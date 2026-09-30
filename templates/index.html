@@ -226,7 +226,7 @@
 
         <!-- Simulador de Financiamento -->
         <div id="simulador-container" class="controls" style="margin-bottom: 30px; display: none;">
-            <h3 style="width: 100%; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Simulador de Financiamento</h3>
+            <h3 style="width: 100%; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Simulador de Financiamento</h3>
             
             <div class="control-group">
                 <label for="sim_valor">Valor Base (R$)</label>
@@ -236,7 +236,7 @@
             <div class="control-group">
                 <label for="sim_entrada">Ajuste de Preço (R$)</label>
                 <input type="number" id="sim_entrada" placeholder="-10000 para entrada" value="0" oninput="calcularFinanciamento()">
-                <small style="color: #666; margin-top: 5px;">Valores negativos = Entrada (Subtrai). Valores positivos = Taxas extras (Adiciona).</small>
+                <small style="color: var(--text-muted); margin-top: 5px;">Valores negativos = Entrada (Subtrai). Valores positivos = Taxas extras (Adiciona).</small>
             </div>
             
             <div class="control-group half">
@@ -248,7 +248,7 @@
                 <label for="sim_taxa">Taxa de Juros (%)</label>
                 <div style="display: flex; gap: 5px;">
                     <input type="number" step="0.01" id="sim_taxa" value="1.5" style="width: 60%;" oninput="calcularFinanciamento()">
-                    <select id="sim_taxa_tipo" style="width: 40%; padding: 10px; border: 1px solid #ccc; border-radius: 0;" onchange="calcularFinanciamento()">
+                    <select id="sim_taxa_tipo" style="width: 40%; padding: 10px; border: 1px solid var(--border-color); border-radius: 0; background-color: var(--container-bg); color: var(--text-main);" onchange="calcularFinanciamento()">
                         <option value="mes">ao mês</option>
                         <option value="ano">ao ano</option>
                     </select>
@@ -259,24 +259,24 @@
                 <button type="button" class="btn-secondary" style="margin-top: 0;" onclick="usarSelicSimulador()">Usar Taxa SELIC do Mês Final</button>
             </div>
             
-            <div class="control-group full" id="sim_resultado" style="background: rgba(0,0,0,0.05); padding: 20px; border-radius: 0; border-left: 5px solid #007bff; margin-top: 20px;">
+            <div class="control-group full" id="sim_resultado" style="background: var(--event-bg); color: var(--event-text); padding: 20px; border-radius: 0; border-left: 5px solid var(--primary); margin-top: 20px;">
                 <h4 style="margin: 0 0 15px 0;">Resultado (Tabela Price)</h4>
                 <div style="display: flex; flex-wrap: wrap; gap: 20px;">
                     <div style="flex: 1; min-width: 150px;">
-                        <p style="margin: 0 0 5px 0; color: #555;">Valor Financiado</p>
-                        <p id="res_financiado" style="margin: 0; font-size: 20px; font-weight: bold;">R$ 0,00</p>
+                        <p style="margin: 0 0 5px 0; color: var(--text-muted);">Valor Financiado</p>
+                        <p id="res_financiado" style="margin: 0; font-size: 20px; font-weight: bold; color: var(--text-main);">R$ 0,00</p>
                     </div>
                     <div style="flex: 1; min-width: 150px;">
-                        <p style="margin: 0 0 5px 0; color: #555;">Valor da Parcela</p>
-                        <p id="res_parcela" style="margin: 0; font-size: 24px; font-weight: bold; color: #d32f2f;">R$ 0,00</p>
+                        <p style="margin: 0 0 5px 0; color: var(--text-muted);">Valor da Parcela</p>
+                        <p id="res_parcela" style="margin: 0; font-size: 24px; font-weight: bold; color: var(--negative);">R$ 0,00</p>
                     </div>
                     <div style="flex: 1; min-width: 150px;">
-                        <p style="margin: 0 0 5px 0; color: #555;">Total Pago</p>
-                        <p id="res_total" style="margin: 0; font-size: 18px; font-weight: bold;">R$ 0,00</p>
+                        <p style="margin: 0 0 5px 0; color: var(--text-muted);">Total Pago</p>
+                        <p id="res_total" style="margin: 0; font-size: 18px; font-weight: bold; color: var(--text-main);">R$ 0,00</p>
                     </div>
                     <div style="flex: 1; min-width: 150px;">
-                        <p style="margin: 0 0 5px 0; color: #555;">Total em Juros</p>
-                        <p id="res_juros" style="margin: 0; font-size: 18px; font-weight: bold; color: #f57c00;">R$ 0,00</p>
+                        <p style="margin: 0 0 5px 0; color: var(--text-muted);">Total em Juros</p>
+                        <p id="res_juros" style="margin: 0; font-size: 18px; font-weight: bold; color: var(--negative);">R$ 0,00</p>
                     </div>
                 </div>
             </div>
