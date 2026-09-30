@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Consulte o histórico de preços da Tabela FIPE para carros, motos e caminhões. Visualize a evolução de valores em gráficos interativos e encontre as melhores opções.">
+    <meta name="keywords" content="tabela fipe, histórico fipe, preço de carros, fipe, veículos, motos, caminhões, gráfico de desvalorização, fipex">
+    <meta name="author" content="GraphFIPE">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph (Facebook/WhatsApp/LinkedIn) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="GraphFIPE - Gráficos e Histórico da Tabela FIPE">
+    <meta property="og:description" content="Acompanhe a evolução histórica dos preços de veículos da Tabela FIPE de forma rápida e visual.">
+    <meta property="og:site_name" content="GraphFIPE">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="GraphFIPE - Gráficos e Histórico da Tabela FIPE">
+    <meta name="twitter:description" content="Acompanhe a evolução histórica dos preços de veículos da Tabela FIPE de forma rápida e visual.">
+
+    <title>GraphFIPE - Gráfico e Histórico de Preços</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --container-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --secondary: #64748b;
+            --secondary-hover: #475569;
+            
+            --table-header: #f8fafc;
+            --event-bg: #e0f2fe;
+            --event-border: #3b82f6;
+            --event-text: #0369a1;
+            --positive: #16a34a;
+            --negative: #dc2626;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --container-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --secondary: #475569;
+            --secondary-hover: #64748b;
+            
+            --table-header: #0f172a;
+            --event-bg: #1e3a8a;
+            --event-border: #60a5fa;
+            --event-text: #bfdbfe;
+            --positive: #4ade80;
+            --negative: #f87171;
+        }
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 20px; background-color: var(--bg-color); color: var(--text-main); transition: background 0.2s, color 0.2s; }
+        .container { max-width: 1200px; margin: auto; background: var(--container-bg); padding: 25px; border-radius: 0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        h2, h3, h4 { color: var(--text-main); }
+        
+        .controls { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; background: rgba(0,0,0,0.02); padding: 20px; border-radius: 0; border: 1px solid var(--border-color); }
+        body.dark-mode .controls { background: rgba(0,0,0,0.2); }
+        
+        .control-group { display: flex; flex-direction: column; flex: 1; min-width: 180px; }
+        .control-group.full { flex-basis: 100%; }
+        .control-group.half { flex-basis: 48%; }
+        label { font-weight: 600; margin-bottom: 6px; font-size: 14px; color: var(--text-muted); }
+        
+        input[type="number"], select { padding: 10px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 0; background-color: var(--container-bg); color: var(--text-main); }
+        input[type="number"]:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        
+        button { background-color: var(--primary); color: white; border: none; font-weight: 600; cursor: pointer; transition: all 0.2s; padding: 12px 16px; font-size: 14px; border-radius: 0; }
+        button:hover { background-color: var(--primary-hover); }
+        
+        .btn-secondary { background-color: var(--secondary); }
+        .btn-secondary:hover { background-color: var(--secondary-hover); }
+        
+        .chart-container { position: relative; height: 500px; width: 100%; margin-bottom: 30px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        table, th, td { border: 1px solid var(--border-color); }
+        th, td { padding: 14px; text-align: left; }
+        th { background-color: var(--table-header); font-weight: 600; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal-content { background: var(--container-bg); padding: 30px; border-radius: 0; width: 90%; max-width: 500px; position: relative; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .modal-content input, .modal-content textarea { background-color: var(--container-bg); color: var(--text-main); border-color: var(--border-color); }
+        .modal-close { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: var(--text-muted); background: none; border: none; padding: 0; margin: 0; line-height: 1; }
+        
+        .about-box { margin-top: 40px; padding: 20px; background: rgba(59, 130, 246, 0.05); border-left: 4px solid var(--primary); border-radius: 0; text-align: left; color: var(--text-muted); }
+        .about-box h3 { margin-top: 0; margin-bottom: 10px; color: var(--text-main); }
+        .about-box p { margin-bottom: 0; line-height: 1.6; }
+
+        .positive { color: var(--positive); font-weight: bold; }
+        .negative { color: var(--negative); font-weight: bold; }
+        
+        .event-box { background: var(--event-bg); color: var(--event-text); padding: 18px; border-radius: 0; border-left: 5px solid var(--event-border); margin-bottom: 30px; }
+
+        /* Links Globais Topo */
+        .top-links a { background: var(--secondary); color: #fff; padding: 10px 16px; border-radius: 0; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.2s; }
+        .top-links a:hover { background: var(--secondary-hover); }
+        .top-links a.primary-link { background: var(--primary); }
+        .top-links a.primary-link:hover { background: var(--primary-hover); }
+
+        .theme-toggle { position: absolute; top: 15px; right: 15px; background: var(--secondary); color: #fff; padding: 8px 12px; border-radius: 0; }
+        
+        /* TomSelect Dark Mode Fixes */
+        .ts-control { border-radius: 0; padding: 10px; font-size: 14px; background-color: var(--container-bg); border-color: var(--border-color); }
+        .ts-dropdown { background-color: var(--container-bg); border-color: var(--border-color); color: var(--text-main); }
+        body.dark-mode .ts-control { background-color: var(--container-bg) !important; color: var(--text-main) !important; border-color: var(--border-color) !important; }
+        body.dark-mode .ts-control input { color: var(--text-main) !important; background-color: transparent !important; }
+        body.dark-mode .ts-wrapper.focus .ts-control { border-color: var(--primary) !important; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        body.dark-mode .ts-dropdown .active { background-color: rgba(59, 130, 246, 0.2); color: var(--text-main); }
+        body.dark-mode .ts-dropdown .option { color: var(--text-main); }
+        body.dark-mode .item { background-color: var(--secondary) !important; color: #fff !important; }
+        
+        @media (max-width: 768px) {
+            body { margin: 10px; }
+            .container { padding: 15px; }
+            .theme-toggle { position: relative; display: block; top: 0; right: 0; margin: 10px 0 20px 0; width: 100%; text-align: center; }
+            .controls { flex-direction: column; gap: 12px; padding: 15px; }
+            .control-group, .control-group.half, .control-group.full { flex-basis: 100% !important; width: 100%; }
+            div[style*="flex-direction: row"] { flex-direction: column !important; gap: 12px !important; }
+            button { margin-top: 5px; width: 100%; padding: 14px; }
+            .chart-container { height: 350px; margin-bottom: 20px; }
+            #table-container { overflow-x: auto; }
+            th, td { padding: 10px; }
+            .top-links { position: relative !important; top: 0 !important; left: 0 !important; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+            .top-links a { text-align: center; }
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="top-links" style="position: absolute; top: 15px; left: 15px; z-index: 10; display: flex; gap: 10px;">
+        <a href="/ranking">Ranking</a>
+        <a href="/docs" class="primary-link">API Docs</a>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()">Modo Escuro/Claro</button>
+
+    <div class="container">
+        <h2>GráficoFIPE - Evolução de Preços da Tabela FIPE</h2>
+               
+        <div class="controls">
+            <div class="control-group">
+                <label for="tipo">Categoria</label>
+                <select id="tipo" placeholder="Selecione a categoria..."></select>
+            </div>
+            
+            <div class="control-group">
+                <label for="marca">Marca (Digite para buscar)</label>
+                <select id="marca" placeholder="Selecione a marca..."></select>
+            </div>
+            
+            <div class="control-group">
+                <label for="mes_inicio">Mês Inicial</label>
+                <select id="mes_inicio" placeholder="Mês inicial..."></select>
+            </div>
+            
+            <div class="control-group">
+                <label for="mes_fim">Mês Final</label>
+                <select id="mes_fim" placeholder="Mês final..."></select>
+            </div>
+
+            <div class="control-group full" style="flex-direction: row; gap: 15px;">
+                <div class="control-group half">
+                    <label for="preco_min">Preço Mínimo (R$)</label>
+                    <input type="number" id="preco_min" placeholder="Ex: 10000" onchange="applyFilters()">
+                </div>
+                <div class="control-group half">
+                    <label for="preco_max">Preço Máximo (R$)</label>
+                    <input type="number" id="preco_max" placeholder="Ex: 50000" onchange="applyFilters()">
+                </div>
+            </div>
+
+            <div class="control-group full">
+                <label for="modelo">Modelos (Digite para buscar. Mantém seleções anteriores!)</label>
+                <select id="modelo" multiple placeholder="Selecione os modelos..."></select>
+            </div>
+            
+            <div class="control-group full" style="flex-direction: row; gap: 15px;">
+                <button onclick="updateChart()">Atualizar Gráfico</button>
+                <button type="button" class="btn-secondary" onclick="copyLink()">Copiar Link do Gráfico</button>
+                <button type="button" class="btn-secondary" onclick="listTable()">Listar Tabela Detalhada</button>
+                <button type="button" class="btn-secondary" onclick="tsModelo.clear()">Remover Todos</button>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="fipeChart"></canvas>
+        </div>
+        
+        <div id="events-container" class="event-box" style="display: none;">
+            <h4 style="margin-top: 0; margin-bottom: 10px;">Linha do Tempo Histórica (Neste Período)</h4>
+            <ul id="eventsList" style="margin: 0; padding-left: 20px;"></ul>
+        </div>
+        
+        <div id="summary-container" style="display: none; margin-bottom: 30px;">
+            <h3>Comparação e Resumo (Período Selecionado)</h3>
+            <table id="summaryTable">
+                <thead>
+                    <tr>
+                        <th>Modelo / Veículo</th>
+                        <th>Variação no Período</th>
+                        <th>Menor Preço</th>
+                        <th>Maior Preço</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- Simulador de Financiamento -->
+        <div id="simulador-container" class="controls" style="margin-bottom: 30px; display: none;">
+            <h3 style="width: 100%; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Simulador de Financiamento</h3>
+            
+            <div class="control-group">
+                <label for="sim_valor">Valor Base (R$)</label>
+                <input type="number" id="sim_valor" placeholder="Ex: 50000" oninput="calcularFinanciamento()">
+            </div>
+            
+            <div class="control-group">
+                <label for="sim_entrada">Ajuste de Preço (R$)</label>
+                <input type="number" id="sim_entrada" placeholder="-10000 para entrada" value="0" oninput="calcularFinanciamento()">
+                <small style="color: #666; margin-top: 5px;">Valores negativos = Entrada (Subtrai). Valores positivos = Taxas extras (Adiciona).</small>
+            </div>
+            
+            <div class="control-group half">
+                <label for="sim_parcelas">Prazo (Meses)</label>
+                <input type="number" id="sim_parcelas" value="48" min="1" oninput="calcularFinanciamento()">
+            </div>
+            
+            <div class="control-group half">
+                <label for="sim_taxa">Taxa de Juros (%)</label>
+                <div style="display: flex; gap: 5px;">
+                    <input type="number" step="0.01" id="sim_taxa" value="1.5" style="width: 60%;" oninput="calcularFinanciamento()">
+                    <select id="sim_taxa_tipo" style="width: 40%; padding: 10px; border: 1px solid #ccc; border-radius: 0;" onchange="calcularFinanciamento()">
+                        <option value="mes">ao mês</option>
+                        <option value="ano">ao ano</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="control-group full" style="flex-direction: row; gap: 15px; margin-top: 10px;">
+                <button type="button" class="btn-secondary" style="margin-top: 0;" onclick="usarSelicSimulador()">Usar Taxa SELIC do Mês Final</button>
+            </div>
+            
+            <div class="control-group full" id="sim_resultado" style="background: rgba(0,0,0,0.05); padding: 20px; border-radius: 0; border-left: 5px solid #007bff; margin-top: 20px;">
+                <h4 style="margin: 0 0 15px 0;">Resultado (Tabela Price)</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                    <div style="flex: 1; min-width: 150px;">
+                        <p style="margin: 0 0 5px 0; color: #555;">Valor Financiado</p>
+                        <p id="res_financiado" style="margin: 0; font-size: 20px; font-weight: bold;">R$ 0,00</p>
+                    </div>
+                    <div style="flex: 1; min-width: 150px;">
+                        <p style="margin: 0 0 5px 0; color: #555;">Valor da Parcela</p>
+                        <p id="res_parcela" style="margin: 0; font-size: 24px; font-weight: bold; color: #d32f2f;">R$ 0,00</p>
+                    </div>
+                    <div style="flex: 1; min-width: 150px;">
+                        <p style="margin: 0 0 5px 0; color: #555;">Total Pago</p>
+                        <p id="res_total" style="margin: 0; font-size: 18px; font-weight: bold;">R$ 0,00</p>
+                    </div>
+                    <div style="flex: 1; min-width: 150px;">
+                        <p style="margin: 0 0 5px 0; color: #555;">Total em Juros</p>
+                        <p id="res_juros" style="margin: 0; font-size: 18px; font-weight: bold; color: #f57c00;">R$ 0,00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="table-container" style="display: none;">
+            <h3>Lista de Veículos (Baseado nos filtros ou Modelos selecionados)</h3>
+            <table id="veiculosTable">
+                <thead>
+                    <tr>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Versão / Ano</th>
+                        <th>Preço (R$)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <div class="about-box">
+            <h3>Sobre o FipeData</h3>
+            <p>O <strong>FipeData</strong> é uma plataforma independente e gratuita desenvolvida para facilitar a consulta e a visualização do histórico de preços de veículos da Tabela FIPE (carros, motos e caminhões). Através de nossos gráficos interativos, você consegue acompanhar de forma clara a desvalorização ou a valorização de modelos específicos ao longo dos meses e anos, auxiliando na melhor tomada de decisão para a compra, venda ou seguro do seu veículo.</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <button type="button" class="btn-secondary" onclick="abrirModalSugestao()" style="margin-top: 0;">Enviar Sugestão | Reportar Problema</button>
+        </div>
+    </div>
+
+    <!-- Modal de Sugestões -->
+    <div id="modalSugestao" class="modal-overlay" onclick="fecharModalSugestao(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="fecharModalSugestao()">&times;</button>
+            <h3 style="margin-top: 0;">Enviar Sugestão</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <input type="text" id="sug_nome" placeholder="Seu Nome (Opcional)" style="padding: 10px; border: 1px solid #ccc; border-radius: 0; width: 100%; box-sizing: border-box;">
+                <textarea id="sug_msg" placeholder="Descreva sua sugestão ou problema..." rows="4" style="padding: 10px; border: 1px solid #ccc; border-radius: 0; resize: vertical; width: 100%; box-sizing: border-box;"></textarea>
+                <button type="button" id="btnEnviarSugestao" class="btn-secondary" onclick="enviarSugestao()">Enviar Sugestão</button>
+                <p id="sug_status" style="margin: 0; font-size: 14px; font-weight: bold; text-align: center;"></p>
+            </div>
+        </div>
+    </div>
+
+    {% include 'ad.html' ignore missing %}
+    
+    <script>
+        // Cookie utils
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days*24*60*60*1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+        }
+        function getCookie(name) {
+            let nameEQ = name + "=";
+            let ca = document.cookie.split(';');
+            for(let i=0;i < ca.length;i++) {
+                let c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+
+        // Apply theme on load before anything renders
+        if (getCookie('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            Chart.defaults.color = '#ccc';
+            Chart.defaults.borderColor = '#444';
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            let isDark = document.body.classList.contains('dark-mode');
+            setCookie('theme', isDark ? 'dark' : 'light', 365);
+            
+            Chart.defaults.color = isDark ? '#ccc' : '#666';
+            Chart.defaults.borderColor = isDark ? '#444' : '#e0e0e0';
+            
+            if(chartInstance) {
+                // Update specific scales explicitly so existing chart updates
+                if(chartInstance.options.scales.x) {
+                    chartInstance.options.scales.x.ticks.color = Chart.defaults.color;
+                    chartInstance.options.scales.x.grid.color = Chart.defaults.borderColor;
+                }
+                if(chartInstance.options.scales.y) {
+                    if(!chartInstance.options.scales.y.ticks) chartInstance.options.scales.y.ticks = {};
+                    chartInstance.options.scales.y.ticks.color = Chart.defaults.color;
+                    if(!chartInstance.options.scales.y.grid) chartInstance.options.scales.y.grid = {};
+                    chartInstance.options.scales.y.grid.color = Chart.defaults.borderColor;
+                }
+                if(chartInstance.options.plugins && chartInstance.options.plugins.title) {
+                    chartInstance.options.plugins.title.color = Chart.defaults.color;
+                }
+                chartInstance.update();
+            }
+        }
+
+        let chartInstance = null;
+        let tsTipo, tsMarca, tsModelo, tsMesInicio, tsMesFim;
+        let currentBrandModels = []; // Armazena modelos brutos da marca atual
+
+        async function fetchAPI(url, options = {}) {
+            const res = await fetch(url, options);
+            return res.json();
+        }
+
+        const formatMoney = (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+
+        async function init() {
+            tsTipo = new TomSelect('#tipo', { create: false, onChange: loadMarcas, searchField: ['text'] });
+            tsMarca = new TomSelect('#marca', { create: false, onChange: loadModelos, searchField: ['text'] });
+            tsModelo = new TomSelect('#modelo', { create: false, plugins: ['remove_button'], searchField: ['text'], maxItems: 50 });
+            tsMesInicio = new TomSelect('#mes_inicio', { create: false, searchField: ['text'] });
+            tsMesFim = new TomSelect('#mes_fim', { create: false, searchField: ['text'] });
+
+            const tipos = await fetchAPI('/api/tipos');
+            tsTipo.addOption(tipos.map(t => ({value: t.id, text: t.nome})));
+
+            const meses = await fetchAPI('/api/meses');
+            const mesesOptions = meses.map(m => ({value: m.codigo, text: m.mes}));
+            tsMesInicio.addOption(mesesOptions);
+            tsMesFim.addOption(mesesOptions);
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const c = urlParams.get('c');
+            let urlModelos = urlParams.get('modelos');
+            let urlMesInicio = urlParams.get('mes_inicio');
+            let urlMesFim = urlParams.get('mes_fim');
+
+            if (c) {
+                try {
+                    const decompressed = LZString.decompressFromEncodedURIComponent(c);
+                    const state = JSON.parse(decompressed);
+                    if (state.m) urlModelos = state.m.join(',');
+                    if (state.i) urlMesInicio = state.i;
+                    if (state.f) urlMesFim = state.f;
+                } catch(e) {
+                    console.error("Erro ao descomprimir URL", e);
+                }
+            }
+
+            if (urlModelos) {
+                const mods = urlModelos.split(',');
+                mods.forEach(m => tsModelo.addOption({value: m, text: m}));
+                tsModelo.setValue(mods);
+            }
+            
+            if (meses.length > 0) {
+                tsMesInicio.setValue(urlMesInicio || meses[0].codigo);
+                tsMesFim.setValue(urlMesFim || meses[meses.length - 1].codigo);
+            }
+
+            if (urlModelos) {
+                setTimeout(updateChart, 300);
+            }
+        }
+
+        async function loadMarcas(tipoId) {
+            tsMarca.clearOptions();
+            tsMarca.clear();
+            
+            if (!tipoId) return;
+            
+            const marcas = await fetchAPI(`/api/marcas/${tipoId}`);
+            tsMarca.addOption(marcas.map(m => ({value: m.id, text: m.nome})));
+            tsMarca.refreshOptions(false);
+        }
+
+        async function loadModelos(marcaId) {
+            if (!marcaId) return;
+            
+            // Salvar seleções anteriores para não perder ao mudar de marca
+            const selectedValues = tsModelo.getValue();
+            const selectedOptions = (Array.isArray(selectedValues) ? selectedValues : [selectedValues])
+                .filter(v => v)
+                .map(v => tsModelo.options[v]);
+            
+            tsModelo.clearOptions();
+            
+            // Restaurar opções selecionadas
+            selectedOptions.forEach(opt => {
+                if (opt) tsModelo.addOption(opt);
+            });
+            tsModelo.setValue(selectedValues, true); // silent update
+            
+            // Buscar novos modelos
+            currentBrandModels = await fetchAPI(`/api/modelos/${marcaId}`);
+            applyFilters();
+        }
+
+        function applyFilters() {
+            if (!currentBrandModels || currentBrandModels.length === 0) return;
+            
+            const minPrice = parseFloat(document.getElementById('preco_min').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('preco_max').value) || Infinity;
+            
+            const filtered = currentBrandModels.filter(m => {
+                const preco = m.preco_atual || 0;
+                // Se preco for 0, pode significar que não tem dados no mes mais recente, vamos ignorar do filtro rigido ou mostrar
+                if (preco === 0) return true; 
+                return preco >= minPrice && preco <= maxPrice;
+            });
+            
+            // Adicionar as opções filtradas
+            filtered.forEach(m => {
+                let text = m.nome;
+                if (m.preco_atual) {
+                    text += ` - ${formatMoney(m.preco_atual)}`;
+                }
+                // Só adiciona se não existir para não sobrescrever seleções
+                if (!tsModelo.options[m.id]) {
+                    tsModelo.addOption({value: m.id, text: text});
+                }
+            });
+            tsModelo.refreshOptions(false);
+        }
+
+        
+        async function listTable() {
+            const marcaId = tsMarca.getValue();
+            const modelosVal = tsModelo.getValue();
+            const modelos = (Array.isArray(modelosVal) ? modelosVal : (modelosVal ? [modelosVal] : [])).map(v => v);
+            const mesFim = tsMesFim.getValue();
+            const minPrice = parseFloat(document.getElementById('preco_min').value) || null;
+            const maxPrice = parseFloat(document.getElementById('preco_max').value) || null;
+
+            if (!marcaId && modelos.length === 0) {
+                alert("Selecione uma Marca ou Modelos para listar.");
+                return;
+            }
+
+            const data = await fetchAPI('/api/veiculos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    marca_id: marcaId ? marcaId : null,
+                    modelos: modelos,
+                    mes_codigo: mesFim,
+                    preco_min: minPrice,
+                    preco_max: maxPrice
+                })
+            });
+
+            const tbody = document.querySelector('#veiculosTable tbody');
+            tbody.innerHTML = '';
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Nenhum veículo encontrado para os filtros.</td></tr>';
+            } else {
+                data.forEach(v => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${v.marca}</td>
+                            <td>${v.modelo}</td>
+                            <td>${v.versao}</td>
+                            <td>${formatMoney(v.preco)}</td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            document.getElementById('table-container').style.display = 'block';
+        }
+
+        const colors = [
+            'rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 206, 86)',
+            'rgb(75, 192, 192)', 'rgb(153, 102, 255)', 'rgb(255, 159, 64)',
+            'rgb(201, 203, 207)', 'rgb(255, 105, 180)', 'rgb(144, 238, 144)'
+        ];
+
+        let globalLastSelicRate = 0;
+
+        function calcularFinanciamento() {
+            const valorBase = parseFloat(document.getElementById('sim_valor').value) || 0;
+            const entrada = parseFloat(document.getElementById('sim_entrada').value) || 0;
+            let taxa = parseFloat(document.getElementById('sim_taxa').value) || 0;
+            const parcelas = parseInt(document.getElementById('sim_parcelas').value) || 1;
+            const tipoTaxa = document.getElementById('sim_taxa_tipo').value;
+            
+            const valorFinanciado = valorBase + entrada;
+            if (valorFinanciado <= 0) {
+                document.getElementById('res_financiado').innerText = formatMoney(0);
+                document.getElementById('res_parcela').innerText = formatMoney(0);
+                document.getElementById('res_total').innerText = formatMoney(0);
+                document.getElementById('res_juros').innerText = formatMoney(0);
+                return;
+            }
+            
+            let i = taxa / 100;
+            if (tipoTaxa === 'ano') {
+                i = Math.pow(1 + i, 1 / 12) - 1;
+            }
+            
+            let parcela = 0;
+            if (i === 0) {
+                parcela = valorFinanciado / parcelas;
+            } else {
+                parcela = valorFinanciado * (i * Math.pow(1 + i, parcelas)) / (Math.pow(1 + i, parcelas) - 1);
+            }
+            
+            const total = parcela * parcelas;
+            const juros = total - valorFinanciado;
+            
+            document.getElementById('res_financiado').innerText = formatMoney(valorFinanciado);
+            document.getElementById('res_parcela').innerText = formatMoney(parcela);
+            document.getElementById('res_total').innerText = formatMoney(total);
+            document.getElementById('res_juros').innerText = formatMoney(juros);
+        }
+
+        function usarSelicSimulador() {
+            if (globalLastSelicRate > 0) {
+                document.getElementById('sim_taxa').value = globalLastSelicRate.toFixed(2);
+                document.getElementById('sim_taxa_tipo').value = 'mes';
+                calcularFinanciamento();
+            } else {
+                alert("Nenhuma taxa SELIC carregada no gráfico atual.");
+            }
+        }
+
+        async function updateChart() {
+            const modelosVal = tsModelo.getValue();
+            const modelos = (Array.isArray(modelosVal) ? modelosVal : [modelosVal]).map(v => v);
+            const mesInicio = tsMesInicio.getValue();
+            const mesFim = tsMesFim.getValue();
+
+            if (modelos.length === 0 || (!modelos[0])) {
+                alert("Selecione pelo menos um modelo da lista.");
+                return;
+            }
+
+            if (parseInt(mesInicio) > parseInt(mesFim)) {
+                alert("O Mês Inicial deve ser anterior ou igual ao Mês Final.");
+                return;
+            }
+            
+            // Atualizar URL para permitir compartilhamento com links curtos
+            const params = new URLSearchParams();
+            const state = { m: modelos };
+            if (mesInicio) state.i = mesInicio;
+            if (mesFim) state.f = mesFim;
+            
+            const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(state));
+            params.set('c', compressed);
+            window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+
+            const data = await fetchAPI('/api/dados', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    modelos: modelos,
+                    mes_inicio: mesInicio,
+                    mes_fim: mesFim
+                })
+            });
+
+            if (data.labels === undefined || data.labels.length === 0) {
+                alert("Nenhum dado encontrado para o período e modelos selecionados.");
+                return;
+            }
+
+            const datasets = data.datasets.map((ds, idx) => ({
+                label: ds.label,
+                data: ds.data,
+                borderColor: colors[idx % colors.length],
+                backgroundColor: colors[idx % colors.length],
+                tension: 0.1,
+                fill: false,
+                spanGaps: true,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }));
+
+            // Atualiza o simulador com o preço do veículo principal (se houver) e a SELIC do mês final
+            if (datasets.length > 0) {
+                const validData = datasets[0].data.filter(v => v !== null && v !== undefined);
+                if (validData.length > 0) {
+                    const latestPrice = validData[validData.length - 1];
+                    document.getElementById('sim_valor').value = latestPrice;
+                }
+            }
+            if (data.macro && data.macro.length > 0) {
+                globalLastSelicRate = data.macro[data.macro.length - 1].selic;
+            }
+            document.getElementById('simulador-container').style.display = 'flex';
+            calcularFinanciamento();
+
+            const originalLabels = [...data.labels];
+            data.labels = data.labels.map(lbl => economicEvents[lbl] ? `* ${lbl}` : lbl);
+
+            // Atualiza o painel de Eventos
+            const eventsContainer = document.getElementById('events-container');
+            const eventsList = document.getElementById('eventsList');
+            eventsList.innerHTML = '';
+            let foundEvents = false;
+            
+            originalLabels.forEach(lbl => {
+                if (economicEvents[lbl]) {
+                    foundEvents = true;
+                    eventsList.innerHTML += `<li style="margin-bottom: 5px;"><strong>${lbl}</strong>: ${economicEvents[lbl]}</li>`;
+                }
+            });
+            
+            eventsContainer.style.display = foundEvents ? 'block' : 'none';
+
+            renderChart(data.labels, datasets, data.macro, originalLabels);
+
+            // Popula a tabela de resumo comparativo
+            const summaryContainer = document.getElementById('summary-container');
+            const summaryBody = document.querySelector('#summaryTable tbody');
+            summaryBody.innerHTML = '';
+
+            let acumuladoSelic = 0;
+            let acumuladoIpca = 0;
+            if (data.macro && data.macro.length > 0) {
+                // Cálculo de juros compostos
+                acumuladoSelic = data.macro.reduce((acc, m) => acc * (1 + (m.selic/100)), 1) - 1;
+                acumuladoIpca = data.macro.reduce((acc, m) => acc * (1 + (m.ipca/100)), 1) - 1;
+            }
+
+            datasets.forEach(ds => {
+                const validData = ds.data.filter(v => v !== null && v !== undefined);
+                if (validData.length === 0) return;
+                
+                const minPrice = Math.min(...validData);
+                const maxPrice = Math.max(...validData);
+                const firstPrice = validData[0];
+                const lastPrice = validData[validData.length - 1];
+                
+                let varPct = 0;
+                if (firstPrice > 0) {
+                    varPct = ((lastPrice / firstPrice) - 1) * 100;
+                }
+                
+                let varStr = varPct.toFixed(2) + '%';
+                let varClass = '';
+                if (varPct > 0) {
+                    varStr = '+' + varStr;
+                    varClass = 'positive';
+                } else if (varPct < 0) {
+                    varClass = 'negative';
+                }
+                
+                summaryBody.innerHTML += `
+                    <tr>
+                        <td>${ds.label}</td>
+                        <td class="${varClass}">${varStr}</td>
+                        <td>${formatMoney(minPrice)}</td>
+                        <td>${formatMoney(maxPrice)}</td>
+                    </tr>
+                `;
+            });
+
+            if (data.macro && data.macro.length > 0) {
+                const firstDolar = data.macro[0].dolar;
+                const lastDolar = data.macro[data.macro.length - 1].dolar;
+                const varDolar = firstDolar > 0 ? ((lastDolar / firstDolar) - 1) * 100 : 0;
+                let varDolarStr = varDolar.toFixed(2) + '%';
+                let varDolarClass = varDolar > 0 ? 'positive' : (varDolar < 0 ? 'negative' : '');
+                if (varDolar > 0) varDolarStr = '+' + varDolarStr;
+
+                let selicStr = '+' + (acumuladoSelic * 100).toFixed(2) + '%';
+                let ipcaStr = '+' + (acumuladoIpca * 100).toFixed(2) + '%';
+
+                summaryBody.innerHTML += `
+                    <tr style="background: rgba(0,0,0,0.05);">
+                        <td><strong>Dólar Comercial</strong></td>
+                        <td class="${varDolarClass}">${varDolarStr}</td>
+                        <td>${formatMoney(Math.min(...data.macro.map(m=>m.dolar).filter(d=>d>0)))}</td>
+                        <td>${formatMoney(Math.max(...data.macro.map(m=>m.dolar).filter(d=>d>0)))}</td>
+                    </tr>
+                    <tr style="background: rgba(0,0,0,0.05);">
+                        <td><strong>Rendimento SELIC (Acumulado)</strong></td>
+                        <td class="positive">${selicStr}</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr style="background: rgba(0,0,0,0.05);">
+                        <td><strong>Inflação IPCA (Acumulada)</strong></td>
+                        <td class="positive">${ipcaStr}</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                `;
+            }
+
+            summaryContainer.style.display = 'block';
+        }
+        const economicEvents = {
+            '10/2008': 'Crise Financeira Global',
+            '5/2018': 'Greve dos Caminhoneiros',
+            '3/2020': 'Início da Pandemia de COVID-19',
+            '1/2021': 'Crise Global de Semicondutores',
+            '2/2022': 'Início da Guerra na Ucrânia',
+            '1/2023': 'Fim da Desoneração dos Combustíveis',
+            '6/2023': 'Incentivo ao Carro Popular'
+        };
+
+        function renderChart(labels, datasets, macro, originalLabels = null) {
+            const ctx = document.getElementById('fipeChart').getContext('2d');
+            
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+            
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Preço Médio dos Modelos (R$)',
+                            font: { size: 18 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                afterTitle: function(context) {
+                                    if (!originalLabels) return '';
+                                    const lbl = originalLabels[context[0].dataIndex];
+                                    if (economicEvents[lbl]) {
+                                        return `\nEvento: ${economicEvents[lbl]}`;
+                                    }
+                                    return '';
+                                },
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += formatMoney(context.parsed.y);
+                                    }
+                                    return label;
+                                },
+                                afterBody: function(context) {
+                                    if (!macro || macro.length === 0) return '';
+                                    const idx = context[0].dataIndex;
+                                    const m = macro[idx];
+                                    if (!m || m.dolar === 0) return '';
+                                    return `\nMacroeconomia do Mês:\nDólar: ${formatMoney(m.dolar)}\nIPCA: ${m.ipca.toFixed(2)}%\nSELIC: ${m.selic.toFixed(2)}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: function(value) {
+                                    return formatMoney(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function copyLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link copiado para a área de transferência!');
+            }).catch(err => {
+                alert('Erro ao copiar o link. Você pode copiar o endereço diretamente da barra do seu navegador.');
+            });
+        }
+
+        function abrirModalSugestao() {
+            document.getElementById('modalSugestao').style.display = 'flex';
+        }
+
+        function fecharModalSugestao(e) {
+            if (!e || e.target.id === 'modalSugestao') {
+                document.getElementById('modalSugestao').style.display = 'none';
+                document.getElementById('sug_status').innerText = "";
+            }
+        }
+
+        async function enviarSugestao() {
+            const nome = document.getElementById('sug_nome').value.trim();
+            const msg = document.getElementById('sug_msg').value.trim();
+            const statusLabel = document.getElementById('sug_status');
+            const btn = document.getElementById('btnEnviarSugestao');
+            
+            if (!msg) {
+                statusLabel.innerText = "Por favor, digite uma mensagem.";
+                statusLabel.style.color = "red";
+                return;
+            }
+            
+            statusLabel.innerText = "Enviando...";
+            statusLabel.style.color = "#000";
+            btn.disabled = true;
+            
+            try {
+                const res = await fetch('/api/sugestao', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome: nome, mensagem: msg })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    statusLabel.innerText = "Enviada com sucesso! Obrigado.";
+                    statusLabel.style.color = "green";
+                    document.getElementById('sug_msg').value = "";
+                    
+                    let timeLeft = 30;
+                    btn.innerText = `Aguarde ${timeLeft}s`;
+                    const timer = setInterval(() => {
+                        timeLeft--;
+                        if (timeLeft <= 0) {
+                            clearInterval(timer);
+                            btn.disabled = false;
+                            btn.innerText = "Enviar Sugestão";
+                            statusLabel.innerText = "";
+                        } else {
+                            btn.innerText = `Aguarde ${timeLeft}s`;
+                        }
+                    }, 1000);
+                } else {
+                    btn.disabled = false;
+                    statusLabel.innerText = data.error || "Erro ao enviar sugestão.";
+                    statusLabel.style.color = "red";
+                }
+            } catch (err) {
+                btn.disabled = false;
+                statusLabel.innerText = "Erro de conexão ao enviar.";
+                statusLabel.style.color = "red";
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

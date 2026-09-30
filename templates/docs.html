@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Documentação da API do FipeData para desenvolvedores.">
+    <title>Documentação da API - FipeData</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --container-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --secondary: #64748b;
+            
+            --table-header: #f8fafc;
+            --endpoint-bg: #e0f2fe;
+            --code-bg: #f1f5f9;
+            --code-text: #db2777;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --container-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --secondary: #475569;
+            
+            --table-header: #0f172a;
+            --endpoint-bg: #1e3a8a;
+            --code-bg: #334155;
+            --code-text: #f472b6;
+        }
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 20px; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; transition: background 0.2s, color 0.2s; }
+        .container { max-width: 900px; margin: auto; background: var(--container-bg); padding: 30px; border-radius: 0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        h1, h2, h3 { color: var(--text-main); }
+        h1 { border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: 600; padding: 10px 15px; background: rgba(59, 130, 246, 0.1); border-radius: 0; transition: 0.2s; }
+        .back-link:hover { background: rgba(59, 130, 246, 0.2); }
+        
+        code { background: var(--code-bg); padding: 2px 5px; border-radius: 0; font-family: monospace; color: var(--code-text); font-size: 15px; }
+        pre { background: #1e293b; color: #f8fafc; padding: 15px; border-radius: 0; overflow-x: auto; }
+        pre code { background: transparent; color: inherit; padding: 0; }
+        
+        .endpoint { background: var(--endpoint-bg); padding: 15px; border-left: 5px solid var(--primary); border-radius: 0; margin-bottom: 20px; }
+        .badge { color: white; padding: 4px 10px; border-radius: 0; font-size: 13px; font-weight: bold; margin-right: 10px; }
+        .get { background: #10b981; }
+        .post { background: #f59e0b; color: #fff; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+        table, th, td { border: 1px solid var(--border-color); }
+        th, td { padding: 12px; text-align: left; }
+        th { background-color: var(--table-header); font-weight: 600; }
+    </style>
+</head>
+<body>
+    <script>
+        function getCookie(name) {
+            let nameEQ = name + "=";
+            let ca = document.cookie.split(';');
+            for(let i=0;i < ca.length;i++) {
+                let c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+        if (getCookie('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+
+    <div class="container">
+        <a href="/" class="back-link">← Voltar para o Painel</a>
+        <h1>Documentação da API FipeData</h1>
+        <p>A API do FipeData permite a consulta direta aos dados brutos e históricos da Tabela FIPE armazenados no nosso sistema. O formato de resposta padrão é JSON.</p>
+        
+        <h2>Atenção: Codificação de URLs (URL Encoding)</h2>
+        <p>Ao realizar consultas que contenham <strong>espaços em branco</strong> ou <strong>caracteres especiais</strong>, você deve substituir esses caracteres pelos seus respectivos códigos HTML/URL para evitar que o navegador ou o sistema cortem a sua pesquisa.</p>
+        <p>O caso mais comum é o <strong>espaço em branco</strong>, que deve ser substituído por <code>%20</code> ou <code>+</code>.</p>
+        
+        <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 0; border: 1px solid #ffeeba; margin-bottom: 20px;">
+            <strong>❌ Errado:</strong> <code>/api/consulta?marca=vw volkswagen</code> (O espaço quebra o link)<br>
+            <strong>✅ Correto:</strong> <code>/api/consulta?marca=vw%20volkswagen</code> (Uso do %20 no lugar do espaço)
+        </div>
+
+        <p>Outros caracteres úteis:</p>
+        <ul>
+            <li>Espaço ( ) = <code>%20</code></li>
+            <li>Barra (/) = <code>%2F</code></li>
+            <li>E Comercial (&) = <code>%26</code></li>
+        </ul>
+        <p><em>Dica: Em linguagens de programação, você pode usar funções nativas para fazer isso automaticamente, como <code>encodeURIComponent("vw volkswagen")</code> no JavaScript ou <code>urllib.parse.quote("vw volkswagen")</code> no Python.</em></p>
+
+        <hr style="border: 0; border-top: 1px solid #ddd; margin: 30px 0;">
+
+        <h2>Endpoint Principal</h2>
+
+        <div class="endpoint">
+            <span class="badge get">GET</span> <code>/api/consulta</code>
+            <p style="margin-top: 10px; margin-bottom: 0;">Consulta genérica e flexível do histórico de veículos da Tabela FIPE. Permite múltiplos filtros combinados.</p>
+        </div>
+
+        <h3>Parâmetros de Busca (Query Strings)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parâmetro</th>
+                    <th>Descrição</th>
+                    <th>Exemplo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>fipe</code></td>
+                    <td>Código FIPE exato do veículo (formato: 000000-0)</td>
+                    <td><code>?fipe=004315-0</code></td>
+                </tr>
+                <tr>
+                    <td><code>marca</code></td>
+                    <td>Nome da marca (busca aproximada). Lembre-se do <code>%20</code>.</td>
+                    <td><code>?marca=fiat</code> ou <code>?marca=aston%20martin</code></td>
+                </tr>
+                <tr>
+                    <td><code>modelo</code></td>
+                    <td>Nome do modelo (busca aproximada).</td>
+                    <td><code>?modelo=palio%20fire</code></td>
+                </tr>
+                <tr>
+                    <td><code>ano_modelo</code></td>
+                    <td>Filtra por ano específico de fabricação do veículo.</td>
+                    <td><code>?ano_modelo=2020</code></td>
+                </tr>
+                <tr>
+                    <td><code>mes</code></td>
+                    <td>Mês de referência FIPE (formato MM, ex: 1 = Janeiro).</td>
+                    <td><code>?mes=10</code></td>
+                </tr>
+                <tr>
+                    <td><code>ano</code></td>
+                    <td>Ano de referência (quando o preço foi publicado).</td>
+                    <td><code>?ano=2023</code></td>
+                </tr>
+                <tr>
+                    <td><code>limit</code></td>
+                    <td>Limita a quantidade de resultados retornados (Padrão: 100, Máx: 1000).</td>
+                    <td><code>?limit=50</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Exemplos de Uso Combinado</h3>
+        <p>Buscando todos os Palios ano 2020 cadastrados na FIPE em Janeiro de 2023:</p>
+        <pre><code>GET /api/consulta?marca=fiat&modelo=palio&ano_modelo=2020&mes=1&ano=2023</code></pre>
+
+        <h3>Exemplo de Resposta JSON</h3>
+        <pre><code>[
+  {
+    "ano_modelo": 2020,
+    "ano_referencia": 2023,
+    "codigo_fipe": "001267-0",
+    "mes_referencia": 1,
+    "nome_combustivel": "Gasolina",
+    "nome_marca": "Fiat",
+    "nome_modelo": "Palio 1.0 ECONOMY Fire Flex 8V 4p",
+    "sigla_combustivel": "G",
+    "tipo_veiculo": "1",
+    "valor_centavos": 3540000,
+    "valor_formatado": "R$ 35.400,00",
+    "zero_km": false
+  }
+]</code></pre>
+
+    </div>
+</body>
+</html>

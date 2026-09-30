@@ -179,3 +179,10 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# CUSTOM
+fipe_data.csv
+fipex-prices-latest.csv
+fipe.duckdb
+sugestoes.db
+templates/ad.html
