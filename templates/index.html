@@ -168,6 +168,16 @@
                 <select id="marca" placeholder="Selecione a marca..."></select>
             </div>
             
+            <div class="control-group full">
+                <label for="modelo">Modelos (Digite para buscar. Mantém seleções anteriores!)</label>
+                <select id="modelo" multiple placeholder="Selecione os modelos..."></select>
+            </div>
+
+            <div class="control-group full" style="margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                <h4 style="margin: 0 0 5px 0; color: var(--text-main);">Filtros Opcionais</h4>
+                <p style="margin: 0 0 15px 0; font-size: 14px; color: var(--text-muted);">Refine sua busca escolhendo um período específico ou filtrando os modelos por uma faixa de preço.</p>
+            </div>
+            
             <div class="control-group">
                 <label for="mes_inicio">Mês Inicial</label>
                 <select id="mes_inicio" placeholder="Mês inicial..."></select>
@@ -187,11 +197,6 @@
                     <label for="preco_max">Preço Máximo (R$)</label>
                     <input type="number" id="preco_max" placeholder="Ex: 50000" onchange="applyFilters()">
                 </div>
-            </div>
-
-            <div class="control-group full">
-                <label for="modelo">Modelos (Digite para buscar. Mantém seleções anteriores!)</label>
-                <select id="modelo" multiple placeholder="Selecione os modelos..."></select>
             </div>
             
             <div class="control-group full" style="flex-direction: row; gap: 15px;">
