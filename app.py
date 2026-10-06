@@ -423,6 +423,21 @@ def save_sugestao():
     
     return jsonify({'success': True})
 
+import threading
+import check_release
+
+def daily_update_check():
+    while True:
+        try:
+            check_release.check_and_update()
+        except Exception as e:
+            print(f"Erro na checagem diária: {e}")
+        time.sleep(86400) # Dorme por 24 horas
+
 if __name__ == '__main__':
     init_sugestoes_db()
+    
+    # Inicia a checagem em background para não travar o início do servidor
+    threading.Thread(target=daily_update_check, daemon=True).start()
+    
     app.run(debug=True, port=7177)
