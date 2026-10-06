@@ -390,6 +390,39 @@ def init_sugestoes_db():
     conn.commit()
     conn.close()
 
+import time
+import datetime
+
+@app.route('/api/sugestao', methods=['POST'])
+def save_sugestao():
+    ip = request.remote_addr
+    now = time.time()
+    
+    if ip in SUGESTOES_RATE_LIMIT:
+        SUGESTOES_RATE_LIMIT[ip] = [t for t in SUGESTOES_RATE_LIMIT[ip] if now - t < LIMIT_WINDOW]
+        if len(SUGESTOES_RATE_LIMIT[ip]) >= LIMIT_REQUESTS:
+            return jsonify({'error': 'Limite atingido. Tente novamente mais tarde.'}), 429
+            
+    if ip not in SUGESTOES_RATE_LIMIT:
+        SUGESTOES_RATE_LIMIT[ip] = []
+        
+    data = request.json
+    nome = data.get('nome', 'Anônimo').strip()
+    mensagem = data.get('mensagem', '').strip()
+    
+    if not mensagem:
+        return jsonify({'error': 'A mensagem não pode estar vazia.'}), 400
+        
+    SUGESTOES_RATE_LIMIT[ip].append(now)
+        
+    conn = sqlite3.connect(SUGESTOES_DB)
+    conn.execute('INSERT INTO sugestoes (ip, nome, mensagem, data) VALUES (?, ?, ?, ?)', 
+                 (ip, nome, mensagem, datetime.datetime.now().isoformat()))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'success': True})
+
 if __name__ == '__main__':
     init_sugestoes_db()
     app.run(debug=True, port=7177)
