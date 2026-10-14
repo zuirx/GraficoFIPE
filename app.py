@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import duckdb, sqlite3, os
 import webmotors
+import olx
 import ficha_tecnica_icarros
 
 app = Flask(__name__)
@@ -427,8 +428,8 @@ def save_sugestao():
 
 # --- Integração Webmotors ---
 WEBMOTORS_RATE_LIMIT = {}  # ip -> list of timestamps
-WEBMOTORS_MAX_REQUESTS = 3
-WEBMOTORS_WINDOW = 3600  # 1 hora
+WEBMOTORS_MAX_REQUESTS = 10
+WEBMOTORS_WINDOW = 86400  # 24 horas
 
 def get_client_ip():
     if request.headers.get('X-Forwarded-For'):
@@ -458,7 +459,7 @@ def get_webmotors_listings():
         WEBMOTORS_RATE_LIMIT[ip] = [t for t in WEBMOTORS_RATE_LIMIT[ip] if now - t < WEBMOTORS_WINDOW]
         if len(WEBMOTORS_RATE_LIMIT[ip]) >= WEBMOTORS_MAX_REQUESTS:
             return jsonify({
-                'error': 'Limite de 3 consultas ao Webmotors atingido. Tente novamente mais tarde.',
+                'error': 'Limite de consultas ao Webmotors atingido. Tente novamente mais tarde.',
                 'tentativas_restantes': 0
             }), 429
 
@@ -503,9 +504,136 @@ def get_webmotors_listings():
             'anuncios': anuncios
         })
     except Exception as e:
+        if now in WEBMOTORS_RATE_LIMIT[ip]:
+            WEBMOTORS_RATE_LIMIT[ip].remove(now)
+        restantes_corrigido = max(0, WEBMOTORS_MAX_REQUESTS - len(WEBMOTORS_RATE_LIMIT[ip]))
         return jsonify({
             'error': f"Erro ao consultar Webmotors: {str(e)}",
-            'tentativas_restantes': restantes
+            'tentativas_restantes': restantes_corrigido
+        }), 500
+
+# --- Integração OLX ---
+OLX_RATE_LIMIT = {}  # ip -> list of timestamps
+OLX_MAX_REQUESTS = 5
+OLX_WINDOW = 3600  # 1 hora
+
+@app.route('/api/olx/status', methods=['GET'])
+def olx_status():
+    ip = get_client_ip()
+    now = time.time()
+    if ip in OLX_RATE_LIMIT:
+        OLX_RATE_LIMIT[ip] = [t for t in OLX_RATE_LIMIT[ip] if now - t < OLX_WINDOW]
+    else:
+        OLX_RATE_LIMIT[ip] = []
+    restantes = max(0, OLX_MAX_REQUESTS - len(OLX_RATE_LIMIT[ip]))
+
+    ddds_lista = [
+        {'ddd': k, 'uf': v['uf'].upper(), 'regiao': v['nome_regiao']}
+        for k, v in sorted(olx.DDD_MAP.items())
+    ]
+    estados_lista = sorted(list({v['uf'].upper() for v in olx.DDD_MAP.values()}))
+
+    return jsonify({
+        'tentativas_restantes': restantes,
+        'max_tentativas': OLX_MAX_REQUESTS,
+        'ddds': ddds_lista,
+        'estados': estados_lista
+    })
+
+@app.route('/api/olx', methods=['POST'])
+def get_olx_listings():
+    ip = get_client_ip()
+    now = time.time()
+
+    if ip in OLX_RATE_LIMIT:
+        OLX_RATE_LIMIT[ip] = [t for t in OLX_RATE_LIMIT[ip] if now - t < OLX_WINDOW]
+        if len(OLX_RATE_LIMIT[ip]) >= OLX_MAX_REQUESTS:
+            return jsonify({
+                'error': f'Limite de {OLX_MAX_REQUESTS} consultas à OLX atingido. Tente novamente mais tarde.',
+                'tentativas_restantes': 0
+            }), 429
+
+    if ip not in OLX_RATE_LIMIT:
+        OLX_RATE_LIMIT[ip] = []
+
+    data = request.json or {}
+    modelo = data.get('modelo', '').strip()
+    marca = data.get('marca', '').strip()
+    ano = data.get('ano')
+    ddd = data.get('ddd')
+    estado = data.get('estado')
+    regiao = data.get('regiao')
+    municipio = data.get('municipio')
+    preco_min = data.get('preco_min')
+    preco_max = data.get('preco_max')
+    
+    try:
+        max_results = int(data.get('max_results', 15))
+        if max_results > 30:
+            max_results = 30
+        if max_results < 1:
+            max_results = 15
+    except Exception:
+        max_results = 15
+
+    if not modelo:
+        return jsonify({'error': 'Modelo não informado.'}), 400
+
+    # Se o ID foi passado no formato cod_fipe|ano, busca nome no duckdb
+    if '|' in modelo:
+        parts = modelo.split('|')
+        cod_fipe = parts[0]
+        ano_val = int(parts[1]) if parts[1].isdigit() else None
+        try:
+            conn = get_db_connection()
+            row = conn.execute("SELECT nome_marca, nome_modelo FROM fipe WHERE codigo_fipe = ? AND ano_modelo = ? LIMIT 1", [cod_fipe, ano_val]).fetchone()
+            if row:
+                marca = row[0]
+                modelo = f"{row[1]} ({ano_val})"
+                ano = ano_val
+            conn.close()
+        except Exception:
+            pass
+
+    OLX_RATE_LIMIT[ip].append(now)
+    restantes = max(0, OLX_MAX_REQUESTS - len(OLX_RATE_LIMIT[ip]))
+
+    try:
+        anuncios = olx.search_olx(
+            query=modelo,
+            brand=marca,
+            year=ano,
+            ddd=ddd,
+            estado=estado,
+            regiao=regiao,
+            municipio=municipio,
+            preco_min=preco_min,
+            preco_max=preco_max,
+            max_results=max_results
+        )
+        return jsonify({
+            'success': True,
+            'modelo_buscado': modelo,
+            'tentativas_restantes': restantes,
+            'max_tentativas': OLX_MAX_REQUESTS,
+            'total': len(anuncios),
+            'filtros': {
+                'ddd': ddd,
+                'estado': estado,
+                'regiao': regiao,
+                'municipio': municipio,
+                'preco_min': preco_min,
+                'preco_max': preco_max
+            },
+            'anuncios': anuncios
+        })
+    except Exception as e:
+        if now in OLX_RATE_LIMIT[ip]:
+            OLX_RATE_LIMIT[ip].remove(now)
+        restantes_corrigido = max(0, OLX_MAX_REQUESTS - len(OLX_RATE_LIMIT[ip]))
+        return jsonify({
+            'error': f"Erro ao consultar OLX: {str(e)}",
+            'tentativas_restantes': restantes_corrigido
         }), 500
 
 # --- Ficha Técnica (iCarros) ---

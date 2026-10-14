@@ -1,10 +1,65 @@
 import os
 import re
+import sys
+import shutil
+import subprocess
+import time
 import urllib.parse
 import duckdb
 from patchright.sync_api import sync_playwright
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fipe.duckdb')
+
+_xvfb_process = None
+
+def ensure_xvfb():
+    """
+    Garante que em servidores Linux sem display físico haja um display virtual (Xvfb) ativo,
+    permitindo que o navegador seja iniciado em modo gráfico (headed) sem erro de XServer.
+    """
+    global _xvfb_process
+    if not sys.platform.startswith('linux'):
+        return
+
+    # Se já existe variável DISPLAY definida (ex: desktop, WSL ou xvfb-run), nada a fazer
+    if os.environ.get('DISPLAY'):
+        return
+
+    # Tenta usar pyvirtualdisplay se instalado
+    try:
+        from pyvirtualdisplay import Display
+        disp = Display(visible=0, size=(1280, 800))
+        disp.start()
+        print("[Webmotors] Display virtual iniciado com pyvirtualdisplay.")
+        return
+    except Exception:
+        pass
+
+    # Tenta iniciar binário Xvfb nativo do sistema
+    xvfb_bin = shutil.which('Xvfb')
+    if not xvfb_bin:
+        return
+
+    if _xvfb_process and _xvfb_process.poll() is None:
+        return
+
+    try:
+        display_num = 99
+        while os.path.exists(f"/tmp/.X11-unix/X{display_num}") or os.path.exists(f"/tmp/.X{display_num}-lock"):
+            display_num += 1
+            if display_num > 130:
+                break
+        disp_str = f":{display_num}"
+        _xvfb_process = subprocess.Popen(
+            [xvfb_bin, disp_str, '-screen', '0', '1280x800x24', '-nolisten', 'tcp', '-ac'],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        os.environ['DISPLAY'] = disp_str
+        time.sleep(1)
+        print(f"[Webmotors] Display virtual Xvfb iniciado automaticamente em {disp_str}")
+    except Exception as e:
+        print(f"[Webmotors] Erro ao iniciar Xvfb automaticamente: {e}")
 
 def normalize_slug(text):
     """Normaliza texto para slug de URL (minúsculo, sem acentos, sem caracteres especiais)."""
@@ -310,19 +365,54 @@ def search_webmotors(query, brand=None, year=None, max_results=5):
         url = f"https://www.webmotors.com.br/carros/estoque?termo={urllib.parse.quote(clean_query)}"
 
     captured_items = []
+    blocked_by_headless = False
 
-    # Inicializa Patchright com janela posicionada fora da tela para discrição
+    # Garante suporte a display virtual em servidores Linux sem interface gráfica
+    ensure_xvfb()
+    has_display = bool(os.environ.get('DISPLAY')) or (sys.platform in ('win32', 'darwin'))
+
+    # Inicializa Patchright
     with sync_playwright() as p:
-        browser = p.chromium.launch(
-            headless=False,
-            args=[
-                '--window-position=3000,3000',
-                '--window-size=1280,800',
-                '--mute-audio',
-                '--no-sandbox',
-                '--disable-blink-features=AutomationControlled'
-            ]
-        )
+        browser = None
+
+        # 1ª tentativa: modo headed (necessário para passar pelo PerimeterX do Webmotors)
+        if has_display:
+            try:
+                browser = p.chromium.launch(
+                    headless=False,
+                    args=[
+                        '--window-position=3000,3000',
+                        '--window-size=1280,800',
+                        '--mute-audio',
+                        '--no-sandbox',
+                        '--disable-dev-shm-usage',
+                        '--disable-blink-features=AutomationControlled'
+                    ]
+                )
+            except Exception as e:
+                print(f"[Webmotors] Falha ao iniciar modo com display: {e}")
+                browser = None
+
+        # 2ª tentativa: fallback para headless se não houver display
+        if not browser:
+            try:
+                browser = p.chromium.launch(
+                    headless=True,
+                    args=[
+                        '--no-sandbox',
+                        '--disable-dev-shm-usage',
+                        '--disable-gpu',
+                        '--window-size=1280,800',
+                        '--disable-blink-features=AutomationControlled'
+                    ]
+                )
+            except Exception as e:
+                raise RuntimeError(
+                    f"Falha ao iniciar navegador no servidor: {e}. "
+                    "Para servidores Linux sem interface gráfica, instale o Xvfb: 'sudo apt-get install -y xvfb' "
+                    "ou inicie a aplicação com: 'xvfb-run -a python app.py'."
+                )
+
         page = browser.new_page()
 
         def on_response(res):
@@ -342,10 +432,19 @@ def search_webmotors(query, brand=None, year=None, max_results=5):
         try:
             page.goto(url, wait_until="domcontentloaded", timeout=25000)
             page.wait_for_timeout(3500)
+            if "Access to this page has been denied" in page.title():
+                blocked_by_headless = True
         except Exception as e:
             print(f"[Webmotors] Aviso ao carregar página: {e}")
         finally:
             browser.close()
+
+    if not captured_items and blocked_by_headless:
+        raise RuntimeError(
+            "O Webmotors bloqueou a consulta em modo headless (sem display). "
+            "Para servidores Linux sem interface gráfica, instale o Xvfb executando: 'sudo apt-get install -y xvfb' "
+            "ou inicie o servidor com: 'xvfb-run -a python app.py'."
+        )
 
     # Deduplicação por UniqueId
     unique_items = {}

@@ -187,3 +187,4 @@ fipe.duckdb
 sugestoes.db
 templates/ad.html
 fichas_cache.db
+/tmp_profile
