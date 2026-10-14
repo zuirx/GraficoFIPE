@@ -1,0 +1,1934 @@
+[
+  {
+    "mes_codigo": 200001,
+    "ipca": 0.62,
+    "selic": 1.46,
+    "dolar": 1.8024
+  },
+  {
+    "mes_codigo": 200002,
+    "ipca": 0.13,
+    "selic": 1.45,
+    "dolar": 1.7685
+  },
+  {
+    "mes_codigo": 200003,
+    "ipca": 0.22,
+    "selic": 1.45,
+    "dolar": 1.7473
+  },
+  {
+    "mes_codigo": 200004,
+    "ipca": 0.42,
+    "selic": 1.3,
+    "dolar": 1.8067
+  },
+  {
+    "mes_codigo": 200005,
+    "ipca": 0.01,
+    "selic": 1.49,
+    "dolar": 1.8266
+  },
+  {
+    "mes_codigo": 200006,
+    "ipca": 0.23,
+    "selic": 1.39,
+    "dolar": 1.8
+  },
+  {
+    "mes_codigo": 200007,
+    "ipca": 1.61,
+    "selic": 1.31,
+    "dolar": 1.7748
+  },
+  {
+    "mes_codigo": 200008,
+    "ipca": 1.31,
+    "selic": 1.41,
+    "dolar": 1.8234
+  },
+  {
+    "mes_codigo": 200009,
+    "ipca": 0.23,
+    "selic": 1.22,
+    "dolar": 1.8437
+  },
+  {
+    "mes_codigo": 200010,
+    "ipca": 0.14,
+    "selic": 1.29,
+    "dolar": 1.909
+  },
+  {
+    "mes_codigo": 200011,
+    "ipca": 0.32,
+    "selic": 1.22,
+    "dolar": 1.9596
+  },
+  {
+    "mes_codigo": 200012,
+    "ipca": 0.59,
+    "selic": 1.2,
+    "dolar": 1.9554
+  },
+  {
+    "mes_codigo": 200101,
+    "ipca": 0.57,
+    "selic": 1.27,
+    "dolar": 1.9711
+  },
+  {
+    "mes_codigo": 200102,
+    "ipca": 0.46,
+    "selic": 1.02,
+    "dolar": 2.0452
+  },
+  {
+    "mes_codigo": 200103,
+    "ipca": 0.38,
+    "selic": 1.26,
+    "dolar": 2.1616
+  },
+  {
+    "mes_codigo": 200104,
+    "ipca": 0.58,
+    "selic": 1.19,
+    "dolar": 2.1847
+  },
+  {
+    "mes_codigo": 200105,
+    "ipca": 0.41,
+    "selic": 1.34,
+    "dolar": 2.36
+  },
+  {
+    "mes_codigo": 200106,
+    "ipca": 0.52,
+    "selic": 1.27,
+    "dolar": 2.3049
+  },
+  {
+    "mes_codigo": 200107,
+    "ipca": 1.33,
+    "selic": 1.5,
+    "dolar": 2.4313
+  },
+  {
+    "mes_codigo": 200108,
+    "ipca": 0.7,
+    "selic": 1.6,
+    "dolar": 2.5517
+  },
+  {
+    "mes_codigo": 200109,
+    "ipca": 0.28,
+    "selic": 1.32,
+    "dolar": 2.6713
+  },
+  {
+    "mes_codigo": 200110,
+    "ipca": 0.83,
+    "selic": 1.53,
+    "dolar": 2.7071
+  },
+  {
+    "mes_codigo": 200111,
+    "ipca": 0.71,
+    "selic": 1.39,
+    "dolar": 2.5287
+  },
+  {
+    "mes_codigo": 200112,
+    "ipca": 0.65,
+    "selic": 1.39,
+    "dolar": 2.3204
+  },
+  {
+    "mes_codigo": 200201,
+    "ipca": 0.52,
+    "selic": 1.53,
+    "dolar": 2.4183
+  },
+  {
+    "mes_codigo": 200202,
+    "ipca": 0.36,
+    "selic": 1.25,
+    "dolar": 2.3482
+  },
+  {
+    "mes_codigo": 200203,
+    "ipca": 0.6,
+    "selic": 1.37,
+    "dolar": 2.3236
+  },
+  {
+    "mes_codigo": 200204,
+    "ipca": 0.8,
+    "selic": 1.48,
+    "dolar": 2.3625
+  },
+  {
+    "mes_codigo": 200205,
+    "ipca": 0.21,
+    "selic": 1.41,
+    "dolar": 2.522
+  },
+  {
+    "mes_codigo": 200206,
+    "ipca": 0.42,
+    "selic": 1.33,
+    "dolar": 2.8444
+  },
+  {
+    "mes_codigo": 200207,
+    "ipca": 1.19,
+    "selic": 1.54,
+    "dolar": 3.4285
+  },
+  {
+    "mes_codigo": 200208,
+    "ipca": 0.65,
+    "selic": 1.44,
+    "dolar": 3.0223
+  },
+  {
+    "mes_codigo": 200209,
+    "ipca": 0.72,
+    "selic": 1.38,
+    "dolar": 3.8949
+  },
+  {
+    "mes_codigo": 200210,
+    "ipca": 1.31,
+    "selic": 1.65,
+    "dolar": 3.645
+  },
+  {
+    "mes_codigo": 200211,
+    "ipca": 3.02,
+    "selic": 1.54,
+    "dolar": 3.6365
+  },
+  {
+    "mes_codigo": 200212,
+    "ipca": 2.1,
+    "selic": 1.74,
+    "dolar": 3.5333
+  },
+  {
+    "mes_codigo": 200301,
+    "ipca": 2.25,
+    "selic": 1.97,
+    "dolar": 3.5258
+  },
+  {
+    "mes_codigo": 200302,
+    "ipca": 1.57,
+    "selic": 1.83,
+    "dolar": 3.5632
+  },
+  {
+    "mes_codigo": 200303,
+    "ipca": 1.23,
+    "selic": 1.78,
+    "dolar": 3.3531
+  },
+  {
+    "mes_codigo": 200304,
+    "ipca": 0.97,
+    "selic": 1.87,
+    "dolar": 2.8898
+  },
+  {
+    "mes_codigo": 200305,
+    "ipca": 0.61,
+    "selic": 1.97,
+    "dolar": 2.9656
+  },
+  {
+    "mes_codigo": 200306,
+    "ipca": -0.15,
+    "selic": 1.86,
+    "dolar": 2.872
+  },
+  {
+    "mes_codigo": 200307,
+    "ipca": 0.2,
+    "selic": 2.08,
+    "dolar": 2.9655
+  },
+  {
+    "mes_codigo": 200308,
+    "ipca": 0.34,
+    "selic": 1.77,
+    "dolar": 2.9665
+  },
+  {
+    "mes_codigo": 200309,
+    "ipca": 0.78,
+    "selic": 1.68,
+    "dolar": 2.9234
+  },
+  {
+    "mes_codigo": 200310,
+    "ipca": 0.29,
+    "selic": 1.64,
+    "dolar": 2.8562
+  },
+  {
+    "mes_codigo": 200311,
+    "ipca": 0.34,
+    "selic": 1.34,
+    "dolar": 2.9494
+  },
+  {
+    "mes_codigo": 200312,
+    "ipca": 0.52,
+    "selic": 1.37,
+    "dolar": 2.8892
+  },
+  {
+    "mes_codigo": 200401,
+    "ipca": 0.76,
+    "selic": 1.27,
+    "dolar": 2.9409
+  },
+  {
+    "mes_codigo": 200402,
+    "ipca": 0.61,
+    "selic": 1.08,
+    "dolar": 2.9138
+  },
+  {
+    "mes_codigo": 200403,
+    "ipca": 0.47,
+    "selic": 1.38,
+    "dolar": 2.9086
+  },
+  {
+    "mes_codigo": 200404,
+    "ipca": 0.37,
+    "selic": 1.18,
+    "dolar": 2.9447
+  },
+  {
+    "mes_codigo": 200405,
+    "ipca": 0.51,
+    "selic": 1.23,
+    "dolar": 3.1291
+  },
+  {
+    "mes_codigo": 200406,
+    "ipca": 0.71,
+    "selic": 1.23,
+    "dolar": 3.1075
+  },
+  {
+    "mes_codigo": 200407,
+    "ipca": 0.91,
+    "selic": 1.29,
+    "dolar": 3.0268
+  },
+  {
+    "mes_codigo": 200408,
+    "ipca": 0.69,
+    "selic": 1.29,
+    "dolar": 2.9338
+  },
+  {
+    "mes_codigo": 200409,
+    "ipca": 0.33,
+    "selic": 1.25,
+    "dolar": 2.8586
+  },
+  {
+    "mes_codigo": 200410,
+    "ipca": 0.44,
+    "selic": 1.21,
+    "dolar": 2.8565
+  },
+  {
+    "mes_codigo": 200411,
+    "ipca": 0.69,
+    "selic": 1.25,
+    "dolar": 2.7307
+  },
+  {
+    "mes_codigo": 200412,
+    "ipca": 0.86,
+    "selic": 1.48,
+    "dolar": 2.6544
+  },
+  {
+    "mes_codigo": 200501,
+    "ipca": 0.58,
+    "selic": 1.38,
+    "dolar": 2.6248
+  },
+  {
+    "mes_codigo": 200502,
+    "ipca": 0.59,
+    "selic": 1.22,
+    "dolar": 2.595
+  },
+  {
+    "mes_codigo": 200503,
+    "ipca": 0.61,
+    "selic": 1.53,
+    "dolar": 2.6662
+  },
+  {
+    "mes_codigo": 200504,
+    "ipca": 0.87,
+    "selic": 1.41,
+    "dolar": 2.5313
+  },
+  {
+    "mes_codigo": 200505,
+    "ipca": 0.49,
+    "selic": 1.5,
+    "dolar": 2.4038
+  },
+  {
+    "mes_codigo": 200506,
+    "ipca": -0.02,
+    "selic": 1.59,
+    "dolar": 2.3504
+  },
+  {
+    "mes_codigo": 200507,
+    "ipca": 0.25,
+    "selic": 1.51,
+    "dolar": 2.3905
+  },
+  {
+    "mes_codigo": 200508,
+    "ipca": 0.17,
+    "selic": 1.66,
+    "dolar": 2.3637
+  },
+  {
+    "mes_codigo": 200509,
+    "ipca": 0.35,
+    "selic": 1.5,
+    "dolar": 2.2222
+  },
+  {
+    "mes_codigo": 200510,
+    "ipca": 0.75,
+    "selic": 1.41,
+    "dolar": 2.2543
+  },
+  {
+    "mes_codigo": 200511,
+    "ipca": 0.55,
+    "selic": 1.38,
+    "dolar": 2.207
+  },
+  {
+    "mes_codigo": 200512,
+    "ipca": 0.36,
+    "selic": 1.47,
+    "dolar": 2.3407
+  },
+  {
+    "mes_codigo": 200601,
+    "ipca": 0.59,
+    "selic": 1.43,
+    "dolar": 2.216
+  },
+  {
+    "mes_codigo": 200602,
+    "ipca": 0.41,
+    "selic": 1.15,
+    "dolar": 2.1355
+  },
+  {
+    "mes_codigo": 200603,
+    "ipca": 0.43,
+    "selic": 1.42,
+    "dolar": 2.1724
+  },
+  {
+    "mes_codigo": 200604,
+    "ipca": 0.21,
+    "selic": 1.08,
+    "dolar": 2.0892
+  },
+  {
+    "mes_codigo": 200605,
+    "ipca": 0.1,
+    "selic": 1.28,
+    "dolar": 2.3005
+  },
+  {
+    "mes_codigo": 200606,
+    "ipca": -0.21,
+    "selic": 1.18,
+    "dolar": 2.1643
+  },
+  {
+    "mes_codigo": 200607,
+    "ipca": 0.19,
+    "selic": 1.17,
+    "dolar": 2.1762
+  },
+  {
+    "mes_codigo": 200608,
+    "ipca": 0.05,
+    "selic": 1.26,
+    "dolar": 2.1388
+  },
+  {
+    "mes_codigo": 200609,
+    "ipca": 0.21,
+    "selic": 1.06,
+    "dolar": 2.1742
+  },
+  {
+    "mes_codigo": 200610,
+    "ipca": 0.33,
+    "selic": 1.09,
+    "dolar": 2.143
+  },
+  {
+    "mes_codigo": 200611,
+    "ipca": 0.31,
+    "selic": 1.02,
+    "dolar": 2.1668
+  },
+  {
+    "mes_codigo": 200612,
+    "ipca": 0.48,
+    "selic": 0.99,
+    "dolar": 2.138
+  },
+  {
+    "mes_codigo": 200701,
+    "ipca": 0.44,
+    "selic": 1.08,
+    "dolar": 2.1247
+  },
+  {
+    "mes_codigo": 200702,
+    "ipca": 0.44,
+    "selic": 0.87,
+    "dolar": 2.1182
+  },
+  {
+    "mes_codigo": 200703,
+    "ipca": 0.37,
+    "selic": 1.05,
+    "dolar": 2.0504
+  },
+  {
+    "mes_codigo": 200704,
+    "ipca": 0.25,
+    "selic": 0.94,
+    "dolar": 2.0339
+  },
+  {
+    "mes_codigo": 200705,
+    "ipca": 0.28,
+    "selic": 1.03,
+    "dolar": 1.9289
+  },
+  {
+    "mes_codigo": 200706,
+    "ipca": 0.28,
+    "selic": 0.91,
+    "dolar": 1.9262
+  },
+  {
+    "mes_codigo": 200707,
+    "ipca": 0.24,
+    "selic": 0.97,
+    "dolar": 1.8776
+  },
+  {
+    "mes_codigo": 200708,
+    "ipca": 0.47,
+    "selic": 0.99,
+    "dolar": 1.962
+  },
+  {
+    "mes_codigo": 200709,
+    "ipca": 0.18,
+    "selic": 0.8,
+    "dolar": 1.8389
+  },
+  {
+    "mes_codigo": 200710,
+    "ipca": 0.3,
+    "selic": 0.93,
+    "dolar": 1.744
+  },
+  {
+    "mes_codigo": 200711,
+    "ipca": 0.38,
+    "selic": 0.84,
+    "dolar": 1.7837
+  },
+  {
+    "mes_codigo": 200712,
+    "ipca": 0.74,
+    "selic": 0.84,
+    "dolar": 1.7713
+  },
+  {
+    "mes_codigo": 200801,
+    "ipca": 0.54,
+    "selic": 0.93,
+    "dolar": 1.7603
+  },
+  {
+    "mes_codigo": 200802,
+    "ipca": 0.49,
+    "selic": 0.8,
+    "dolar": 1.6833
+  },
+  {
+    "mes_codigo": 200803,
+    "ipca": 0.48,
+    "selic": 0.84,
+    "dolar": 1.7491
+  },
+  {
+    "mes_codigo": 200804,
+    "ipca": 0.55,
+    "selic": 0.9,
+    "dolar": 1.6872
+  },
+  {
+    "mes_codigo": 200805,
+    "ipca": 0.79,
+    "selic": 0.88,
+    "dolar": 1.6294
+  },
+  {
+    "mes_codigo": 200806,
+    "ipca": 0.74,
+    "selic": 0.96,
+    "dolar": 1.5919
+  },
+  {
+    "mes_codigo": 200807,
+    "ipca": 0.53,
+    "selic": 1.07,
+    "dolar": 1.5666
+  },
+  {
+    "mes_codigo": 200808,
+    "ipca": 0.28,
+    "selic": 1.02,
+    "dolar": 1.6344
+  },
+  {
+    "mes_codigo": 200809,
+    "ipca": 0.26,
+    "selic": 1.1,
+    "dolar": 1.9143
+  },
+  {
+    "mes_codigo": 200810,
+    "ipca": 0.45,
+    "selic": 1.18,
+    "dolar": 2.1153
+  },
+  {
+    "mes_codigo": 200811,
+    "ipca": 0.36,
+    "selic": 1.02,
+    "dolar": 2.3331
+  },
+  {
+    "mes_codigo": 200812,
+    "ipca": 0.28,
+    "selic": 1.12,
+    "dolar": 2.337
+  },
+  {
+    "mes_codigo": 200901,
+    "ipca": 0.48,
+    "selic": 1.05,
+    "dolar": 2.3162
+  },
+  {
+    "mes_codigo": 200902,
+    "ipca": 0.55,
+    "selic": 0.86,
+    "dolar": 2.3784
+  },
+  {
+    "mes_codigo": 200903,
+    "ipca": 0.2,
+    "selic": 0.97,
+    "dolar": 2.3152
+  },
+  {
+    "mes_codigo": 200904,
+    "ipca": 0.48,
+    "selic": 0.84,
+    "dolar": 2.1783
+  },
+  {
+    "mes_codigo": 200905,
+    "ipca": 0.47,
+    "selic": 0.77,
+    "dolar": 1.973
+  },
+  {
+    "mes_codigo": 200906,
+    "ipca": 0.36,
+    "selic": 0.76,
+    "dolar": 1.9516
+  },
+  {
+    "mes_codigo": 200907,
+    "ipca": 0.24,
+    "selic": 0.79,
+    "dolar": 1.8726
+  },
+  {
+    "mes_codigo": 200908,
+    "ipca": 0.15,
+    "selic": 0.69,
+    "dolar": 1.8864
+  },
+  {
+    "mes_codigo": 200909,
+    "ipca": 0.24,
+    "selic": 0.69,
+    "dolar": 1.7781
+  },
+  {
+    "mes_codigo": 200910,
+    "ipca": 0.28,
+    "selic": 0.69,
+    "dolar": 1.744
+  },
+  {
+    "mes_codigo": 200911,
+    "ipca": 0.41,
+    "selic": 0.66,
+    "dolar": 1.7505
+  },
+  {
+    "mes_codigo": 200912,
+    "ipca": 0.37,
+    "selic": 0.73,
+    "dolar": 1.7412
+  },
+  {
+    "mes_codigo": 201001,
+    "ipca": 0.75,
+    "selic": 0.66,
+    "dolar": 1.8748
+  },
+  {
+    "mes_codigo": 201002,
+    "ipca": 0.78,
+    "selic": 0.59,
+    "dolar": 1.811
+  },
+  {
+    "mes_codigo": 201003,
+    "ipca": 0.52,
+    "selic": 0.76,
+    "dolar": 1.781
+  },
+  {
+    "mes_codigo": 201004,
+    "ipca": 0.57,
+    "selic": 0.67,
+    "dolar": 1.7306
+  },
+  {
+    "mes_codigo": 201005,
+    "ipca": 0.43,
+    "selic": 0.75,
+    "dolar": 1.8167
+  },
+  {
+    "mes_codigo": 201006,
+    "ipca": 0.0,
+    "selic": 0.79,
+    "dolar": 1.8015
+  },
+  {
+    "mes_codigo": 201007,
+    "ipca": 0.01,
+    "selic": 0.86,
+    "dolar": 1.7572
+  },
+  {
+    "mes_codigo": 201008,
+    "ipca": 0.04,
+    "selic": 0.89,
+    "dolar": 1.756
+  },
+  {
+    "mes_codigo": 201009,
+    "ipca": 0.45,
+    "selic": 0.85,
+    "dolar": 1.6942
+  },
+  {
+    "mes_codigo": 201010,
+    "ipca": 0.75,
+    "selic": 0.81,
+    "dolar": 1.7014
+  },
+  {
+    "mes_codigo": 201011,
+    "ipca": 0.83,
+    "selic": 0.81,
+    "dolar": 1.7161
+  },
+  {
+    "mes_codigo": 201012,
+    "ipca": 0.63,
+    "selic": 0.93,
+    "dolar": 1.6662
+  },
+  {
+    "mes_codigo": 201101,
+    "ipca": 0.83,
+    "selic": 0.86,
+    "dolar": 1.6734
+  },
+  {
+    "mes_codigo": 201102,
+    "ipca": 0.8,
+    "selic": 0.84,
+    "dolar": 1.6612
+  },
+  {
+    "mes_codigo": 201103,
+    "ipca": 0.79,
+    "selic": 0.92,
+    "dolar": 1.6287
+  },
+  {
+    "mes_codigo": 201104,
+    "ipca": 0.77,
+    "selic": 0.84,
+    "dolar": 1.5733
+  },
+  {
+    "mes_codigo": 201105,
+    "ipca": 0.47,
+    "selic": 0.99,
+    "dolar": 1.5799
+  },
+  {
+    "mes_codigo": 201106,
+    "ipca": 0.15,
+    "selic": 0.96,
+    "dolar": 1.5611
+  },
+  {
+    "mes_codigo": 201107,
+    "ipca": 0.16,
+    "selic": 0.97,
+    "dolar": 1.5563
+  },
+  {
+    "mes_codigo": 201108,
+    "ipca": 0.37,
+    "selic": 1.07,
+    "dolar": 1.5872
+  },
+  {
+    "mes_codigo": 201109,
+    "ipca": 0.53,
+    "selic": 0.94,
+    "dolar": 1.8544
+  },
+  {
+    "mes_codigo": 201110,
+    "ipca": 0.43,
+    "selic": 0.88,
+    "dolar": 1.6885
+  },
+  {
+    "mes_codigo": 201111,
+    "ipca": 0.52,
+    "selic": 0.86,
+    "dolar": 1.8109
+  },
+  {
+    "mes_codigo": 201112,
+    "ipca": 0.5,
+    "selic": 0.91,
+    "dolar": 1.8758
+  },
+  {
+    "mes_codigo": 201201,
+    "ipca": 0.56,
+    "selic": 0.89,
+    "dolar": 1.7391
+  },
+  {
+    "mes_codigo": 201202,
+    "ipca": 0.45,
+    "selic": 0.75,
+    "dolar": 1.7092
+  },
+  {
+    "mes_codigo": 201203,
+    "ipca": 0.21,
+    "selic": 0.82,
+    "dolar": 1.8221
+  },
+  {
+    "mes_codigo": 201204,
+    "ipca": 0.64,
+    "selic": 0.71,
+    "dolar": 1.8918
+  },
+  {
+    "mes_codigo": 201205,
+    "ipca": 0.36,
+    "selic": 0.74,
+    "dolar": 2.0223
+  },
+  {
+    "mes_codigo": 201206,
+    "ipca": 0.08,
+    "selic": 0.64,
+    "dolar": 2.0213
+  },
+  {
+    "mes_codigo": 201207,
+    "ipca": 0.43,
+    "selic": 0.68,
+    "dolar": 2.0499
+  },
+  {
+    "mes_codigo": 201208,
+    "ipca": 0.41,
+    "selic": 0.69,
+    "dolar": 2.0372
+  },
+  {
+    "mes_codigo": 201209,
+    "ipca": 0.57,
+    "selic": 0.54,
+    "dolar": 2.0306
+  },
+  {
+    "mes_codigo": 201210,
+    "ipca": 0.59,
+    "selic": 0.61,
+    "dolar": 2.0313
+  },
+  {
+    "mes_codigo": 201211,
+    "ipca": 0.6,
+    "selic": 0.55,
+    "dolar": 2.1074
+  },
+  {
+    "mes_codigo": 201212,
+    "ipca": 0.79,
+    "selic": 0.55,
+    "dolar": 2.0435
+  },
+  {
+    "mes_codigo": 201301,
+    "ipca": 0.86,
+    "selic": 0.6,
+    "dolar": 1.9883
+  },
+  {
+    "mes_codigo": 201302,
+    "ipca": 0.6,
+    "selic": 0.49,
+    "dolar": 1.9754
+  },
+  {
+    "mes_codigo": 201303,
+    "ipca": 0.47,
+    "selic": 0.55,
+    "dolar": 2.0138
+  },
+  {
+    "mes_codigo": 201304,
+    "ipca": 0.55,
+    "selic": 0.61,
+    "dolar": 2.0017
+  },
+  {
+    "mes_codigo": 201305,
+    "ipca": 0.37,
+    "selic": 0.6,
+    "dolar": 2.1319
+  },
+  {
+    "mes_codigo": 201306,
+    "ipca": 0.26,
+    "selic": 0.61,
+    "dolar": 2.2156
+  },
+  {
+    "mes_codigo": 201307,
+    "ipca": 0.03,
+    "selic": 0.72,
+    "dolar": 2.2903
+  },
+  {
+    "mes_codigo": 201308,
+    "ipca": 0.24,
+    "selic": 0.71,
+    "dolar": 2.3725
+  },
+  {
+    "mes_codigo": 201309,
+    "ipca": 0.35,
+    "selic": 0.71,
+    "dolar": 2.23
+  },
+  {
+    "mes_codigo": 201310,
+    "ipca": 0.57,
+    "selic": 0.81,
+    "dolar": 2.2026
+  },
+  {
+    "mes_codigo": 201311,
+    "ipca": 0.54,
+    "selic": 0.72,
+    "dolar": 2.3249
+  },
+  {
+    "mes_codigo": 201312,
+    "ipca": 0.92,
+    "selic": 0.79,
+    "dolar": 2.3426
+  },
+  {
+    "mes_codigo": 201401,
+    "ipca": 0.55,
+    "selic": 0.85,
+    "dolar": 2.4263
+  },
+  {
+    "mes_codigo": 201402,
+    "ipca": 0.69,
+    "selic": 0.79,
+    "dolar": 2.3334
+  },
+  {
+    "mes_codigo": 201403,
+    "ipca": 0.92,
+    "selic": 0.77,
+    "dolar": 2.263
+  },
+  {
+    "mes_codigo": 201404,
+    "ipca": 0.67,
+    "selic": 0.82,
+    "dolar": 2.236
+  },
+  {
+    "mes_codigo": 201405,
+    "ipca": 0.46,
+    "selic": 0.87,
+    "dolar": 2.239
+  },
+  {
+    "mes_codigo": 201406,
+    "ipca": 0.4,
+    "selic": 0.82,
+    "dolar": 2.2025
+  },
+  {
+    "mes_codigo": 201407,
+    "ipca": 0.01,
+    "selic": 0.95,
+    "dolar": 2.2674
+  },
+  {
+    "mes_codigo": 201408,
+    "ipca": 0.25,
+    "selic": 0.87,
+    "dolar": 2.2396
+  },
+  {
+    "mes_codigo": 201409,
+    "ipca": 0.57,
+    "selic": 0.91,
+    "dolar": 2.451
+  },
+  {
+    "mes_codigo": 201410,
+    "ipca": 0.42,
+    "selic": 0.95,
+    "dolar": 2.4442
+  },
+  {
+    "mes_codigo": 201411,
+    "ipca": 0.51,
+    "selic": 0.84,
+    "dolar": 2.5601
+  },
+  {
+    "mes_codigo": 201412,
+    "ipca": 0.78,
+    "selic": 0.96,
+    "dolar": 2.6562
+  },
+  {
+    "mes_codigo": 201501,
+    "ipca": 1.24,
+    "selic": 0.94,
+    "dolar": 2.6623
+  },
+  {
+    "mes_codigo": 201502,
+    "ipca": 1.22,
+    "selic": 0.82,
+    "dolar": 2.8782
+  },
+  {
+    "mes_codigo": 201503,
+    "ipca": 1.32,
+    "selic": 1.04,
+    "dolar": 3.208
+  },
+  {
+    "mes_codigo": 201504,
+    "ipca": 0.71,
+    "selic": 0.95,
+    "dolar": 2.9936
+  },
+  {
+    "mes_codigo": 201505,
+    "ipca": 0.74,
+    "selic": 0.99,
+    "dolar": 3.1788
+  },
+  {
+    "mes_codigo": 201506,
+    "ipca": 0.79,
+    "selic": 1.07,
+    "dolar": 3.1026
+  },
+  {
+    "mes_codigo": 201507,
+    "ipca": 0.62,
+    "selic": 1.18,
+    "dolar": 3.394
+  },
+  {
+    "mes_codigo": 201508,
+    "ipca": 0.22,
+    "selic": 1.11,
+    "dolar": 3.6467
+  },
+  {
+    "mes_codigo": 201509,
+    "ipca": 0.54,
+    "selic": 1.11,
+    "dolar": 3.9729
+  },
+  {
+    "mes_codigo": 201510,
+    "ipca": 0.82,
+    "selic": 1.11,
+    "dolar": 3.8589
+  },
+  {
+    "mes_codigo": 201511,
+    "ipca": 1.01,
+    "selic": 1.06,
+    "dolar": 3.8506
+  },
+  {
+    "mes_codigo": 201512,
+    "ipca": 0.96,
+    "selic": 1.16,
+    "dolar": 3.9048
+  },
+  {
+    "mes_codigo": 201601,
+    "ipca": 1.27,
+    "selic": 1.06,
+    "dolar": 4.0428
+  },
+  {
+    "mes_codigo": 201602,
+    "ipca": 0.9,
+    "selic": 1.0,
+    "dolar": 3.9796
+  },
+  {
+    "mes_codigo": 201603,
+    "ipca": 0.43,
+    "selic": 1.16,
+    "dolar": 3.5589
+  },
+  {
+    "mes_codigo": 201604,
+    "ipca": 0.61,
+    "selic": 1.06,
+    "dolar": 3.4508
+  },
+  {
+    "mes_codigo": 201605,
+    "ipca": 0.78,
+    "selic": 1.11,
+    "dolar": 3.5951
+  },
+  {
+    "mes_codigo": 201606,
+    "ipca": 0.35,
+    "selic": 1.16,
+    "dolar": 3.2098
+  },
+  {
+    "mes_codigo": 201607,
+    "ipca": 0.52,
+    "selic": 1.11,
+    "dolar": 3.239
+  },
+  {
+    "mes_codigo": 201608,
+    "ipca": 0.44,
+    "selic": 1.22,
+    "dolar": 3.2403
+  },
+  {
+    "mes_codigo": 201609,
+    "ipca": 0.08,
+    "selic": 1.11,
+    "dolar": 3.2462
+  },
+  {
+    "mes_codigo": 201610,
+    "ipca": 0.26,
+    "selic": 1.05,
+    "dolar": 3.1811
+  },
+  {
+    "mes_codigo": 201611,
+    "ipca": 0.18,
+    "selic": 1.04,
+    "dolar": 3.3967
+  },
+  {
+    "mes_codigo": 201612,
+    "ipca": 0.3,
+    "selic": 1.12,
+    "dolar": 3.2591
+  },
+  {
+    "mes_codigo": 201701,
+    "ipca": 0.38,
+    "selic": 1.09,
+    "dolar": 3.127
+  },
+  {
+    "mes_codigo": 201702,
+    "ipca": 0.33,
+    "selic": 0.87,
+    "dolar": 3.0993
+  },
+  {
+    "mes_codigo": 201703,
+    "ipca": 0.25,
+    "selic": 1.05,
+    "dolar": 3.1684
+  },
+  {
+    "mes_codigo": 201704,
+    "ipca": 0.14,
+    "selic": 0.79,
+    "dolar": 3.1984
+  },
+  {
+    "mes_codigo": 201705,
+    "ipca": 0.31,
+    "selic": 0.93,
+    "dolar": 3.2437
+  },
+  {
+    "mes_codigo": 201706,
+    "ipca": -0.23,
+    "selic": 0.81,
+    "dolar": 3.3082
+  },
+  {
+    "mes_codigo": 201707,
+    "ipca": 0.24,
+    "selic": 0.8,
+    "dolar": 3.1307
+  },
+  {
+    "mes_codigo": 201708,
+    "ipca": 0.19,
+    "selic": 0.8,
+    "dolar": 3.1471
+  },
+  {
+    "mes_codigo": 201709,
+    "ipca": 0.16,
+    "selic": 0.64,
+    "dolar": 3.168
+  },
+  {
+    "mes_codigo": 201710,
+    "ipca": 0.42,
+    "selic": 0.64,
+    "dolar": 3.2769
+  },
+  {
+    "mes_codigo": 201711,
+    "ipca": 0.28,
+    "selic": 0.57,
+    "dolar": 3.2616
+  },
+  {
+    "mes_codigo": 201712,
+    "ipca": 0.44,
+    "selic": 0.54,
+    "dolar": 3.308
+  },
+  {
+    "mes_codigo": 201801,
+    "ipca": 0.29,
+    "selic": 0.58,
+    "dolar": 3.1624
+  },
+  {
+    "mes_codigo": 201802,
+    "ipca": 0.32,
+    "selic": 0.47,
+    "dolar": 3.2449
+  },
+  {
+    "mes_codigo": 201803,
+    "ipca": 0.09,
+    "selic": 0.53,
+    "dolar": 3.3238
+  },
+  {
+    "mes_codigo": 201804,
+    "ipca": 0.22,
+    "selic": 0.52,
+    "dolar": 3.4811
+  },
+  {
+    "mes_codigo": 201805,
+    "ipca": 0.4,
+    "selic": 0.52,
+    "dolar": 3.737
+  },
+  {
+    "mes_codigo": 201806,
+    "ipca": 1.26,
+    "selic": 0.52,
+    "dolar": 3.8558
+  },
+  {
+    "mes_codigo": 201807,
+    "ipca": 0.33,
+    "selic": 0.54,
+    "dolar": 3.7549
+  },
+  {
+    "mes_codigo": 201808,
+    "ipca": -0.09,
+    "selic": 0.57,
+    "dolar": 4.1353
+  },
+  {
+    "mes_codigo": 201809,
+    "ipca": 0.48,
+    "selic": 0.47,
+    "dolar": 4.0039
+  },
+  {
+    "mes_codigo": 201810,
+    "ipca": 0.45,
+    "selic": 0.54,
+    "dolar": 3.7177
+  },
+  {
+    "mes_codigo": 201811,
+    "ipca": -0.21,
+    "selic": 0.49,
+    "dolar": 3.8633
+  },
+  {
+    "mes_codigo": 201812,
+    "ipca": 0.15,
+    "selic": 0.49,
+    "dolar": 3.8748
+  },
+  {
+    "mes_codigo": 201901,
+    "ipca": 0.32,
+    "selic": 0.54,
+    "dolar": 3.6519
+  },
+  {
+    "mes_codigo": 201902,
+    "ipca": 0.43,
+    "selic": 0.49,
+    "dolar": 3.7385
+  },
+  {
+    "mes_codigo": 201903,
+    "ipca": 0.75,
+    "selic": 0.47,
+    "dolar": 3.8967
+  },
+  {
+    "mes_codigo": 201904,
+    "ipca": 0.57,
+    "selic": 0.52,
+    "dolar": 3.9453
+  },
+  {
+    "mes_codigo": 201905,
+    "ipca": 0.13,
+    "selic": 0.54,
+    "dolar": 3.9407
+  },
+  {
+    "mes_codigo": 201906,
+    "ipca": 0.01,
+    "selic": 0.47,
+    "dolar": 3.8322
+  },
+  {
+    "mes_codigo": 201907,
+    "ipca": 0.19,
+    "selic": 0.57,
+    "dolar": 3.7649
+  },
+  {
+    "mes_codigo": 201908,
+    "ipca": 0.11,
+    "selic": 0.5,
+    "dolar": 4.1385
+  },
+  {
+    "mes_codigo": 201909,
+    "ipca": -0.04,
+    "selic": 0.46,
+    "dolar": 4.1644
+  },
+  {
+    "mes_codigo": 201910,
+    "ipca": 0.1,
+    "selic": 0.48,
+    "dolar": 4.0041
+  },
+  {
+    "mes_codigo": 201911,
+    "ipca": 0.51,
+    "selic": 0.38,
+    "dolar": 4.224
+  },
+  {
+    "mes_codigo": 201912,
+    "ipca": 1.15,
+    "selic": 0.37,
+    "dolar": 4.0307
+  },
+  {
+    "mes_codigo": 202001,
+    "ipca": 0.21,
+    "selic": 0.38,
+    "dolar": 4.2695
+  },
+  {
+    "mes_codigo": 202002,
+    "ipca": 0.25,
+    "selic": 0.29,
+    "dolar": 4.4987
+  },
+  {
+    "mes_codigo": 202003,
+    "ipca": 0.07,
+    "selic": 0.34,
+    "dolar": 5.1987
+  },
+  {
+    "mes_codigo": 202004,
+    "ipca": -0.31,
+    "selic": 0.28,
+    "dolar": 5.427
+  },
+  {
+    "mes_codigo": 202005,
+    "ipca": -0.38,
+    "selic": 0.24,
+    "dolar": 5.4263
+  },
+  {
+    "mes_codigo": 202006,
+    "ipca": 0.26,
+    "selic": 0.21,
+    "dolar": 5.476
+  },
+  {
+    "mes_codigo": 202007,
+    "ipca": 0.36,
+    "selic": 0.19,
+    "dolar": 5.2033
+  },
+  {
+    "mes_codigo": 202008,
+    "ipca": 0.24,
+    "selic": 0.16,
+    "dolar": 5.4713
+  },
+  {
+    "mes_codigo": 202009,
+    "ipca": 0.64,
+    "selic": 0.16,
+    "dolar": 5.6407
+  },
+  {
+    "mes_codigo": 202010,
+    "ipca": 0.86,
+    "selic": 0.16,
+    "dolar": 5.7718
+  },
+  {
+    "mes_codigo": 202011,
+    "ipca": 0.89,
+    "selic": 0.15,
+    "dolar": 5.3317
+  },
+  {
+    "mes_codigo": 202012,
+    "ipca": 1.35,
+    "selic": 0.16,
+    "dolar": 5.1967
+  },
+  {
+    "mes_codigo": 202101,
+    "ipca": 0.25,
+    "selic": 0.15,
+    "dolar": 5.4759
+  },
+  {
+    "mes_codigo": 202102,
+    "ipca": 0.86,
+    "selic": 0.13,
+    "dolar": 5.5302
+  },
+  {
+    "mes_codigo": 202103,
+    "ipca": 0.93,
+    "selic": 0.2,
+    "dolar": 5.6973
+  },
+  {
+    "mes_codigo": 202104,
+    "ipca": 0.31,
+    "selic": 0.21,
+    "dolar": 5.4036
+  },
+  {
+    "mes_codigo": 202105,
+    "ipca": 0.83,
+    "selic": 0.27,
+    "dolar": 5.2322
+  },
+  {
+    "mes_codigo": 202106,
+    "ipca": 0.53,
+    "selic": 0.31,
+    "dolar": 5.0022
+  },
+  {
+    "mes_codigo": 202107,
+    "ipca": 0.96,
+    "selic": 0.36,
+    "dolar": 5.1216
+  },
+  {
+    "mes_codigo": 202108,
+    "ipca": 0.87,
+    "selic": 0.43,
+    "dolar": 5.1433
+  },
+  {
+    "mes_codigo": 202109,
+    "ipca": 1.16,
+    "selic": 0.44,
+    "dolar": 5.4394
+  },
+  {
+    "mes_codigo": 202110,
+    "ipca": 1.25,
+    "selic": 0.49,
+    "dolar": 5.643
+  },
+  {
+    "mes_codigo": 202111,
+    "ipca": 0.95,
+    "selic": 0.59,
+    "dolar": 5.6199
+  },
+  {
+    "mes_codigo": 202112,
+    "ipca": 0.73,
+    "selic": 0.77,
+    "dolar": 5.5805
+  },
+  {
+    "mes_codigo": 202201,
+    "ipca": 0.54,
+    "selic": 0.73,
+    "dolar": 5.3574
+  },
+  {
+    "mes_codigo": 202202,
+    "ipca": 1.01,
+    "selic": 0.76,
+    "dolar": 5.1394
+  },
+  {
+    "mes_codigo": 202203,
+    "ipca": 1.62,
+    "selic": 0.93,
+    "dolar": 4.7378
+  },
+  {
+    "mes_codigo": 202204,
+    "ipca": 1.06,
+    "selic": 0.83,
+    "dolar": 4.9191
+  },
+  {
+    "mes_codigo": 202205,
+    "ipca": 0.47,
+    "selic": 1.03,
+    "dolar": 4.7289
+  },
+  {
+    "mes_codigo": 202206,
+    "ipca": 0.67,
+    "selic": 1.02,
+    "dolar": 5.238
+  },
+  {
+    "mes_codigo": 202207,
+    "ipca": -0.68,
+    "selic": 1.03,
+    "dolar": 5.1884
+  },
+  {
+    "mes_codigo": 202208,
+    "ipca": -0.36,
+    "selic": 1.17,
+    "dolar": 5.179
+  },
+  {
+    "mes_codigo": 202209,
+    "ipca": -0.29,
+    "selic": 1.07,
+    "dolar": 5.4066
+  },
+  {
+    "mes_codigo": 202210,
+    "ipca": 0.59,
+    "selic": 1.02,
+    "dolar": 5.257
+  },
+  {
+    "mes_codigo": 202211,
+    "ipca": 0.41,
+    "selic": 1.02,
+    "dolar": 5.2941
+  },
+  {
+    "mes_codigo": 202212,
+    "ipca": 0.62,
+    "selic": 1.12,
+    "dolar": 5.2177
+  },
+  {
+    "mes_codigo": 202301,
+    "ipca": 0.53,
+    "selic": 1.12,
+    "dolar": 5.0993
+  },
+  {
+    "mes_codigo": 202302,
+    "ipca": 0.84,
+    "selic": 0.92,
+    "dolar": 5.2078
+  },
+  {
+    "mes_codigo": 202303,
+    "ipca": 0.71,
+    "selic": 1.17,
+    "dolar": 5.0804
+  },
+  {
+    "mes_codigo": 202304,
+    "ipca": 0.61,
+    "selic": 0.92,
+    "dolar": 5.0007
+  },
+  {
+    "mes_codigo": 202305,
+    "ipca": 0.23,
+    "selic": 1.12,
+    "dolar": 5.0959
+  },
+  {
+    "mes_codigo": 202306,
+    "ipca": -0.08,
+    "selic": 1.07,
+    "dolar": 4.8192
+  },
+  {
+    "mes_codigo": 202307,
+    "ipca": 0.12,
+    "selic": 1.07,
+    "dolar": 4.7415
+  },
+  {
+    "mes_codigo": 202308,
+    "ipca": 0.23,
+    "selic": 1.14,
+    "dolar": 4.9219
+  },
+  {
+    "mes_codigo": 202309,
+    "ipca": 0.26,
+    "selic": 0.97,
+    "dolar": 5.0076
+  },
+  {
+    "mes_codigo": 202310,
+    "ipca": 0.24,
+    "selic": 1.0,
+    "dolar": 5.0575
+  },
+  {
+    "mes_codigo": 202311,
+    "ipca": 0.28,
+    "selic": 0.92,
+    "dolar": 4.9355
+  },
+  {
+    "mes_codigo": 202312,
+    "ipca": 0.56,
+    "selic": 0.89,
+    "dolar": 4.8413
+  },
+  {
+    "mes_codigo": 202401,
+    "ipca": 0.42,
+    "selic": 0.97,
+    "dolar": 4.9535
+  },
+  {
+    "mes_codigo": 202402,
+    "ipca": 0.83,
+    "selic": 0.8,
+    "dolar": 4.9833
+  },
+  {
+    "mes_codigo": 202403,
+    "ipca": 0.16,
+    "selic": 0.83,
+    "dolar": 4.9962
+  },
+  {
+    "mes_codigo": 202404,
+    "ipca": 0.38,
+    "selic": 0.89,
+    "dolar": 5.1718
+  },
+  {
+    "mes_codigo": 202405,
+    "ipca": 0.46,
+    "selic": 0.83,
+    "dolar": 5.2416
+  },
+  {
+    "mes_codigo": 202406,
+    "ipca": 0.21,
+    "selic": 0.79,
+    "dolar": 5.5589
+  },
+  {
+    "mes_codigo": 202407,
+    "ipca": 0.38,
+    "selic": 0.91,
+    "dolar": 5.6621
+  },
+  {
+    "mes_codigo": 202408,
+    "ipca": -0.02,
+    "selic": 0.87,
+    "dolar": 5.6562
+  },
+  {
+    "mes_codigo": 202409,
+    "ipca": 0.44,
+    "selic": 0.84,
+    "dolar": 5.4481
+  },
+  {
+    "mes_codigo": 202410,
+    "ipca": 0.56,
+    "selic": 0.93,
+    "dolar": 5.7779
+  },
+  {
+    "mes_codigo": 202411,
+    "ipca": 0.39,
+    "selic": 0.79,
+    "dolar": 6.0535
+  },
+  {
+    "mes_codigo": 202412,
+    "ipca": 0.52,
+    "selic": 0.93,
+    "dolar": 6.1923
+  },
+  {
+    "mes_codigo": 202501,
+    "ipca": 0.16,
+    "selic": 1.01,
+    "dolar": 5.8301
+  },
+  {
+    "mes_codigo": 202502,
+    "ipca": 1.31,
+    "selic": 0.99,
+    "dolar": 5.8488
+  },
+  {
+    "mes_codigo": 202503,
+    "ipca": 0.56,
+    "selic": 0.96,
+    "dolar": 5.7422
+  },
+  {
+    "mes_codigo": 202504,
+    "ipca": 0.43,
+    "selic": 1.06,
+    "dolar": 5.6608
+  },
+  {
+    "mes_codigo": 202505,
+    "ipca": 0.26,
+    "selic": 1.14,
+    "dolar": 5.7087
+  },
+  {
+    "mes_codigo": 202506,
+    "ipca": 0.24,
+    "selic": 1.1,
+    "dolar": 5.4571
+  },
+  {
+    "mes_codigo": 202507,
+    "ipca": 0.26,
+    "selic": 1.28,
+    "dolar": 5.6021
+  },
+  {
+    "mes_codigo": 202508,
+    "ipca": -0.11,
+    "selic": 1.16,
+    "dolar": 5.4264
+  },
+  {
+    "mes_codigo": 202509,
+    "ipca": 0.48,
+    "selic": 1.22,
+    "dolar": 5.3186
+  },
+  {
+    "mes_codigo": 202510,
+    "ipca": 0.09,
+    "selic": 1.28,
+    "dolar": 5.3843
+  },
+  {
+    "mes_codigo": 202511,
+    "ipca": 0.18,
+    "selic": 1.05,
+    "dolar": 5.3338
+  },
+  {
+    "mes_codigo": 202512,
+    "ipca": 0.33,
+    "selic": 1.22,
+    "dolar": 5.5024
+  },
+  {
+    "mes_codigo": 202601,
+    "ipca": 0.33,
+    "selic": 1.16,
+    "dolar": 5.2301
+  },
+  {
+    "mes_codigo": 202602,
+    "ipca": 0.7,
+    "selic": 1.0,
+    "dolar": 5.1495
+  },
+  {
+    "mes_codigo": 202603,
+    "ipca": 0.88,
+    "selic": 1.21,
+    "dolar": 5.2194
+  },
+  {
+    "mes_codigo": 202604,
+    "ipca": 0.67,
+    "selic": 1.09,
+    "dolar": 4.9886
+  },
+  {
+    "mes_codigo": 202605,
+    "ipca": 0.58,
+    "selic": 1.07,
+    "dolar": 5.0569
+  },
+  {
+    "mes_codigo": 202606,
+    "ipca": 0.16,
+    "selic": 1.12,
+    "dolar": 5.1766
+  },
+  {
+    "mes_codigo": 202607,
+    "ipca": 0.07,
+    "selic": 1.22,
+    "dolar": 5.0773
+  },
+  {
+    "mes_codigo": 202608,
+    "ipca": -0.32,
+    "selic": 1.09,
+    "dolar": 5.1816
+  },
+  {
+    "mes_codigo": 202609,
+    "ipca": 0.82,
+    "selic": 1.08,
+    "dolar": 5.1809
+  },
+  {
+    "mes_codigo": 202610,
+    "ipca": 0.0,
+    "selic": 0.41,
+    "dolar": 0.0
+  }
+]

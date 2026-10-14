@@ -128,6 +128,16 @@
         .olx-filter-bar { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-bottom: 20px; background: rgba(110, 10, 214, 0.04); padding: 15px; border: 1px solid rgba(110, 10, 214, 0.2); }
         body.dark-mode .olx-filter-bar { background: rgba(110, 10, 214, 0.12); border-color: rgba(168, 85, 247, 0.3); }
 
+        /* Estilos IPVA */
+        .ipva-card { background: var(--container-bg); border: 1px solid var(--border-color); padding: 18px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s, box-shadow 0.2s; }
+        .ipva-card:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.08); }
+        .ipva-badge-isento { background: #10b981; color: white; font-weight: bold; padding: 4px 10px; font-size: 13px; display: inline-block; }
+        .ipva-valor-destaque { font-size: 24px; font-weight: 800; color: #10b981; margin: 6px 0; }
+        body.dark-mode .ipva-valor-destaque { color: #34d399; }
+        .ipva-banner { background: rgba(16, 185, 129, 0.08); border-left: 4px solid #10b981; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        body.dark-mode .ipva-banner { background: rgba(16, 185, 129, 0.15); }
+        @keyframes ipvaSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         .btn-ficha { background-color: #0284c7; color: white !important; font-size: 13px; padding: 6px 12px; border-radius: 0; cursor: pointer; border: none; font-weight: 600; transition: background 0.2s; display: inline-flex; align-items: center; gap: 5px; }
         .btn-ficha:hover { background-color: #0369a1; }
         .btn-wm-action { background-color: #e63946; color: white !important; font-size: 13px; padding: 6px 12px; border-radius: 0; cursor: pointer; border: none; font-weight: 600; transition: background 0.2s; display: inline-flex; align-items: center; gap: 5px; }
@@ -171,7 +181,262 @@
         .top-links a.primary-link { background: var(--primary); }
         .top-links a.primary-link:hover { background: var(--primary-hover); }
 
-        .theme-toggle { position: absolute; top: 15px; right: 15px; background: var(--secondary); color: #fff; padding: 8px 12px; border-radius: 0; }
+        /* Checkbox Switch Pequeno de Modo Escuro/Claro */
+        .theme-switch-wrapper {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .theme-switch-wrapper:hover {
+            border-color: var(--primary);
+        }
+        .theme-switch-wrapper input[type="checkbox"] {
+            position: relative;
+            width: 32px;
+            height: 18px;
+            appearance: none;
+            -webkit-appearance: none;
+            background: #cbd5e1;
+            outline: none;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: background 0.25s;
+            margin: 0;
+            padding: 0;
+            vertical-align: middle;
+        }
+        .theme-switch-wrapper input[type="checkbox"]::before {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            background: #ffffff;
+            transition: transform 0.25s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+        }
+        .theme-switch-wrapper input[type="checkbox"]:checked {
+            background: var(--primary);
+        }
+        .theme-switch-wrapper input[type="checkbox"]:checked::before {
+            transform: translateX(14px);
+        }
+        .theme-icon {
+            font-size: 13px;
+            line-height: 1;
+        }
+        .theme-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        body.dark-mode .theme-switch-wrapper input[type="checkbox"] {
+            background: #3b82f6;
+        }
+
+        /* Estilização Moderna do Painel de Resumo e Comparação */
+        .summary-card {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+        .summary-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: rgba(0,0,0,0.015);
+        }
+        body.dark-mode .summary-header {
+            background: rgba(255,255,255,0.02);
+        }
+        .summary-header h3 {
+            margin: 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+        }
+        .summary-badge-status {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            letter-spacing: 0.5px;
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        #summaryTable {
+            margin-top: 0;
+            border: none;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+        #summaryTable th {
+            background: var(--table-header);
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-bottom: 2px solid var(--border-color);
+            padding: 14px 16px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        #summaryTable td {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 16px;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+        #summaryTable tbody tr {
+            transition: background 0.15s;
+        }
+        #summaryTable tbody tr:hover {
+            background: rgba(59, 130, 246, 0.03);
+        }
+        body.dark-mode #summaryTable tbody tr:hover {
+            background: rgba(255, 255, 255, 0.025);
+        }
+        
+        /* Divisória da Seção Macroeconômica */
+        .summary-section-row td {
+            background: rgba(0,0,0,0.03) !important;
+            padding: 10px 16px !important;
+            border-top: 1px solid var(--border-color) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+        }
+        body.dark-mode .summary-section-row td {
+            background: rgba(255, 255, 255, 0.04) !important;
+        }
+        .summary-section-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .summary-section-banner small {
+            font-size: 11px;
+            font-weight: normal;
+            color: var(--text-muted);
+            text-transform: none;
+        }
+
+        /* Linhas Macroeconômicas (Dólar, Selic, IPCA) */
+        .row-macro {
+            background: rgba(0,0,0,0.015);
+        }
+        body.dark-mode .row-macro {
+            background: rgba(255,255,255,0.015);
+        }
+        .row-macro td:first-child {
+            border-left: 3px solid var(--primary);
+        }
+        .macro-tag-note {
+            display: inline-block;
+            font-size: 11px;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.04);
+            padding: 3px 8px;
+            border: 1px solid var(--border-color);
+        }
+        body.dark-mode .macro-tag-note {
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Badges de Variação */
+        .badge-var {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-var.positive {
+            background: rgba(22, 163, 74, 0.12);
+            color: var(--positive);
+            border: 1px solid rgba(22, 163, 74, 0.25);
+        }
+        .badge-var.negative {
+            background: rgba(220, 38, 38, 0.12);
+            color: var(--negative);
+            border: 1px solid rgba(220, 38, 38, 0.25);
+        }
+        .badge-var.neutral {
+            background: rgba(100, 116, 139, 0.12);
+            color: var(--text-muted);
+            border: 1px solid rgba(100, 116, 139, 0.25);
+        }
+
+        /* Formatação de Preço e Data */
+        .cell-price {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .cell-price-val {
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 14px;
+        }
+        .cell-date-tag {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        /* Grupo de botões de Ações */
+        .actions-btn-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: nowrap;
+        }
+        .actions-btn-group button {
+            margin: 0;
+            white-space: nowrap;
+        }
         
         /* TomSelect Dark Mode Fixes */
         .ts-control { border-radius: 0; padding: 10px; font-size: 14px; background-color: var(--container-bg); border-color: var(--border-color); }
@@ -186,7 +451,7 @@
         @media (max-width: 768px) {
             body { margin: 10px; }
             .container { padding: 15px; }
-            .theme-toggle { position: relative; display: block; top: 0; right: 0; margin: 10px 0 20px 0; width: 100%; text-align: center; }
+            .theme-switch-wrapper { position: relative; top: 0; right: 0; margin: 10px 0 15px auto; width: fit-content; display: inline-flex; }
             .controls { flex-direction: column; gap: 12px; padding: 15px; }
             .control-group, .control-group.half, .control-group.full { flex-basis: 100% !important; width: 100%; }
             div[style*="flex-direction: row"] { flex-direction: column !important; gap: 12px !important; }
@@ -196,6 +461,7 @@
             th, td { padding: 10px; }
             .top-links { position: relative !important; top: 0 !important; left: 0 !important; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
             .top-links a { text-align: center; }
+            .actions-btn-group { flex-wrap: wrap; justify-content: center; }
         }
     </style>
 
@@ -207,7 +473,12 @@
         <a href="/ranking">Ranking</a>
         <a href="/docs" class="primary-link">API Docs</a>
     </div>
-    <button class="theme-toggle" onclick="toggleTheme()">Modo Escuro/Claro</button>
+    <label class="theme-switch-wrapper" for="themeCheckbox" title="Alternar entre Modo Claro e Escuro">
+        <span class="theme-icon">☀️</span>
+        <input type="checkbox" id="themeCheckbox" onchange="toggleTheme(event)">
+        <span class="theme-icon">🌙</span>
+        <span class="theme-text">Modo Escuro</span>
+    </label>
 
     <div class="container">
         <h2>GráficoFIPE - Evolução de Preços da Tabela FIPE</h2>
@@ -271,24 +542,83 @@
             <ul id="eventsList" style="margin: 0; padding-left: 20px;"></ul>
         </div>
         
-        <div id="summary-container" style="display: none; margin-bottom: 30px;">
-            <h3>Comparação e Resumo (Período Selecionado)</h3>
-            <table id="summaryTable">
-                <thead>
-                    <tr>
-                        <th>Modelo / Veículo</th>
-                        <th>Variação no Período</th>
-                        <th>Menor Preço</th>
-                        <th>Maior Preço</th>
-                        <th style="text-align: center; min-width: 380px;">Ficha Técnica & Ofertas de Mercado</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-            <div style="margin-top: 15px; padding: 12px 16px; background: rgba(0,0,0,0.02); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                <div style="font-size: 13px; color: var(--text-muted);">
-                    💡 <strong>Opções de Consulta:</strong> Clique em <strong>📋 Ficha Técnica</strong> (iCarros), <strong>🚗 Webmotors</strong> ou <strong>🛒 OLX</strong> (com filtros de estado, DDD, cidade e preços) para ver ofertas reais de mercado.
+        <div id="summary-container" class="summary-card" style="display: none;">
+            <div class="summary-header">
+                <div>
+                    <h3 id="summary-title" style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <span>📊</span> Comparação e Resumo (Período Selecionado)
+                    </h3>
+                    <p id="summary-subtitle" style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted);">
+                        Visão comparativa de desempenho de mercado e parâmetros macroeconômicos.
+                    </p>
                 </div>
+                <div id="summary-status-badge" class="summary-badge-status">
+                    Histórico Completo
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="summaryTable">
+                    <thead>
+                        <tr>
+                            <th>Modelo / Veículo</th>
+                            <th>Variação no Período</th>
+                            <th>Menor Preço</th>
+                            <th>Maior Preço</th>
+                            <th style="text-align: center; min-width: 380px;">Ficha Técnica & Ofertas de Mercado</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div style="padding: 14px 18px; background: rgba(0,0,0,0.02); border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                <div style="font-size: 13px; color: var(--text-muted); line-height: 1.6; flex: 1; min-width: 280px;">
+                    💡 <strong>Opções de Consulta:</strong> Clique em <strong>📋 Ficha Técnica</strong> (iCarros), <strong>🚗 Webmotors</strong> ou <strong>🛒 OLX</strong> (com filtros de estado, DDD, cidade e preços) para ver ofertas reais de mercado.<br>
+                    📊 <strong>Indicadores Econômicos:</strong> As colunas <em>Menor Preço</em> e <em>Maior Preço</em> para Dólar, SELIC e IPCA utilizam como referência as datas em que o modelo atingiu suas cotações mínima e máxima.
+                </div>
+                <button type="button" class="btn-secondary" onclick="reabrirIPVA()" style="margin: 0; padding: 8px 14px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border-color: #10b981; color: #10b981;">
+                    <span style="background: #10b981; color: white; padding: 2px 6px; font-size: 11px; font-weight: bold;">IPVA</span> Ver Estimativas de IPVA
+                </button>
+            </div>
+        </div>
+
+        <!-- Seção Pré-calculada de IPVA -->
+        <div id="ipva-container" class="controls" style="display: none; flex-direction: column; margin-bottom: 30px; border-left: 5px solid #10b981;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px;">
+                <div>
+                    <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="background: #10b981; color: white; padding: 2px 8px; font-size: 13px; font-weight: bold;">IPVA</span>
+                        Estimativa Pré-calculada de IPVA
+                    </h3>
+                    <p style="margin: 5px 0 0 0; font-size: 14px; color: var(--text-muted);">
+                        Cálculo automático baseado no último valor da Tabela FIPE e na alíquota oficial de cada estado.
+                    </p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <label for="ipva_select_estado" style="font-weight: 600; font-size: 13px; margin: 0; white-space: nowrap;">Estado (UF):</label>
+                    <select id="ipva_select_estado" onchange="aoMudarEstadoIPVA()" style="padding: 7px 12px; font-size: 14px; font-weight: 600; border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-main); cursor: pointer; min-width: 170px;">
+                    </select>
+                    <span id="ipva_geo_tag" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 8px; font-size: 11px; font-weight: 600;" title="Estado selecionado automaticamente com base no seu IP">
+                        Auto IP: ...
+                    </span>
+                    <button type="button" class="btn-secondary" onclick="fecharIPVA()" style="padding: 6px 12px; margin: 0; font-size: 13px;">✕ Fechar</button>
+                </div>
+            </div>
+
+            <!-- Banner com Regras do Estado -->
+            <div id="ipva_banner_regras" class="ipva-banner">
+                <div id="ipva_banner_texto">Carregando regras estaduais de IPVA...</div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="ipva_loading" style="display: none; text-align: center; padding: 25px 20px; width: 100%;">
+                <div style="width: 30px; height: 30px; border: 3px solid rgba(16, 185, 129, 0.2); border-top: 3px solid #10b981; border-radius: 50%; animation: ipvaSpin 0.9s linear infinite; margin: 0 auto 10px auto;"></div>
+                <span style="font-size: 13px; color: var(--text-muted);">Calculando IPVA para o estado selecionado...</span>
+            </div>
+
+            <!-- Grid com os Cards Pré-calculados por Veículo -->
+            <div id="ipva_cards_grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; width: 100%;">
             </div>
         </div>
 
@@ -620,9 +950,28 @@
             Chart.defaults.borderColor = '#444';
         }
 
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            let isDark = document.body.classList.contains('dark-mode');
+        document.addEventListener('DOMContentLoaded', () => {
+            const cb = document.getElementById('themeCheckbox');
+            if (cb) {
+                cb.checked = document.body.classList.contains('dark-mode');
+            }
+        });
+
+        function toggleTheme(e) {
+            const cb = document.getElementById('themeCheckbox');
+            let isDark;
+            if (cb && e && (e.target === cb || e.type === 'change')) {
+                isDark = cb.checked;
+                if (isDark) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            } else {
+                document.body.classList.toggle('dark-mode');
+                isDark = document.body.classList.contains('dark-mode');
+                if (cb) cb.checked = isDark;
+            }
             setCookie('theme', isDark ? 'dark' : 'light', 365);
             
             Chart.defaults.color = isDark ? '#ccc' : '#666';
@@ -708,6 +1057,7 @@
 
             checkWebmotorsStatus();
             checkOLXStatus();
+            carregarEstadosEIPVA();
         }
 
         async function loadMarcas(tipoId) {
@@ -821,6 +1171,14 @@
             }
             
             document.getElementById('table-container').style.display = 'block';
+
+            if (data && data.length > 0) {
+                ipvaVeiculosAtuais = data.slice(0, 10).map(v => ({
+                    nome: `${v.marca} ${v.modelo} ${v.versao}`,
+                    valor_fipe: v.preco
+                }));
+                recalcularIPVA();
+            }
         }
 
         const colors = [
@@ -968,15 +1326,44 @@
             // Popula a tabela de resumo comparativo
             const summaryContainer = document.getElementById('summary-container');
             const summaryBody = document.querySelector('#summaryTable tbody');
+            const summaryTitle = document.getElementById('summary-title');
             summaryBody.innerHTML = '';
 
-            let acumuladoSelic = 0;
-            let acumuladoIpca = 0;
-            if (data.macro && data.macro.length > 0) {
-                // Cálculo de juros compostos
-                acumuladoSelic = data.macro.reduce((acc, m) => acc * (1 + (m.selic/100)), 1) - 1;
-                acumuladoIpca = data.macro.reduce((acc, m) => acc * (1 + (m.ipca/100)), 1) - 1;
+            const mesInicioVal = tsMesInicio ? tsMesInicio.getValue() : null;
+            const mesFimVal = tsMesFim ? tsMesFim.getValue() : null;
+            const periodoDefinido = Boolean(mesInicioVal || mesFimVal);
+
+            if (summaryTitle) {
+                summaryTitle.innerHTML = `<span>📊</span> Comparação e Resumo ${periodoDefinido ? '(Período Selecionado)' : '(Histórico Completo)'}`;
             }
+            const statusBadge = document.getElementById('summary-status-badge');
+            if (statusBadge) {
+                statusBadge.innerText = periodoDefinido ? 'Período Filtrado' : 'Histórico Completo';
+            }
+
+            // Identifica o menor e maior preço globais entre os veículos selecionados e seus respectivos meses
+            let globalMinPrice = Infinity;
+            let globalMaxPrice = -Infinity;
+            let minPriceIdx = -1;
+            let maxPriceIdx = -1;
+
+            datasets.forEach(ds => {
+                ds.data.forEach((val, idx) => {
+                    if (val !== null && val !== undefined && val > 0) {
+                        if (val < globalMinPrice) {
+                            globalMinPrice = val;
+                            minPriceIdx = idx;
+                        }
+                        if (val > globalMaxPrice) {
+                            globalMaxPrice = val;
+                            maxPriceIdx = idx;
+                        }
+                    }
+                });
+            });
+
+            if (minPriceIdx < 0) minPriceIdx = 0;
+            if (maxPriceIdx < 0 && data.macro) maxPriceIdx = Math.max(0, data.macro.length - 1);
 
             datasets.forEach(ds => {
                 const validData = ds.data.filter(v => v !== null && v !== undefined);
@@ -992,68 +1379,212 @@
                     varPct = ((lastPrice / firstPrice) - 1) * 100;
                 }
                 
-                let varStr = varPct.toFixed(2) + '%';
-                let varClass = '';
-                if (varPct > 0) {
-                    varStr = '+' + varStr;
-                    varClass = 'positive';
-                } else if (varPct < 0) {
-                    varClass = 'negative';
-                }
+                let varStr = (varPct >= 0 ? '+' : '') + varPct.toFixed(2) + '%';
+                let varClass = varPct > 0 ? 'positive' : (varPct < 0 ? 'negative' : 'neutral');
+
+                const minIdx = ds.data.indexOf(minPrice);
+                const maxIdx = ds.data.indexOf(maxPrice);
+                const minMonthTag = (minIdx >= 0 && originalLabels[minIdx]) ? `<span class="cell-date-tag">📅 ${originalLabels[minIdx]}</span>` : '';
+                const maxMonthTag = (maxIdx >= 0 && originalLabels[maxIdx]) ? `<span class="cell-date-tag">📅 ${originalLabels[maxIdx]}</span>` : '';
                 
                 const safeLabel = (ds.label || '').replace(/'/g, "\\'");
                 summaryBody.innerHTML += `
                     <tr>
-                        <td><strong>${ds.label}</strong></td>
-                        <td class="${varClass}">${varStr}</td>
-                        <td>${formatMoney(minPrice)}</td>
-                        <td>${formatMoney(maxPrice)}</td>
-                        <td style="text-align: center; white-space: nowrap;">
-                            <button type="button" class="btn-ficha" onclick="consultarFichaTecnica('${safeLabel}')" title="Ver especificações técnicas completas no iCarros" style="margin-right: 6px;">📋 Ficha Técnica</button>
-                            <button type="button" class="btn-wm-action" onclick="buscarWebmotors('${safeLabel}')" title="Buscar ofertas reais deste modelo no Webmotors" style="margin-right: 6px;">🚗 Webmotors</button>
-                            <button type="button" class="btn-olx-action" onclick="buscarOLX('${safeLabel}')" title="Buscar ofertas reais deste modelo na OLX (até 15 anúncios com filtros)">🛒 OLX</button>
+                        <td>
+                            <strong style="color: var(--text-main); font-size: 14px;">${ds.label}</strong>
+                        </td>
+                        <td>
+                            <span class="badge-var ${varClass}">${varStr}</span>
+                        </td>
+                        <td>
+                            <div class="cell-price">
+                                <span class="cell-price-val">${formatMoney(minPrice)}</span>
+                                ${minMonthTag}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="cell-price">
+                                <span class="cell-price-val">${formatMoney(maxPrice)}</span>
+                                ${maxMonthTag}
+                            </div>
+                        </td>
+                        <td style="text-align: center;">
+                            <div class="actions-btn-group">
+                                <button type="button" class="btn-ficha" onclick="consultarFichaTecnica('${safeLabel}')" title="Ver especificações técnicas completas no iCarros">📋 Ficha Técnica</button>
+                                <button type="button" class="btn-wm-action" onclick="buscarWebmotors('${safeLabel}')" title="Buscar ofertas reais deste modelo no Webmotors">🚗 Webmotors</button>
+                                <button type="button" class="btn-olx-action" onclick="buscarOLX('${safeLabel}')" title="Buscar ofertas reais deste modelo na OLX (até 15 anúncios com filtros)">🛒 OLX</button>
+                            </div>
                         </td>
                     </tr>
                 `;
             });
 
             if (data.macro && data.macro.length > 0) {
-                const firstDolar = data.macro[0].dolar;
-                const lastDolar = data.macro[data.macro.length - 1].dolar;
-                const varDolar = firstDolar > 0 ? ((lastDolar / firstDolar) - 1) * 100 : 0;
-                let varDolarStr = varDolar.toFixed(2) + '%';
-                let varDolarClass = varDolar > 0 ? 'positive' : (varDolar < 0 ? 'negative' : '');
-                if (varDolar > 0) varDolarStr = '+' + varDolarStr;
+                // Linha divisória de seção organizando os indicadores macroeconômicos
+                summaryBody.innerHTML += `
+                    <tr class="summary-section-row">
+                        <td colspan="5">
+                            <div class="summary-section-banner">
+                                <span>🌐 Indicadores de Mercado & Referências Macroeconômicas</span>
+                                <small>Cotações e taxas apuradas nos meses de menor e maior preço</small>
+                            </div>
+                        </td>
+                    </tr>
+                `;
 
-                let selicStr = '+' + (acumuladoSelic * 100).toFixed(2) + '%';
-                let ipcaStr = '+' + (acumuladoIpca * 100).toFixed(2) + '%';
+                // Período de referência para os cálculos: se o período não foi definido pelo usuário,
+                // usa a janela entre as datas de Menor Preço e Maior Preço do(s) veículo(s) como solicitado.
+                const refStartIdx = periodoDefinido ? 0 : Math.min(minPriceIdx, maxPriceIdx);
+                const refEndIdx = periodoDefinido ? (data.macro.length - 1) : Math.max(minPriceIdx, maxPriceIdx);
+
+                const macroSlice = (refStartIdx <= refEndIdx) ? data.macro.slice(refStartIdx, refEndIdx + 1) : data.macro;
+
+                let acumuladoSelic = 0;
+                let acumuladoIpca = 0;
+                if (macroSlice.length > 0) {
+                    acumuladoSelic = macroSlice.reduce((acc, m) => acc * (1 + ((m.selic || 0) / 100)), 1) - 1;
+                    acumuladoIpca = macroSlice.reduce((acc, m) => acc * (1 + ((m.ipca || 0) / 100)), 1) - 1;
+                }
+
+                const firstDolar = (data.macro[refStartIdx] && data.macro[refStartIdx].dolar > 0) ? data.macro[refStartIdx].dolar : 0;
+                const lastDolar = (data.macro[refEndIdx] && data.macro[refEndIdx].dolar > 0) ? data.macro[refEndIdx].dolar : 0;
+                let varDolar = 0;
+                if (firstDolar > 0 && lastDolar > 0) {
+                    varDolar = ((lastDolar / firstDolar) - 1) * 100;
+                }
+                let varDolarStr = (varDolar >= 0 ? '+' : '') + varDolar.toFixed(2) + '%';
+                let varDolarClass = varDolar > 0 ? 'positive' : (varDolar < 0 ? 'negative' : 'neutral');
+
+                let selicStr = (acumuladoSelic >= 0 ? '+' : '') + (acumuladoSelic * 100).toFixed(2) + '%';
+                let ipcaStr = (acumuladoIpca >= 0 ? '+' : '') + (acumuladoIpca * 100).toFixed(2) + '%';
+
+                // Dados na data do Menor Preço e Maior Preço
+                const labelMin = (originalLabels && originalLabels[minPriceIdx]) ? originalLabels[minPriceIdx] : '';
+                const labelMax = (originalLabels && originalLabels[maxPriceIdx]) ? originalLabels[maxPriceIdx] : '';
+
+                const dMin = (data.macro[minPriceIdx] && data.macro[minPriceIdx].dolar > 0) ? data.macro[minPriceIdx].dolar : 0;
+                const dMax = (data.macro[maxPriceIdx] && data.macro[maxPriceIdx].dolar > 0) ? data.macro[maxPriceIdx].dolar : 0;
+
+                const sMin = (data.macro[minPriceIdx] && data.macro[minPriceIdx].selic !== undefined && data.macro[minPriceIdx].selic !== null) ? data.macro[minPriceIdx].selic : null;
+                const sMax = (data.macro[maxPriceIdx] && data.macro[maxPriceIdx].selic !== undefined && data.macro[maxPriceIdx].selic !== null) ? data.macro[maxPriceIdx].selic : null;
+
+                const iMin = (data.macro[minPriceIdx] && data.macro[minPriceIdx].ipca !== undefined && data.macro[minPriceIdx].ipca !== null) ? data.macro[minPriceIdx].ipca : null;
+                const iMax = (data.macro[maxPriceIdx] && data.macro[maxPriceIdx].ipca !== undefined && data.macro[maxPriceIdx].ipca !== null) ? data.macro[maxPriceIdx].ipca : null;
+
+                const dMinStr = dMin > 0 ? formatMoney(dMin) : '-';
+                const dMaxStr = dMax > 0 ? formatMoney(dMax) : '-';
+
+                const sMinStr = (sMin !== null && sMin > 0) ? sMin.toFixed(2) + '% a.m.' : '-';
+                const sMaxStr = (sMax !== null && sMax > 0) ? sMax.toFixed(2) + '% a.m.' : '-';
+
+                const iMinStr = (iMin !== null && iMin !== 0) ? iMin.toFixed(2) + '% a.m.' : '-';
+                const iMaxStr = (iMax !== null && iMax !== 0) ? iMax.toFixed(2) + '% a.m.' : '-';
 
                 summaryBody.innerHTML += `
-                    <tr style="background: rgba(0,0,0,0.05);">
-                        <td><strong>Dólar Comercial</strong></td>
-                        <td class="${varDolarClass}">${varDolarStr}</td>
-                        <td>${formatMoney(Math.min(...data.macro.map(m=>m.dolar).filter(d=>d>0)))}</td>
-                        <td>${formatMoney(Math.max(...data.macro.map(m=>m.dolar).filter(d=>d>0)))}</td>
-                        <td style="text-align: center;">-</td>
+                    <tr class="row-macro">
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 16px;">💵</span>
+                                <div>
+                                    <strong style="color: var(--text-main);">Dólar Comercial</strong>
+                                    <span style="font-size: 11px; color: var(--text-muted); display: block;">PTAX Venda (Banco Central)</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge-var ${varDolarClass}">${varDolarStr}</span>
+                        </td>
+                        <td>
+                            <div class="cell-price">
+                                <span class="cell-price-val">${dMinStr}</span>
+                                ${labelMin && dMin > 0 ? `<span class="cell-date-tag">📅 ${labelMin}</span>` : ''}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="cell-price">
+                                <span class="cell-price-val">${dMaxStr}</span>
+                                ${labelMax && dMax > 0 ? `<span class="cell-date-tag">📅 ${labelMax}</span>` : ''}
+                            </div>
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="macro-tag-note">Cotação na data do menor/maior preço</span>
+                        </td>
                     </tr>
-                    <tr style="background: rgba(0,0,0,0.05);">
-                        <td><strong>Rendimento SELIC (Acumulado)</strong></td>
-                        <td class="positive">${selicStr}</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td style="text-align: center;">-</td>
+                    <tr class="row-macro">
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 16px;">📈</span>
+                                <div>
+                                    <strong style="color: var(--text-main);">Rendimento SELIC (Acumulado)</strong>
+                                    <span style="font-size: 11px; color: var(--text-muted); display: block;">Juros compostos acumulados</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge-var positive">${selicStr}</span>
+                        </td>
+                        <td>
+                            <div class="cell-price">
+                                <span class="cell-price-val">${sMinStr}</span>
+                                ${labelMin && sMin > 0 ? `<span class="cell-date-tag">📅 ${labelMin}</span>` : ''}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="cell-price">
+                                <span class="cell-price-val">${sMaxStr}</span>
+                                ${labelMax && sMax > 0 ? `<span class="cell-date-tag">📅 ${labelMax}</span>` : ''}
+                            </div>
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="macro-tag-note">Taxa mensal na data do menor/maior preço</span>
+                        </td>
                     </tr>
-                    <tr style="background: rgba(0,0,0,0.05);">
-                        <td><strong>Inflação IPCA (Acumulada)</strong></td>
-                        <td class="positive">${ipcaStr}</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td style="text-align: center;">-</td>
+                    <tr class="row-macro">
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 16px;">🏷️</span>
+                                <div>
+                                    <strong style="color: var(--text-main);">Inflação IPCA (Acumulada)</strong>
+                                    <span style="font-size: 11px; color: var(--text-muted); display: block;">Índice oficial de preços</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge-var positive">${ipcaStr}</span>
+                        </td>
+                        <td>
+                            <div class="cell-price">
+                                <span class="cell-price-val">${iMinStr}</span>
+                                ${labelMin && iMin !== null && iMin !== 0 ? `<span class="cell-date-tag">📅 ${labelMin}</span>` : ''}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="cell-price">
+                                <span class="cell-price-val">${iMaxStr}</span>
+                                ${labelMax && iMax !== null && iMax !== 0 ? `<span class="cell-date-tag">📅 ${labelMax}</span>` : ''}
+                            </div>
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="macro-tag-note">Inflação mensal na data do menor/maior preço</span>
+                        </td>
                     </tr>
                 `;
             }
 
             summaryContainer.style.display = 'block';
+
+            ipvaVeiculosAtuais = datasets.map(ds => {
+                const validData = ds.data.filter(v => v !== null && v !== undefined);
+                const lastPrice = validData.length > 0 ? validData[validData.length - 1] : 0;
+                return {
+                    nome: ds.label,
+                    valor_fipe: lastPrice
+                };
+            }).filter(v => v.valor_fipe > 0);
+
+            if (ipvaVeiculosAtuais.length > 0) {
+                recalcularIPVA();
+            }
         }
         const economicEvents = {
             '10/2008': 'Crise Financeira Global',
@@ -1684,6 +2215,236 @@
 
         function fecharFichaTecnica() {
             document.getElementById('ficha-tecnica-container').style.display = 'none';
+        }
+
+        /* --- Módulo de Estimativa de IPVA --- */
+        let ipvaVeiculosAtuais = [];
+        let ipvaTabelaEstados = [];
+        let ipvaUfDetectada = 'SP';
+
+        async function carregarEstadosEIPVA() {
+            try {
+                const res = await fetch('/api/ipva/estados');
+                if (!res.ok) return;
+                const data = await res.json();
+                ipvaTabelaEstados = data.estados || [];
+                ipvaUfDetectada = data.uf_detectada || 'SP';
+
+                const selectEstado = document.getElementById('ipva_select_estado');
+                if (selectEstado) {
+                    selectEstado.innerHTML = '';
+                    ipvaTabelaEstados.forEach(est => {
+                        const opt = document.createElement('option');
+                        opt.value = est.uf;
+                        opt.textContent = `${est.nome} (${est.uf}) - IPVA: ${est.aliquota_formatada} | Lic: ${est.taxa_licenciamento_formatada}`;
+                        if (est.uf === ipvaUfDetectada) {
+                            opt.selected = true;
+                        }
+                        selectEstado.appendChild(opt);
+                    });
+                }
+
+                const geoTag = document.getElementById('ipva_geo_tag');
+                if (geoTag) {
+                    geoTag.innerText = `📍 Auto IP: ${ipvaUfDetectada}`;
+                }
+
+                atualizarBannerRegrasIPVA(ipvaUfDetectada);
+            } catch (e) {
+                console.error("Erro ao carregar tabela de estados IPVA:", e);
+            }
+        }
+
+        function atualizarBannerRegrasIPVA(uf) {
+            if (!ipvaTabelaEstados || ipvaTabelaEstados.length === 0) return;
+            const est = ipvaTabelaEstados.find(e => e.uf === uf);
+            if (!est) return;
+
+            const bannerEl = document.getElementById('ipva_banner_texto');
+            if (bannerEl) {
+                bannerEl.innerHTML = `
+                    <div style="width: 100%;">
+                        <div style="margin-bottom: 4px;">
+                            <strong>${est.nome} (${est.uf}):</strong> Alíquota padrão de <strong>${est.aliquota_formatada}</strong> para carros de passeio &bull; 
+                            Isenção de IPVA com <strong>${est.isencao_anos} anos</strong> de fabricação ou mais &bull; 
+                            ${est.desconto_avista > 0 ? `Desconto de <strong>${est.desconto_avista}%</strong> à vista (cota única) &bull; ` : ''}
+                            Parcelamento oficial em até <strong>${est.max_parcelas}x</strong> sem juros &bull; 
+                            Taxa de Licenciamento Anual (Detran-${est.uf}): <strong>${est.taxa_licenciamento_formatada}</strong>.
+                        </div>
+                        <span style="display: block; color: var(--text-muted); font-size: 12px;">ℹ️ ${est.observacoes}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function aoMudarEstadoIPVA() {
+            const selectEstado = document.getElementById('ipva_select_estado');
+            const uf = selectEstado ? selectEstado.value : ipvaUfDetectada;
+            atualizarBannerRegrasIPVA(uf);
+            recalcularIPVA();
+        }
+
+        function reabrirIPVA() {
+            const container = document.getElementById('ipva-container');
+            if (container) {
+                container.style.display = 'flex';
+                container.scrollIntoView({ behavior: 'smooth' });
+                if (ipvaVeiculosAtuais.length > 0) {
+                    recalcularIPVA();
+                }
+            }
+        }
+
+        function fecharIPVA() {
+            const container = document.getElementById('ipva-container');
+            if (container) {
+                container.style.display = 'none';
+            }
+        }
+
+        async function recalcularIPVA() {
+            const container = document.getElementById('ipva-container');
+            const loading = document.getElementById('ipva_loading');
+            const cardsGrid = document.getElementById('ipva_cards_grid');
+            const selectEstado = document.getElementById('ipva_select_estado');
+            const uf = selectEstado ? selectEstado.value : ipvaUfDetectada;
+
+            if (!container || !loading || !cardsGrid) return;
+
+            if (!ipvaVeiculosAtuais || ipvaVeiculosAtuais.length === 0) {
+                return;
+            }
+
+            container.style.display = 'flex';
+            loading.style.display = 'block';
+            cardsGrid.innerHTML = '';
+
+            try {
+                const res = await fetch('/api/ipva/calcular', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        uf: uf,
+                        veiculos: ipvaVeiculosAtuais
+                    })
+                });
+
+                loading.style.display = 'none';
+
+                if (!res.ok) {
+                    cardsGrid.innerHTML = '<div style="grid-column: 1 / -1; padding: 15px; color: var(--negative);">Erro ao calcular estimativa de IPVA. Tente novamente.</div>';
+                    return;
+                }
+
+                const data = await res.json();
+                const resultados = data.resultados || [];
+
+                if (resultados.length === 0) {
+                    cardsGrid.innerHTML = '<div style="grid-column: 1 / -1; padding: 15px; color: var(--text-muted); text-align: center;">Nenhum veículo disponível para cálculo de IPVA.</div>';
+                    return;
+                }
+
+                resultados.forEach(r => {
+                    const planosHtml = (r.planos_parcelamento && r.planos_parcelamento.length > 0) ? `
+                        <div style="margin-top: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.02); padding: 10px 12px;">
+                            <div style="font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">
+                                📅 Cronograma de Parcelamento (sem juros):
+                            </div>
+                            ${r.planos_parcelamento.map(p => `
+                                <div style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed var(--border-color);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; margin-bottom: 5px;">
+                                        <span style="color: var(--text-main); font-weight: bold;">🔹 ${p.nome}:</span>
+                                        <span style="color: #10b981; font-weight: 700;">${p.num_parcelas}x de ${p.valor_parcela_formatado}</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); gap: 5px; margin-top: 5px;">
+                                        ${p.cronograma.map(c => `
+                                            <div style="background: var(--container-bg); border: 1px solid var(--border-color); padding: 4px 6px; font-size: 11px; display: flex; flex-direction: column;">
+                                                <span style="color: var(--text-muted); font-size: 10px;">${c.titulo} (${c.mes})</span>
+                                                <strong style="color: var(--text-main); font-size: 12px;">${c.valor_formatado}</strong>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : '';
+
+                    cardsGrid.innerHTML += `
+                        <div class="ipva-card">
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
+                                    <h4 style="margin: 0; font-size: 15px; color: var(--text-main); line-height: 1.3;">${r.nome}</h4>
+                                    ${r.isento ? '<span class="ipva-badge-isento">ISENTO</span>' : `<span style="font-size: 12px; background: rgba(16, 185, 129, 0.1); color: #10b981; font-weight: 700; padding: 3px 7px; white-space: nowrap;">Alíquota: ${r.aliquota_formatada}</span>`}
+                                </div>
+                                
+                                <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">
+                                    Valor FIPE: <strong style="color: var(--text-main);">${r.valor_fipe_formatado}</strong>
+                                    ${r.idade_anos !== null ? ` &bull; Idade: ${r.idade_anos} ano(s)` : ''}
+                                </div>
+
+                                <!-- Taxa de Licenciamento Anual (DETRAN) -->
+                                <div style="background: rgba(2, 132, 199, 0.06); border: 1px solid rgba(2, 132, 199, 0.25); padding: 8px 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #0284c7; display: block;">Licenciamento Anual (Detran-${r.uf})</span>
+                                        <small style="font-size: 11px; color: var(--text-muted);">Taxa obrigatória para emissão do CRLV-e</small>
+                                    </div>
+                                    <strong style="font-size: 15px; color: #0284c7; white-space: nowrap;">${r.taxa_licenciamento_formatada}</strong>
+                                </div>
+
+                                ${r.isento ? `
+                                    <div style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding: 10px 12px; font-size: 13px; color: var(--text-main); margin-bottom: 10px;">
+                                        🎉 <strong>Isenção por Tempo de Fabricação:</strong><br>
+                                        <span style="font-size: 12px; color: var(--text-muted);">${r.motivo_isencao || `Veículo isento de IPVA no estado de ${r.estado_nome}.`}</span>
+                                    </div>
+                                    <div class="ipva-valor-destaque" style="color: #10b981;">IPVA: R$ 0,00</div>
+
+                                    <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); padding: 10px 12px; margin-top: 8px;">
+                                        <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); display: block;">Custo Anual Total Obrigatório:</span>
+                                        <div style="font-size: 18px; font-weight: bold; color: #10b981; margin-top: 2px;">${r.custo_total_avista_formatado}</div>
+                                        <small style="font-size: 11px; color: var(--text-muted);">Isento de IPVA &bull; recolhe apenas a taxa de licenciamento.</small>
+                                    </div>
+                                ` : `
+                                    <div style="margin-bottom: 10px;">
+                                        <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Estimativa de IPVA Anual</span>
+                                        <div class="ipva-valor-destaque">${r.valor_ipva_formatado}</div>
+                                    </div>
+
+                                    <div style="background: rgba(0,0,0,0.03); border: 1px solid var(--border-color); padding: 10px 12px; font-size: 13px; display: flex; flex-direction: column; gap: 6px;">
+                                        ${r.desconto_avista_pct > 0 ? `
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <span>💰 Cota Única (à vista c/ -${r.desconto_avista_pct}%):</span>
+                                                <strong style="color: #10b981;">${r.valor_avista_formatado}</strong>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+
+                                    ${planosHtml}
+
+                                    <!-- Custo Total Anual (IPVA + Licenciamento) -->
+                                    <div style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.3); padding: 10px 12px; margin-top: 10px;">
+                                        <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">💳 Custo Anual Total (IPVA + Licenciamento):</div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
+                                            <span>À Vista c/ Desconto:</span>
+                                            <strong style="color: #10b981; font-size: 15px;">${r.custo_total_avista_formatado}</strong>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-top: 3px;">
+                                            <span>Parcelado (IPVA integral + Licenciamento):</span>
+                                            <strong style="color: var(--text-main);">${r.custo_total_parcelado_formatado}</strong>
+                                        </div>
+                                    </div>
+                                `}
+                            </div>
+
+                            <div style="margin-top: 14px; font-size: 11px; color: var(--text-muted); border-top: 1px dashed var(--border-color); padding-top: 8px;">
+                                📍 <em>${r.estado_nome} (${r.uf}) &bull; ${r.observacoes || ''}</em>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                loading.style.display = 'none';
+                cardsGrid.innerHTML = '<div style="grid-column: 1 / -1; padding: 15px; color: var(--negative);">Erro de conexão ao calcular o IPVA.</div>';
+            }
         }
 
         window.onload = init;

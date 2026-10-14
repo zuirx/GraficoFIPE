@@ -79,6 +79,13 @@ def main():
         """)
         conn.execute("CREATE INDEX idx_ranking_variacao ON ranking(variacao_percentual)")
         
+        print('Populando dados macroeconômicos (Dólar, Selic, IPCA)...')
+        try:
+            import macro_service
+            macro_service.inicializar_tabela_macro(conn)
+        except Exception as err:
+            print(f'Aviso: Não foi possível atualizar dados macro: {err}')
+        
         print('Banco de dados atualizado com sucesso!')
     except Exception as e:
         print(f'Erro ao atualizar o DuckDB: {e}')

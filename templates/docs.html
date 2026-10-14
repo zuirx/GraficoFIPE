@@ -365,6 +365,156 @@
     }
   ]
 }</code></pre>
+        <h2 style="margin-top: 40px;">Estimativa de IPVA por Estado</h2>
+        <div class="endpoint">
+            <span class="badge get">GET</span> <code>/api/ipva/estados</code>
+        </div>
+        <p>Retorna a tabela oficial e consolidada de alíquotas de IPVA, tempo de isenção por ano de fabricação, desconto para pagamento em cota única e regras de parcelamento de todos os 26 estados brasileiros e do Distrito Federal. Retorna também o estado (UF) detectado automaticamente a partir do IP do cliente.</p>
+
+        <h4>Exemplo de Resposta:</h4>
+        <pre><code>{
+  "uf_detectada": "SP",
+  "estados": [
+    {
+      "uf": "AC",
+      "nome": "Acre",
+      "aliquota": 2.0,
+      "aliquota_formatada": "2,00%",
+      "isencao_anos": 20,
+      "desconto_avista": 10.0,
+      "max_parcelas": 3,
+      "observacoes": "Alíquota de 2% para automóveis de passeio. Desconto de 10% para pagamento em cota única."
+    },
+    {
+      "uf": "SP",
+      "nome": "São Paulo",
+      "aliquota": 4.0,
+      "aliquota_formatada": "4,00%",
+      "isencao_anos": 20,
+      "desconto_avista": 3.0,
+      "max_parcelas": 5,
+      "taxa_licenciamento": 160.22,
+      "taxa_licenciamento_formatada": "R$ 160,22",
+      "observacoes": "Alíquota de 4% para carros de passeio movidos a gasolina ou flex. Veículos com mais de 20 anos são isentos."
+    }
+  ]
+}</code></pre>
+
+        <div class="endpoint" style="margin-top: 30px;">
+            <span class="badge post">POST</span> <code>/api/ipva/calcular</code>
+        </div>
+        <p>Calcula a estimativa de IPVA para um ou múltiplos veículos com base no valor da Tabela FIPE, ano do modelo e UF selecionada. Aplica regras estaduais de isenção por tempo de fabricação, cronograma detalhado de parcelamento (opção padrão de 3 parcelas e limite máximo do estado sem juros) e taxa atualizada de licenciamento anual do DETRAN estadual.</p>
+
+        <h4>Parâmetros (JSON no corpo da requisição):</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Exemplo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>uf</code></td>
+                    <td>string (opcional)</td>
+                    <td>Sigla do estado (ex: SP, RJ, SC, MG). Se omitido, usa a UF detectada pelo IP do usuário.</td>
+                    <td><code>"SP"</code></td>
+                </tr>
+                <tr>
+                    <td><code>veiculos</code></td>
+                    <td>array de objetos (opcional)</td>
+                    <td>Lista de veículos para cálculo em lote.</td>
+                    <td><code>[{"nome": "Gol 1.0 (2018)", "valor_fipe": 42000, "ano_modelo": 2018}]</code></td>
+                </tr>
+                <tr>
+                    <td><code>valor_fipe</code></td>
+                    <td>numérico (opcional)</td>
+                    <td>Valor FIPE único caso não envie o array <code>veiculos</code>.</td>
+                    <td><code>42000.00</code></td>
+                </tr>
+                <tr>
+                    <td><code>ano_modelo</code></td>
+                    <td>inteiro (opcional)</td>
+                    <td>Ano do modelo do veículo (para conferência de isenção por idade).</td>
+                    <td><code>2018</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Exemplo de Resposta:</h4>
+        <pre><code>{
+  "uf": "SP",
+  "estado_nome": "São Paulo",
+  "aliquota": 4.0,
+  "aliquota_formatada": "4,00%",
+  "isencao_anos": 20,
+  "desconto_avista": 3.0,
+  "max_parcelas": 5,
+  "taxa_licenciamento": 160.22,
+  "taxa_licenciamento_formatada": "R$ 160,22",
+  "observacoes": "Alíquota de 4% para carros de passeio movidos a gasolina ou flex. Veículos com mais de 20 anos são isentos.",
+  "resultados": [
+    {
+      "nome": "Fiat Uno Mille 1.0 Fire (2018)",
+      "uf": "SP",
+      "estado_nome": "São Paulo",
+      "valor_fipe": 30000.0,
+      "valor_fipe_formatado": "R$ 30.000,00",
+      "aliquota": 4.0,
+      "aliquota_formatada": "4,00%",
+      "ano_modelo": 2018,
+      "idade_anos": 8,
+      "isencao_anos": 20,
+      "isento": false,
+      "motivo_isencao": "",
+      "valor_ipva": 1200.0,
+      "valor_ipva_formatado": "R$ 1.200,00",
+      "desconto_avista_pct": 3.0,
+      "valor_avista": 1164.0,
+      "valor_avista_formatado": "R$ 1.164,00",
+      "max_parcelas": 5,
+      "valor_parcela": 240.0,
+      "valor_parcela_formatado": "R$ 240,00",
+      "taxa_licenciamento": 160.22,
+      "taxa_licenciamento_formatada": "R$ 160,22",
+      "custo_total_avista": 1324.22,
+      "custo_total_avista_formatado": "R$ 1.324,22",
+      "custo_total_parcelado": 1360.22,
+      "custo_total_parcelado_formatado": "R$ 1.360,22",
+      "planos_parcelamento": [
+        {
+          "num_parcelas": 3,
+          "nome": "Em 3x (Padrão)",
+          "descricao": "3 parcelas mensais sem juros",
+          "valor_parcela": 400.0,
+          "valor_parcela_formatado": "R$ 400,00",
+          "cronograma": [
+            {"numero": 1, "titulo": "1ª Parcela", "mes": "Janeiro", "valor": 400.0, "valor_formatado": "R$ 400,00"},
+            {"numero": 2, "titulo": "2ª Parcela", "mes": "Fevereiro", "valor": 400.0, "valor_formatado": "R$ 400,00"},
+            {"numero": 3, "titulo": "3ª Parcela", "mes": "Março", "valor": 400.0, "valor_formatado": "R$ 400,00"}
+          ]
+        },
+        {
+          "num_parcelas": 5,
+          "nome": "Em 5x (Máximo Estadual)",
+          "descricao": "5 parcelas mensais sem juros",
+          "valor_parcela": 240.0,
+          "valor_parcela_formatado": "R$ 240,00",
+          "cronograma": [
+            {"numero": 1, "titulo": "1ª Parcela", "mes": "Janeiro", "valor": 240.0, "valor_formatado": "R$ 240,00"},
+            {"numero": 2, "titulo": "2ª Parcela", "mes": "Fevereiro", "valor": 240.0, "valor_formatado": "R$ 240,00"},
+            {"numero": 3, "titulo": "3ª Parcela", "mes": "Março", "valor": 240.0, "valor_formatado": "R$ 240,00"},
+            {"numero": 4, "titulo": "4ª Parcela", "mes": "Abril", "valor": 240.0, "valor_formatado": "R$ 240,00"},
+            {"numero": 5, "titulo": "5ª Parcela", "mes": "Maio", "valor": 240.0, "valor_formatado": "R$ 240,00"}
+          ]
+        }
+      ],
+      "observacoes": "Alíquota de 4% para carros de passeio..."
+    }
+  ]
+}</code></pre>
     </div>
 </body>
 </html>

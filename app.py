@@ -2,13 +2,22 @@ from flask import Flask, render_template, request, jsonify
 import duckdb, sqlite3, os
 import webmotors
 import olx
+import ipva
 import ficha_tecnica_icarros
+import macro_service
 
 app = Flask(__name__)
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fipe.duckdb')
 
 def get_db_connection():
     return duckdb.connect(DB_PATH)
+
+try:
+    _c = get_db_connection()
+    macro_service.inicializar_tabela_macro(_c)
+    _c.close()
+except Exception as _e:
+    print(f"[app] Aviso ao verificar tabela macro: {_e}")
 
 @app.route('/')
 def index():
@@ -223,16 +232,11 @@ def get_dados():
     macro_dados = []
     if sorted_mes_codigos:
         conn = get_db_connection()
-        min_mes = sorted_mes_codigos[0]
-        max_mes = sorted_mes_codigos[-1]
         try:
-            macro_res = conn.execute("SELECT mes_codigo, ipca, selic, dolar FROM macro WHERE mes_codigo >= ? AND mes_codigo <= ? ORDER BY mes_codigo", (min_mes, max_mes)).fetchall()
-            macro_dict = {r[0]: {'ipca': r[1], 'selic': r[2], 'dolar': r[3]} for r in macro_res}
-            for cod in sorted_mes_codigos:
-                macro_dados.append(macro_dict.get(cod, {'ipca': 0, 'selic': 0, 'dolar': 0}))
-        except Exception:
-            for cod in sorted_mes_codigos:
-                macro_dados.append({'ipca': 0, 'selic': 0, 'dolar': 0})
+            macro_dados = macro_service.obter_dados_macro(conn, sorted_mes_codigos)
+        except Exception as e:
+            print(f"[app] Erro ao obter dados macro: {e}")
+            macro_dados = [{'ipca': 0.0, 'selic': 0.0, 'dolar': 0.0} for _ in sorted_mes_codigos]
         finally:
             conn.close()
 
@@ -666,6 +670,65 @@ def api_ficha_tecnica():
         return jsonify(dados)
     except Exception as e:
         return jsonify({'sucesso': False, 'erro': str(e)}), 500
+
+# --- Cálculo de IPVA por Estado ---
+@app.route('/api/ipva/estados', methods=['GET'])
+def get_ipva_estados():
+    client_ip = get_client_ip()
+    uf_detectada = ipva.obter_uf_por_ip(client_ip)
+    estados = ipva.obter_tabela_estados()
+    return jsonify({
+        'uf_detectada': uf_detectada,
+        'estados': estados
+    })
+
+@app.route('/api/ipva/calcular', methods=['POST'])
+def calcular_ipva_veiculos():
+    data = request.json or {}
+    uf = (data.get('uf') or '').strip().upper()
+    if not uf or uf not in ipva.ESTADOS_IPVA:
+        client_ip = get_client_ip()
+        uf = ipva.obter_uf_por_ip(client_ip)
+
+    veiculos = data.get('veiculos', [])
+    if not veiculos and 'valor_fipe' in data:
+        veiculos = [{
+            'nome': data.get('nome', 'Veículo'),
+            'valor_fipe': data.get('valor_fipe', 0.0),
+            'ano_modelo': data.get('ano_modelo')
+        }]
+
+    resultados = []
+    for v in veiculos:
+        nome = v.get('nome', 'Veículo')
+        preco = float(v.get('valor_fipe') or v.get('preco') or 0.0)
+        ano = v.get('ano_modelo') or v.get('ano')
+        
+        if not ano and '(' in str(nome):
+            import re
+            m = re.search(r'\((\d{4})\)', str(nome))
+            if m:
+                ano = int(m.group(1))
+
+        calc = ipva.calcular_ipva(valor_fipe=preco, ano_modelo=ano, uf=uf)
+        calc['nome'] = nome
+        resultados.append(calc)
+
+    estado_info = ipva.ESTADOS_IPVA.get(uf, ipva.ESTADOS_IPVA['SP'])
+    taxa_lic = float(estado_info.get('taxa_licenciamento', 160.00))
+    return jsonify({
+        'uf': uf,
+        'estado_nome': estado_info['nome'],
+        'aliquota': estado_info['aliquota'],
+        'aliquota_formatada': f"{estado_info['aliquota']:.2f}%".replace('.', ','),
+        'isencao_anos': estado_info['isencao_anos'],
+        'desconto_avista': estado_info['desconto_avista'],
+        'max_parcelas': estado_info['max_parcelas'],
+        'taxa_licenciamento': taxa_lic,
+        'taxa_licenciamento_formatada': ipva.format_money(taxa_lic),
+        'observacoes': estado_info['observacoes'],
+        'resultados': resultados
+    })
 
 import threading
 import check_release
