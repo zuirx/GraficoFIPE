@@ -92,7 +92,6 @@
         .btn-webmotors { background-color: #e63946; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
         .btn-webmotors:hover { background-color: #d62828; }
         .btn-webmotors:disabled { opacity: 0.6; cursor: not-allowed; }
-        .wm-counter { background: rgba(0,0,0,0.2); padding: 2px 6px; font-size: 11px; font-weight: bold; }
         .wm-spinner { width: 34px; height: 34px; border: 4px solid rgba(230, 57, 70, 0.2); border-top: 4px solid #e63946; border-radius: 50%; animation: wmSpin 0.9s linear infinite; }
         @keyframes wmSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .wm-card { background: var(--container-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
@@ -106,6 +105,29 @@
         .wm-card-link { margin-top: auto; display: block; text-align: center; background: #e63946; color: white !important; text-decoration: none; font-weight: 600; font-size: 14px; padding: 10px; transition: background 0.2s; }
         .wm-card-link:hover { background: #d62828; }
         
+        /* Estilos OLX */
+        .btn-olx { background-color: #6e0ad6; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-olx:hover { background-color: #5507a8; }
+        .btn-olx:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-olx-action { background-color: #6e0ad6; color: white !important; font-size: 13px; padding: 6px 12px; border-radius: 0; cursor: pointer; border: none; font-weight: 600; transition: background 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-olx-action:hover { background-color: #5507a8; }
+        .btn-olx-action:disabled { opacity: 0.6; cursor: not-allowed; }
+        .olx-counter { background: rgba(0,0,0,0.2); padding: 2px 6px; font-size: 11px; font-weight: bold; }
+        .olx-spinner { width: 34px; height: 34px; border: 4px solid rgba(110, 10, 214, 0.2); border-top: 4px solid #6e0ad6; border-radius: 50%; animation: olxSpin 0.9s linear infinite; }
+        @keyframes olxSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .olx-card { background: var(--container-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+        .olx-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.12); }
+        .olx-card-img { width: 100%; height: 180px; object-fit: cover; background-color: rgba(0,0,0,0.05); }
+        .olx-card-body { padding: 15px; display: flex; flex-direction: column; flex: 1; }
+        .olx-card-price { font-size: 22px; font-weight: bold; color: var(--positive); margin: 6px 0 10px 0; }
+        .olx-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
+        .olx-chip { background: rgba(110, 10, 214, 0.08); color: var(--text-main); font-size: 12px; padding: 3px 8px; border-radius: 0; border: 1px solid rgba(110, 10, 214, 0.2); }
+        body.dark-mode .olx-chip { background: rgba(110, 10, 214, 0.25); color: #e9d5ff; border-color: rgba(168, 85, 247, 0.4); }
+        .olx-card-link { margin-top: auto; display: block; text-align: center; background: #6e0ad6; color: white !important; text-decoration: none; font-weight: 600; font-size: 14px; padding: 10px; transition: background 0.2s; }
+        .olx-card-link:hover { background: #5507a8; }
+        .olx-filter-bar { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-bottom: 20px; background: rgba(110, 10, 214, 0.04); padding: 15px; border: 1px solid rgba(110, 10, 214, 0.2); }
+        body.dark-mode .olx-filter-bar { background: rgba(110, 10, 214, 0.12); border-color: rgba(168, 85, 247, 0.3); }
+
         .btn-ficha { background-color: #0284c7; color: white !important; font-size: 13px; padding: 6px 12px; border-radius: 0; cursor: pointer; border: none; font-weight: 600; transition: background 0.2s; display: inline-flex; align-items: center; gap: 5px; }
         .btn-ficha:hover { background-color: #0369a1; }
         .btn-wm-action { background-color: #e63946; color: white !important; font-size: 13px; padding: 6px 12px; border-radius: 0; cursor: pointer; border: none; font-weight: 600; transition: background 0.2s; display: inline-flex; align-items: center; gap: 5px; }
@@ -258,14 +280,14 @@
                         <th>Variação no Período</th>
                         <th>Menor Preço</th>
                         <th>Maior Preço</th>
-                        <th style="text-align: center; min-width: 290px;">Ficha Técnica & Webmotors</th>
+                        <th style="text-align: center; min-width: 380px;">Ficha Técnica & Ofertas de Mercado</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
             <div style="margin-top: 15px; padding: 12px 16px; background: rgba(0,0,0,0.02); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
                 <div style="font-size: 13px; color: var(--text-muted);">
-                    💡 <strong>Opções de Consulta:</strong> Clique em <strong>📋 Ficha Técnica</strong> para detalhes de motor, consumo e equipamentos (iCarros), ou <strong>🚗 Buscar no Webmotors</strong> para ofertas reais com preços e quilometragem.
+                    💡 <strong>Opções de Consulta:</strong> Clique em <strong>📋 Ficha Técnica</strong> (iCarros), <strong>🚗 Webmotors</strong> ou <strong>🛒 OLX</strong> (com filtros de estado, DDD, cidade e preços) para ver ofertas reais de mercado.
                 </div>
             </div>
         </div>
@@ -320,9 +342,6 @@
                     <p id="wm_subtitulo" style="margin: 5px 0 0 0; font-size: 14px; color: var(--text-muted);"></p>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span id="wm_tentativas_badge" style="background: rgba(230, 57, 70, 0.1); color: #e63946; border: 1px solid #e63946; padding: 5px 12px; font-size: 13px; font-weight: bold;">
-                        Consultas restantes: 3/3
-                    </span>
                     <button type="button" class="btn-secondary" onclick="fecharWebmotors()" style="padding: 6px 12px; margin: 0; font-size: 13px;">✕ Fechar</button>
                 </div>
             </div>
@@ -339,6 +358,130 @@
 
             <!-- Results Grid -->
             <div id="wm_cards_grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; width: 100%;"></div>
+        </div>
+
+        <!-- Seção OLX com Filtros -->
+        <div id="olx-container" class="controls" style="display: none; flex-direction: column; margin-bottom: 30px; border-left: 5px solid #6e0ad6;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px;">
+                <div>
+                    <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="background: #6e0ad6; color: white; padding: 2px 8px; font-size: 13px; font-weight: bold;">OLX</span>
+                        Ofertas e Preços Praticados no Mercado
+                    </h3>
+                    <p id="olx_subtitulo" style="margin: 5px 0 0 0; font-size: 14px; color: var(--text-muted);"></p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span id="olx_tentativas_badge" style="background: rgba(110, 10, 214, 0.1); color: #6e0ad6; border: 1px solid #6e0ad6; padding: 5px 12px; font-size: 13px; font-weight: bold;">
+                        Consultas restantes: 5/5
+                    </span>
+                    <button type="button" class="btn-secondary" onclick="fecharOLX()" style="padding: 6px 12px; margin: 0; font-size: 13px;">✕ Fechar</button>
+                </div>
+            </div>
+
+            <!-- Barra de Filtros OLX -->
+            <div class="olx-filter-bar">
+                <div class="control-group" style="margin: 0;">
+                    <label for="olx_filtro_estado" style="font-size: 12px; font-weight: 600;">Estado (UF)</label>
+                    <select id="olx_filtro_estado" onchange="aoMudarEstadoOLX()" style="padding: 8px; font-size: 13px;">
+                        <option value="">Brasil (Todos)</option>
+                        <option value="SP">São Paulo (SP)</option>
+                        <option value="RJ">Rio de Janeiro (RJ)</option>
+                        <option value="MG">Minas Gerais (MG)</option>
+                        <option value="PR">Paraná (PR)</option>
+                        <option value="RS">Rio Grande do Sul (RS)</option>
+                        <option value="SC">Santa Catarina (SC)</option>
+                        <option value="BA">Bahia (BA)</option>
+                        <option value="DF">Distrito Federal (DF)</option>
+                        <option value="GO">Goiás (GO)</option>
+                        <option value="PE">Pernambuco (PE)</option>
+                        <option value="CE">Ceará (CE)</option>
+                        <option value="ES">Espírito Santo (ES)</option>
+                        <option value="MT">Mato Grosso (MT)</option>
+                        <option value="MS">Mato Grosso do Sul (MS)</option>
+                        <option value="PA">Pará (PA)</option>
+                        <option value="AM">Amazonas (AM)</option>
+                        <option value="MA">Maranhão (MA)</option>
+                        <option value="PB">Paraíba (PB)</option>
+                        <option value="RN">Rio Grande do Norte (RN)</option>
+                        <option value="AL">Alagoas (AL)</option>
+                        <option value="PI">Piauí (PI)</option>
+                        <option value="SE">Sergipe (SE)</option>
+                        <option value="RO">Rondônia (RO)</option>
+                        <option value="TO">Tocantins (TO)</option>
+                        <option value="AC">Acre (AC)</option>
+                        <option value="AP">Amapá (AP)</option>
+                        <option value="RR">Roraima (RR)</option>
+                    </select>
+                </div>
+                <div class="control-group" style="margin: 0;">
+                    <label for="olx_filtro_ddd" style="font-size: 12px; font-weight: 600;">DDD / Região</label>
+                    <select id="olx_filtro_ddd" onchange="aoMudarDDDOLX()" style="padding: 8px; font-size: 13px;">
+                        <option value="">Todos os DDDs</option>
+                        <option value="11">11 - São Paulo e Região</option>
+                        <option value="19">19 - Campinas e Região</option>
+                        <option value="12">12 - Vale do Paraíba / Litoral</option>
+                        <option value="13">13 - Baixada Santista</option>
+                        <option value="14">14 - Bauru / Marília</option>
+                        <option value="15">15 - Sorocaba e Região</option>
+                        <option value="16">16 - Ribeirão Preto</option>
+                        <option value="17">17 - São José do Rio Preto</option>
+                        <option value="18">18 - Presidente Prudente</option>
+                        <option value="21">21 - Rio de Janeiro e Região</option>
+                        <option value="22">22 - Norte Fluminense</option>
+                        <option value="24">24 - Serra / Angra dos Reis</option>
+                        <option value="27">27 - Vitória / Norte ES</option>
+                        <option value="28">28 - Sul do ES</option>
+                        <option value="31">31 - Belo Horizonte e Região</option>
+                        <option value="32">32 - Juiz de Fora e Região</option>
+                        <option value="34">34 - Triângulo Mineiro</option>
+                        <option value="35">35 - Sul de Minas</option>
+                        <option value="41">41 - Curitiba e Região</option>
+                        <option value="43">43 - Londrina e Região</option>
+                        <option value="44">44 - Maringá e Região</option>
+                        <option value="47">47 - Norte de SC / Joinville</option>
+                        <option value="48">48 - Florianópolis e Região</option>
+                        <option value="51">51 - Porto Alegre e Região</option>
+                        <option value="54">54 - Caxias do Sul / Serra Gaúcha</option>
+                        <option value="61">61 - Brasília / DF e Região</option>
+                        <option value="62">62 - Goiânia e Anápolis</option>
+                        <option value="71">71 - Salvador e Região</option>
+                        <option value="81">81 - Recife e Região</option>
+                        <option value="85">85 - Fortaleza e Região</option>
+                        <option value="91">91 - Belém e Região</option>
+                        <option value="92">92 - Manaus e Região</option>
+                    </select>
+                </div>
+                <div class="control-group" style="margin: 0;">
+                    <label for="olx_filtro_municipio" style="font-size: 12px; font-weight: 600;">Município / Cidade</label>
+                    <input type="text" id="olx_filtro_municipio" placeholder="Ex: Campinas ou Santos" style="padding: 8px; font-size: 13px;">
+                </div>
+                <div class="control-group" style="margin: 0;">
+                    <label for="olx_filtro_preco_min" style="font-size: 12px; font-weight: 600;">Preço Mínimo (R$)</label>
+                    <input type="number" id="olx_filtro_preco_min" placeholder="Ex: 25000" style="padding: 8px; font-size: 13px;">
+                </div>
+                <div class="control-group" style="margin: 0;">
+                    <label for="olx_filtro_preco_max" style="font-size: 12px; font-weight: 600;">Preço Máximo (R$)</label>
+                    <input type="number" id="olx_filtro_preco_max" placeholder="Ex: 60000" style="padding: 8px; font-size: 13px;">
+                </div>
+                <div style="display: flex; align-items: flex-end;">
+                    <button type="button" class="btn-olx" onclick="aplicarFiltrosOLX()" style="width: 100%; height: 38px; font-size: 13px; padding: 0 14px;">
+                        🔍 Filtrar Ofertas OLX
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Spinner / Message -->
+            <div id="olx_loading" style="display: none; text-align: center; padding: 35px 20px; width: 100%;">
+                <div class="olx-spinner" style="margin: 0 auto 15px auto;"></div>
+                <h4 style="margin: 0 0 5px 0; color: var(--text-main);">Consultando anúncios e preços na OLX via Patchright...</h4>
+                <p style="margin: 0; color: var(--text-muted); font-size: 14px;">Coletando preços, quilometragem, fotos e até 15 anúncios reais (aguarde alguns instantes)...</p>
+            </div>
+
+            <!-- Error Box -->
+            <div id="olx_error" style="display: none; background: rgba(220, 38, 38, 0.1); border: 1px solid var(--negative); color: var(--negative); padding: 15px; margin-bottom: 15px; width: 100%; box-sizing: border-box;"></div>
+
+            <!-- Results Grid (Max 15 items) -->
+            <div id="olx_cards_grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; width: 100%;"></div>
         </div>
 
         <!-- Simulador de Financiamento -->
@@ -564,6 +707,7 @@
             }
 
             checkWebmotorsStatus();
+            checkOLXStatus();
         }
 
         async function loadMarcas(tipoId) {
@@ -668,7 +812,8 @@
                             <td>${formatMoney(v.preco)}</td>
                             <td style="text-align: center; white-space: nowrap;">
                                 <button type="button" class="btn-ficha" onclick="consultarFichaTecnica('${nomeCarro}')" title="Ver Ficha Técnica" style="margin-right: 4px;">📋 Ficha</button>
-                                <button type="button" class="btn-wm-action" onclick="buscarWebmotors('${nomeCarro}')" title="Buscar no Webmotors">🚗 Webmotors</button>
+                                <button type="button" class="btn-wm-action" onclick="buscarWebmotors('${nomeCarro}')" title="Buscar no Webmotors" style="margin-right: 4px;">🚗 Webmotors</button>
+                                <button type="button" class="btn-olx-action" onclick="buscarOLX('${nomeCarro}')" title="Buscar ofertas na OLX (até 15 itens)">🛒 OLX</button>
                             </td>
                         </tr>
                     `;
@@ -865,7 +1010,8 @@
                         <td>${formatMoney(maxPrice)}</td>
                         <td style="text-align: center; white-space: nowrap;">
                             <button type="button" class="btn-ficha" onclick="consultarFichaTecnica('${safeLabel}')" title="Ver especificações técnicas completas no iCarros" style="margin-right: 6px;">📋 Ficha Técnica</button>
-                            <button type="button" class="btn-wm-action" onclick="buscarWebmotors('${safeLabel}')" title="Buscar ofertas reais deste modelo no Webmotors">🚗 Buscar no Webmotors <span class="wm-counter">(${wmLimiteRestante}/3)</span></button>
+                            <button type="button" class="btn-wm-action" onclick="buscarWebmotors('${safeLabel}')" title="Buscar ofertas reais deste modelo no Webmotors" style="margin-right: 6px;">🚗 Webmotors</button>
+                            <button type="button" class="btn-olx-action" onclick="buscarOLX('${safeLabel}')" title="Buscar ofertas reais deste modelo na OLX (até 15 anúncios com filtros)">🛒 OLX</button>
                         </td>
                     </tr>
                 `;
@@ -1063,40 +1209,22 @@
         }
 
         // --- Webmotors Integration Frontend ---
-        let wmLimiteRestante = 3;
+        let wmLimiteAtingido = false;
 
         async function checkWebmotorsStatus() {
             try {
                 const res = await fetchAPI('/api/webmotors/status');
                 if (res && res.tentativas_restantes !== undefined) {
-                    wmLimiteRestante = res.tentativas_restantes;
-                    atualizarBadgeWebmotors();
+                    wmLimiteAtingido = res.tentativas_restantes <= 0;
                 }
             } catch(e) {
-                console.warn("Não foi possível carregar o status do Webmotors:", e);
+                console.warn("Não foi possível verificar status do Webmotors:", e);
             }
         }
 
-        function atualizarBadgeWebmotors() {
-            document.querySelectorAll('.wm-counter').forEach(el => {
-                el.innerText = `(${wmLimiteRestante}/3)`;
-            });
-            const badgeTopo = document.getElementById('wm_tentativas_badge');
-            if (badgeTopo) badgeTopo.innerText = `Consultas restantes: ${wmLimiteRestante}/3`;
-            const buttons = document.querySelectorAll('.btn-webmotors, .btn-wm-action');
-            buttons.forEach(btn => {
-                if (wmLimiteRestante <= 0) {
-                    btn.disabled = true;
-                    btn.title = "Limite de 3 consultas ao Webmotors atingido nesta sessão.";
-                } else {
-                    btn.disabled = false;
-                }
-            });
-        }
-
         async function buscarWebmotors(modeloNomeEspecifico) {
-            if (wmLimiteRestante <= 0) {
-                alert("Você já atingiu o limite de 3 consultas ao Webmotors nesta sessão. Tente novamente mais tarde.");
+            if (wmLimiteAtingido) {
+                alert("Limite diário de consultas ao Webmotors atingido. Tente novamente mais tarde.");
                 return;
             }
 
@@ -1144,9 +1272,8 @@
 
                 const data = await res.json();
 
-                if (data.tentativas_restantes !== undefined) {
-                    wmLimiteRestante = data.tentativas_restantes;
-                    atualizarBadgeWebmotors();
+                if (data.tentativas_restantes !== undefined && data.tentativas_restantes <= 0) {
+                    wmLimiteAtingido = true;
                 }
 
                 loading.style.display = 'none';
