@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import duckdb, sqlite3, os
 import webmotors
-# import olx
+import olx
 import ficha_tecnica_icarros
 
 app = Flask(__name__)

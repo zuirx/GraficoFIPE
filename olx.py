@@ -274,10 +274,6 @@ def build_olx_url(query_text, year=None, ddd=None, estado=None, regiao=None, mun
         path_parts.append(f"estado-{uf}")
         if reg_slug:
             path_parts.append(reg_slug)
-            if mun_slug:
-                path_parts.append(mun_slug)
-        elif mun_slug:
-            path_parts.append(mun_slug)
 
     base_url = "/".join(path_parts)
 
@@ -571,6 +567,11 @@ def search_olx(query, brand=None, year=None, ddd=None, estado=None, regiao=None,
     default_uf = estado.upper() if estado else (DDD_MAP.get(int(ddd), {}).get('uf', '').upper() if ddd and str(ddd).isdigit() and int(ddd) in DDD_MAP else None)
 
     for r in raw_items:
+        raw_url = (r.get('url') or '')
+        # Ignora blocos de recomendação / fallback da OLX quando não há resultado
+        if 'rec_detail_location' in raw_url or 'listing_no_result' in raw_url or 'gallery_id=recents' in raw_url:
+            continue
+
         it = parse_card_data(r, default_uf=default_uf)
         if not it['titulo'] and not it['preco']:
             continue
@@ -586,6 +587,15 @@ def search_olx(query, brand=None, year=None, ddd=None, estado=None, regiao=None,
             continue
 
         parsed_items.append(it)
+
+    # Se município foi especificado, tenta filtrar apenas anúncios do município
+    if mun_lower := (municipio or '').lower().strip():
+        matched_mun = [
+            it for it in parsed_items 
+            if mun_lower in it['cidade'].lower() or mun_lower in it['localizacao'].lower()
+        ]
+        if matched_mun:
+            parsed_items = matched_mun
 
     # Ranqueamento dos anúncios por relevância
     query_words = set(re.findall(r'\b\w+\b', parsed['clean_query'].lower()))
