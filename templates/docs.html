@@ -186,7 +186,7 @@
         <div class="endpoint">
             <span class="badge post">POST</span> <code>/api/webmotors</code>
         </div>
-        <p>Consulta até 5 ofertas reais anunciadas no Webmotors para um modelo de veículo, trazendo preços praticados, quilometragem, fotos e links dos anúncios. Limitado a <strong>3 requisições</strong> por sessão/IP.</p>
+        <p>Consulta até 5 ofertas reais anunciadas no Webmotors para um modelo de veículo, trazendo preços praticados, quilometragem, fotos e links dos anúncios. Limitado a <strong>10 requisições a cada 24 horas</strong> por IP.</p>
 
         <h4>Parâmetros (JSON no corpo da requisição):</h4>
         <table>
@@ -240,6 +240,128 @@
       "localizacao": "Teresina - Piauí (PI)",
       "url": "https://www.webmotors.com.br/comprar/volkswagen/gol/...",
       "foto": "https://image.webmotors.com.br/..."
+    }
+  ]
+}</code></pre>
+
+        <h2 style="margin-top: 40px;">Pesquisa de Ofertas Reais (OLX)</h2>
+        <div class="endpoint">
+            <span class="badge post">POST</span> <code>/api/olx</code>
+        </div>
+        <p>Consulta até 15 ofertas reais anunciadas na OLX Brasil com suporte a filtros regionais e de faixa de preço. Traz preços praticados, quilometragem, ano, cor, motor, localização e links diretos dos anúncios.</p>
+
+        <h4>Parâmetros (JSON no corpo da requisição):</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Exemplo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>modelo</code></td>
+                    <td>string (obrigatório)</td>
+                    <td>Nome do modelo, versão ou código FIPE com ano (ex: <code>cod_fipe|ano</code>).</td>
+                    <td><code>"Gol Special 1.0 Total Flex 8V 5p (2015)"</code></td>
+                </tr>
+                <tr>
+                    <td><code>marca</code></td>
+                    <td>string (opcional)</td>
+                    <td>Nome da marca do veículo.</td>
+                    <td><code>"VW - VolksWagen"</code></td>
+                </tr>
+                <tr>
+                    <td><code>ano</code></td>
+                    <td>inteiro (opcional)</td>
+                    <td>Ano do modelo a ser consultado.</td>
+                    <td><code>2015</code></td>
+                </tr>
+                <tr>
+                    <td><code>ddd</code></td>
+                    <td>inteiro/string (opcional)</td>
+                    <td>Código DDD da região desejada (ex: 11, 19, 21, 31, 41, etc.).</td>
+                    <td><code>19</code></td>
+                </tr>
+                <tr>
+                    <td><code>estado</code></td>
+                    <td>string (opcional)</td>
+                    <td>Sigla da UF (ex: SP, RJ, MG, PR, SC, RS, etc.).</td>
+                    <td><code>"SP"</code></td>
+                </tr>
+                <tr>
+                    <td><code>regiao</code></td>
+                    <td>string (opcional)</td>
+                    <td>Nome ou slug da região na OLX.</td>
+                    <td><code>"grande-campinas"</code></td>
+                </tr>
+                <tr>
+                    <td><code>municipio</code></td>
+                    <td>string (opcional)</td>
+                    <td>Nome do município para filtro específico.</td>
+                    <td><code>"Campinas"</code></td>
+                </tr>
+                <tr>
+                    <td><code>preco_min</code></td>
+                    <td>numérico (opcional)</td>
+                    <td>Preço mínimo desejado em reais.</td>
+                    <td><code>20000</code></td>
+                </tr>
+                <tr>
+                    <td><code>preco_max</code></td>
+                    <td>numérico (opcional)</td>
+                    <td>Preço máximo desejado em reais.</td>
+                    <td><code>50000</code></td>
+                </tr>
+                <tr>
+                    <td><code>max_results</code></td>
+                    <td>inteiro (opcional)</td>
+                    <td>Quantidade máxima de anúncios (padrão: 15, máx: 30).</td>
+                    <td><code>15</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Exemplo de Resposta:</h4>
+        <pre><code>{
+  "success": true,
+  "modelo_buscado": "Gol Special 1.0 Total Flex 8V 5p (2015)",
+  "tentativas_restantes": 4,
+  "max_tentativas": 5,
+  "total": 15,
+  "filtros": {
+    "ddd": 19,
+    "estado": "SP",
+    "regiao": "grande-campinas",
+    "municipio": "Campinas",
+    "preco_min": 20000,
+    "preco_max": 50000
+  },
+  "anuncios": [
+    {
+      "id": "1544134717",
+      "titulo": "Volkswagen Gol Geração VI Special 1.0 8V Total Flex Mec. 4P 2015",
+      "preco": 32000.0,
+      "preco_formatado": "R$ 32.000,00",
+      "km": 200000,
+      "km_formatado": "200.000 km",
+      "ano": 2015,
+      "ano_formatado": "2015",
+      "combustivel": "Flex",
+      "cambio": "Manual",
+      "cor": "Branco",
+      "motor": "1.0",
+      "carroceria": "Hatch",
+      "cidade": "Campinas",
+      "bairro": "Jardim das Oliveiras",
+      "estado": "SP",
+      "regiao": "Grande Campinas E Regiao",
+      "localizacao": "Campinas, Jardim das Oliveiras - SP",
+      "data_publicacao": "Hoje, 11:29",
+      "url": "https://sp.olx.com.br/grande-campinas/autos-e-pecas/...",
+      "foto": "https://img.olx.com.br/thumbs700x500/..."
     }
   ]
 }</code></pre>
