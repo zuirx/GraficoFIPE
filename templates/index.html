@@ -1326,6 +1326,253 @@
             document.getElementById('webmotors-container').style.display = 'none';
         }
 
+        // --- OLX Integration Frontend ---
+        let olxLimiteRestante = 5;
+        let modeloAtualOLX = '';
+        let marcaAtualOLX = '';
+
+        async function checkOLXStatus() {
+            try {
+                const res = await fetchAPI('/api/olx/status');
+                if (res && res.tentativas_restantes !== undefined) {
+                    olxLimiteRestante = res.tentativas_restantes;
+                    atualizarBadgeOLX();
+                }
+            } catch(e) {
+                console.warn("Não foi possível carregar o status da OLX:", e);
+            }
+        }
+
+        function atualizarBadgeOLX() {
+            document.querySelectorAll('.olx-counter').forEach(el => {
+                el.innerText = `(${olxLimiteRestante}/5)`;
+            });
+            const badgeTopo = document.getElementById('olx_tentativas_badge');
+            if (badgeTopo) badgeTopo.innerText = `Consultas restantes: ${olxLimiteRestante}/5`;
+            const buttons = document.querySelectorAll('.btn-olx, .btn-olx-action');
+            buttons.forEach(btn => {
+                if (olxLimiteRestante <= 0) {
+                    btn.disabled = true;
+                    btn.title = "Limite de 5 consultas à OLX atingido nesta sessão.";
+                } else {
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        function aoMudarEstadoOLX() {
+            const uf = document.getElementById('olx_filtro_estado').value;
+            const dddSelect = document.getElementById('olx_filtro_ddd');
+            // Se o usuário selecionou estado e o DDD atual não pertence a ele, limpa o DDD
+            if (uf && dddSelect.value) {
+                const dddInt = parseInt(dddSelect.value);
+                const dddUfMap = {
+                    'SP': [11, 12, 13, 14, 15, 16, 17, 18, 19],
+                    'RJ': [21, 22, 24],
+                    'ES': [27, 28],
+                    'MG': [31, 32, 33, 34, 35, 37, 38],
+                    'PR': [41, 42, 43, 44, 45, 46],
+                    'SC': [47, 48, 49],
+                    'RS': [51, 53, 54, 55],
+                    'DF': [61],
+                    'GO': [62, 64],
+                    'TO': [63],
+                    'MT': [65, 66],
+                    'MS': [67],
+                    'BA': [71, 73, 74, 75, 77],
+                    'SE': [79],
+                    'PE': [81, 87],
+                    'AL': [82],
+                    'PB': [83],
+                    'RN': [84],
+                    'CE': [85, 88],
+                    'PI': [86, 89],
+                    'PA': [91, 93, 94],
+                    'AM': [92, 97],
+                    'MA': [98, 99]
+                };
+                if (dddUfMap[uf] && !dddUfMap[uf].includes(dddInt)) {
+                    dddSelect.value = '';
+                }
+            }
+        }
+
+        function aoMudarDDDOLX() {
+            const dddSelect = document.getElementById('olx_filtro_ddd');
+            const dddVal = dddSelect.value;
+            if (dddVal) {
+                const dddInt = parseInt(dddVal);
+                if (dddInt >= 11 && dddInt <= 19) document.getElementById('olx_filtro_estado').value = 'SP';
+                else if (dddInt >= 21 && dddInt <= 24) document.getElementById('olx_filtro_estado').value = 'RJ';
+                else if (dddInt === 27 || dddInt === 28) document.getElementById('olx_filtro_estado').value = 'ES';
+                else if (dddInt >= 31 && dddInt <= 38) document.getElementById('olx_filtro_estado').value = 'MG';
+                else if (dddInt >= 41 && dddInt <= 46) document.getElementById('olx_filtro_estado').value = 'PR';
+                else if (dddInt >= 47 && dddInt <= 49) document.getElementById('olx_filtro_estado').value = 'SC';
+                else if (dddInt >= 51 && dddInt <= 55) document.getElementById('olx_filtro_estado').value = 'RS';
+                else if (dddInt === 61) document.getElementById('olx_filtro_estado').value = 'DF';
+                else if (dddInt === 62 || dddInt === 64) document.getElementById('olx_filtro_estado').value = 'GO';
+                else if (dddInt === 63) document.getElementById('olx_filtro_estado').value = 'TO';
+                else if (dddInt === 65 || dddInt === 66) document.getElementById('olx_filtro_estado').value = 'MT';
+                else if (dddInt === 67) document.getElementById('olx_filtro_estado').value = 'MS';
+                else if (dddInt >= 71 && dddInt <= 77) document.getElementById('olx_filtro_estado').value = 'BA';
+                else if (dddInt === 79) document.getElementById('olx_filtro_estado').value = 'SE';
+                else if (dddInt === 81 || dddInt === 87) document.getElementById('olx_filtro_estado').value = 'PE';
+                else if (dddInt === 82) document.getElementById('olx_filtro_estado').value = 'AL';
+                else if (dddInt === 83) document.getElementById('olx_filtro_estado').value = 'PB';
+                else if (dddInt === 84) document.getElementById('olx_filtro_estado').value = 'RN';
+                else if (dddInt === 85 || dddInt === 88) document.getElementById('olx_filtro_estado').value = 'CE';
+                else if (dddInt === 86 || dddInt === 89) document.getElementById('olx_filtro_estado').value = 'PI';
+                else if (dddInt === 91 || dddInt === 93 || dddInt === 94) document.getElementById('olx_filtro_estado').value = 'PA';
+                else if (dddInt === 92 || dddInt === 97) document.getElementById('olx_filtro_estado').value = 'AM';
+                else if (dddInt === 98 || dddInt === 99) document.getElementById('olx_filtro_estado').value = 'MA';
+            }
+        }
+
+        async function buscarOLX(modeloNomeEspecifico) {
+            if (olxLimiteRestante <= 0) {
+                alert("Você já atingiu o limite de 5 consultas à OLX nesta sessão. Tente novamente mais tarde.");
+                return;
+            }
+
+            let modeloNome = modeloNomeEspecifico;
+            let marcaId = tsMarca ? tsMarca.getValue() : '';
+
+            if (!modeloNome) {
+                const modelosVal = tsModelo.getValue();
+                const modelos = (Array.isArray(modelosVal) ? modelosVal : (modelosVal ? [modelosVal] : [])).filter(v => v);
+
+                if (modelos.length === 0) {
+                    alert("Por favor, selecione ou atualize um modelo para buscar ofertas na OLX.");
+                    return;
+                }
+
+                const modeloId = modelos[0];
+                const modeloOption = tsModelo.options[modeloId];
+                modeloNome = modeloOption ? modeloOption.text : modeloId;
+            }
+
+            modeloAtualOLX = modeloNome;
+            marcaAtualOLX = marcaId;
+
+            await executarBuscaOLX();
+        }
+
+        async function aplicarFiltrosOLX() {
+            if (!modeloAtualOLX) {
+                const modelosVal = tsModelo ? tsModelo.getValue() : null;
+                if (modelosVal) {
+                    const mId = Array.isArray(modelosVal) ? modelosVal[0] : modelosVal;
+                    if (mId && tsModelo.options[mId]) {
+                        modeloAtualOLX = tsModelo.options[mId].text;
+                    }
+                }
+            }
+
+            if (!modeloAtualOLX) {
+                alert("Selecione um veículo ou modelo antes de filtrar na OLX.");
+                return;
+            }
+
+            await executarBuscaOLX();
+        }
+
+        async function executarBuscaOLX() {
+            const container = document.getElementById('olx-container');
+            const loading = document.getElementById('olx_loading');
+            const errorBox = document.getElementById('olx_error');
+            const cardsGrid = document.getElementById('olx_cards_grid');
+            const subtitulo = document.getElementById('olx_subtitulo');
+
+            const estado = document.getElementById('olx_filtro_estado').value;
+            const ddd = document.getElementById('olx_filtro_ddd').value;
+            const municipio = document.getElementById('olx_filtro_municipio').value.trim();
+            const precoMin = document.getElementById('olx_filtro_preco_min').value;
+            const precoMax = document.getElementById('olx_filtro_preco_max').value;
+
+            container.style.display = 'flex';
+            loading.style.display = 'block';
+            errorBox.style.display = 'none';
+            cardsGrid.innerHTML = '';
+            subtitulo.innerText = `Buscando ofertas reais na OLX para: ${modeloAtualOLX}...`;
+
+            container.scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                const res = await fetch('/api/olx', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        modelo: modeloAtualOLX,
+                        marca: marcaAtualOLX,
+                        estado: estado || null,
+                        ddd: ddd || null,
+                        municipio: municipio || null,
+                        preco_min: precoMin ? parseFloat(precoMin) : null,
+                        preco_max: precoMax ? parseFloat(precoMax) : null,
+                        max_results: 15
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.tentativas_restantes !== undefined) {
+                    olxLimiteRestante = data.tentativas_restantes;
+                    atualizarBadgeOLX();
+                }
+
+                loading.style.display = 'none';
+
+                if (!res.ok) {
+                    errorBox.innerText = data.error || "Erro ao consultar a OLX.";
+                    errorBox.style.display = 'block';
+                    return;
+                }
+
+                const anuncios = data.anuncios || [];
+                if (anuncios.length === 0) {
+                    cardsGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: var(--text-muted); font-size: 15px;">Nenhum anúncio correspondente foi encontrado na OLX com os filtros selecionados no momento. Tente alterar o estado, DDD ou a faixa de preço.</div>';
+                    return;
+                }
+
+                subtitulo.innerText = `Exibindo ${anuncios.length} ofertas reais para: ${data.modelo_buscado || modeloAtualOLX}`;
+
+                anuncios.forEach(a => {
+                    const fallbackImg = "https://webmotors.com.br/assets/img/webp/vehicle_no_photo.webp";
+                    const fotoSrc = a.foto ? a.foto : fallbackImg;
+
+                    cardsGrid.innerHTML += `
+                        <div class="olx-card">
+                            <img src="${fotoSrc}" alt="${a.titulo}" class="olx-card-img" onerror="this.onerror=null;this.src='${fallbackImg}';">
+                            <div class="olx-card-body">
+                                <h4 style="margin: 0 0 5px 0; font-size: 15px; color: var(--text-main); line-height: 1.3;">${a.titulo}</h4>
+                                <div class="olx-card-price">${a.preco_formatado}</div>
+                                <div class="olx-chips">
+                                    <span class="olx-chip">🏎️ ${a.km_formatado}</span>
+                                    <span class="olx-chip">📅 ${a.ano_formatado}</span>
+                                    <span class="olx-chip">📍 ${a.localizacao || 'Brasil'}</span>
+                                    ${a.cambio ? `<span class="olx-chip">⚙️ ${a.cambio}</span>` : ''}
+                                    ${a.combustivel ? `<span class="olx-chip">⛽ ${a.combustivel}</span>` : ''}
+                                    ${a.motor ? `<span class="olx-chip">🚀 ${a.motor}</span>` : ''}
+                                    ${a.cor && a.cor !== 'Não informada' ? `<span class="olx-chip">🎨 ${a.cor}</span>` : ''}
+                                    ${a.data_publicacao ? `<span class="olx-chip">🕒 ${a.data_publicacao}</span>` : ''}
+                                </div>
+                                <a href="${a.url}" target="_blank" rel="noopener" class="olx-card-link">Ver Anúncio na OLX ↗</a>
+                            </div>
+                        </div>
+                    `;
+                });
+
+            } catch (err) {
+                loading.style.display = 'none';
+                errorBox.innerText = "Erro de conexão ao buscar na OLX. Tente novamente.";
+                errorBox.style.display = 'block';
+            }
+        }
+
+        function fecharOLX() {
+            document.getElementById('olx-container').style.display = 'none';
+        }
+
         async function consultarFichaTecnica(modeloNome) {
             if (!modeloNome) return;
 
