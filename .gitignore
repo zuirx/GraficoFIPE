@@ -186,3 +186,4 @@ fipex-prices-latest.csv
 fipe.duckdb
 sugestoes.db
 templates/ad.html
+fichas_cache.db

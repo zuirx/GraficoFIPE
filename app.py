@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import duckdb, sqlite3, os
+import webmotors
+import ficha_tecnica_icarros
 
 app = Flask(__name__)
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fipe.duckdb')
@@ -422,6 +424,120 @@ def save_sugestao():
     conn.close()
     
     return jsonify({'success': True})
+
+# --- Integração Webmotors ---
+WEBMOTORS_RATE_LIMIT = {}  # ip -> list of timestamps
+WEBMOTORS_MAX_REQUESTS = 3
+WEBMOTORS_WINDOW = 3600  # 1 hora
+
+def get_client_ip():
+    if request.headers.get('X-Forwarded-For'):
+        return request.headers.get('X-Forwarded-For').split(',')[0].strip()
+    return request.remote_addr
+
+@app.route('/api/webmotors/status', methods=['GET'])
+def webmotors_status():
+    ip = get_client_ip()
+    now = time.time()
+    if ip in WEBMOTORS_RATE_LIMIT:
+        WEBMOTORS_RATE_LIMIT[ip] = [t for t in WEBMOTORS_RATE_LIMIT[ip] if now - t < WEBMOTORS_WINDOW]
+    else:
+        WEBMOTORS_RATE_LIMIT[ip] = []
+    restantes = max(0, WEBMOTORS_MAX_REQUESTS - len(WEBMOTORS_RATE_LIMIT[ip]))
+    return jsonify({
+        'tentativas_restantes': restantes,
+        'max_tentativas': WEBMOTORS_MAX_REQUESTS
+    })
+
+@app.route('/api/webmotors', methods=['POST'])
+def get_webmotors_listings():
+    ip = get_client_ip()
+    now = time.time()
+
+    if ip in WEBMOTORS_RATE_LIMIT:
+        WEBMOTORS_RATE_LIMIT[ip] = [t for t in WEBMOTORS_RATE_LIMIT[ip] if now - t < WEBMOTORS_WINDOW]
+        if len(WEBMOTORS_RATE_LIMIT[ip]) >= WEBMOTORS_MAX_REQUESTS:
+            return jsonify({
+                'error': 'Limite de 3 consultas ao Webmotors atingido. Tente novamente mais tarde.',
+                'tentativas_restantes': 0
+            }), 429
+
+    if ip not in WEBMOTORS_RATE_LIMIT:
+        WEBMOTORS_RATE_LIMIT[ip] = []
+
+    data = request.json or {}
+    modelo = data.get('modelo', '').strip()
+    marca = data.get('marca', '').strip()
+    ano = data.get('ano')
+
+    if not modelo:
+        return jsonify({'error': 'Modelo não informado.'}), 400
+
+    # Se o ID foi passado no formato cod_fipe|ano, busca nome no duckdb
+    if '|' in modelo:
+        parts = modelo.split('|')
+        cod_fipe = parts[0]
+        ano_val = int(parts[1]) if parts[1].isdigit() else None
+        try:
+            conn = get_db_connection()
+            row = conn.execute("SELECT nome_marca, nome_modelo FROM fipe WHERE codigo_fipe = ? AND ano_modelo = ? LIMIT 1", [cod_fipe, ano_val]).fetchone()
+            if row:
+                marca = row[0]
+                modelo = f"{row[1]} ({ano_val})"
+                ano = ano_val
+            conn.close()
+        except Exception:
+            pass
+
+    # Registra o uso da cota de consulta
+    WEBMOTORS_RATE_LIMIT[ip].append(now)
+    restantes = max(0, WEBMOTORS_MAX_REQUESTS - len(WEBMOTORS_RATE_LIMIT[ip]))
+
+    try:
+        anuncios = webmotors.search_webmotors(query=modelo, brand=marca, year=ano, max_results=5)
+        return jsonify({
+            'success': True,
+            'modelo_buscado': modelo,
+            'tentativas_restantes': restantes,
+            'max_tentativas': WEBMOTORS_MAX_REQUESTS,
+            'anuncios': anuncios
+        })
+    except Exception as e:
+        return jsonify({
+            'error': f"Erro ao consultar Webmotors: {str(e)}",
+            'tentativas_restantes': restantes
+        }), 500
+
+# --- Ficha Técnica (iCarros) ---
+@app.route('/api/ficha-tecnica', methods=['POST'])
+def api_ficha_tecnica():
+    data = request.json or {}
+    modelo = data.get('modelo', '').strip()
+    marca = data.get('marca', '').strip()
+
+    if not modelo:
+        return jsonify({'sucesso': False, 'erro': 'Modelo não informado.'}), 400
+
+    # Se modelo tiver formato fipe "cod_fipe|ano"
+    if '|' in modelo:
+        parts = modelo.split('|')
+        cod_fipe = parts[0]
+        ano_val = int(parts[1]) if parts[1].isdigit() else None
+        try:
+            conn = get_db_connection()
+            row = conn.execute("SELECT nome_marca, nome_modelo FROM fipe WHERE codigo_fipe = ? AND ano_modelo = ? LIMIT 1", [cod_fipe, ano_val]).fetchone()
+            if row:
+                marca = row[0]
+                modelo = f"{row[1]} ({ano_val})"
+            conn.close()
+        except Exception:
+            pass
+
+    try:
+        dados = ficha_tecnica_icarros.obter_ficha_tecnica_icarros(termo_carro=modelo)
+        return jsonify(dados)
+    except Exception as e:
+        return jsonify({'sucesso': False, 'erro': str(e)}), 500
 
 import threading
 import check_release

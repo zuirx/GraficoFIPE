@@ -1,5 +1,6 @@
-﻿Flask
+Flask
 requests
 pandas
 plotly
 duckdb
+patchright

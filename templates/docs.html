@@ -182,6 +182,67 @@
   }
 ]</code></pre>
 
+        <h2 style="margin-top: 40px;">Pesquisa de Ofertas Reais (Webmotors)</h2>
+        <div class="endpoint">
+            <span class="badge post">POST</span> <code>/api/webmotors</code>
+        </div>
+        <p>Consulta até 5 ofertas reais anunciadas no Webmotors para um modelo de veículo, trazendo preços praticados, quilometragem, fotos e links dos anúncios. Limitado a <strong>3 requisições</strong> por sessão/IP.</p>
+
+        <h4>Parâmetros (JSON no corpo da requisição):</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Exemplo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>modelo</code></td>
+                    <td>string (obrigatório)</td>
+                    <td>Nome do modelo ou versão com ano.</td>
+                    <td><code>"Gol Special 1.0 Total Flex 8V 5p (2015)"</code></td>
+                </tr>
+                <tr>
+                    <td><code>marca</code></td>
+                    <td>string (opcional)</td>
+                    <td>Nome da marca do veículo.</td>
+                    <td><code>"VW - VolksWagen"</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Exemplo de Resposta:</h4>
+        <pre><code>{
+  "success": true,
+  "modelo_buscado": "Gol Special 1.0 Total Flex 8V 5p (2015)",
+  "tentativas_restantes": 2,
+  "max_tentativas": 3,
+  "anuncios": [
+    {
+      "id": 81142393,
+      "titulo": "VOLKSWAGEN GOL 1.0 MI SPECIAL 8V FLEX 4P MANUAL",
+      "marca": "VOLKSWAGEN",
+      "modelo": "GOL",
+      "versao": "1.0 MI SPECIAL 8V FLEX 4P MANUAL",
+      "ano_fabricacao": "2015",
+      "ano_modelo": 2015,
+      "ano_formatado": "2015/2015",
+      "preco": 39990.0,
+      "preco_formatado": "R$ 39.990,00",
+      "km": 122000.0,
+      "km_formatado": "122.000 km",
+      "cambio": "Manual",
+      "combustivel": "Flex",
+      "cor": "Branco",
+      "localizacao": "Teresina - Piauí (PI)",
+      "url": "https://www.webmotors.com.br/comprar/volkswagen/gol/...",
+      "foto": "https://image.webmotors.com.br/..."
+    }
+  ]
+}</code></pre>
     </div>
 </body>
 </html>
