@@ -27,175 +27,212 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
     <style>
         :root {
-            --bg-color: #f0f4f8;
+            --bg-color: #f1f5f9;
             --container-bg: #ffffff;
-            --text-main: #334155;
+            --card-bg: #ffffff;
+            --subtle-bg: #f8fafc;
+            --subtle-border: #e2e8f0;
+            --text-main: #0f172a;
             --text-muted: #64748b;
             --border-color: #cbd5e1;
             
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: rgba(37, 99, 235, 0.08);
+            --primary-border: rgba(37, 99, 235, 0.25);
             --secondary: #64748b;
             --secondary-hover: #475569;
             
             --table-header: #f8fafc;
-            --event-bg: #e0f2fe;
+            --event-bg: #eff6ff;
             --event-border: #3b82f6;
-            --event-text: #0369a1;
+            --event-text: #1d4ed8;
             --positive: #16a34a;
             --negative: #dc2626;
+
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-full: 9999px;
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
         }
 
         body.dark-mode {
-            --bg-color: #0f172a;
-            --container-bg: #1e293b;
+            --bg-color: #0b1120;
+            --container-bg: #151e32;
+            --card-bg: #1e2942;
+            --subtle-bg: #182238;
+            --subtle-border: #24324c;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border-color: #334155;
+            --border-color: #2e3d5a;
             
             --primary: #3b82f6;
             --primary-hover: #60a5fa;
+            --primary-light: rgba(59, 130, 246, 0.16);
+            --primary-border: rgba(96, 165, 250, 0.3);
             --secondary: #475569;
             --secondary-hover: #64748b;
             
-            --table-header: #0f172a;
-            --event-bg: #1e3a8a;
-            --event-border: #60a5fa;
+            --table-header: #101828;
+            --event-bg: #172554;
+            --event-border: #3b82f6;
             --event-text: #bfdbfe;
             --positive: #4ade80;
             --negative: #f87171;
+
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.35);
+            --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.55);
         }
 
-        header { text-align: center ; margin: 24px;}
+        * {
+            box-sizing: border-box;
+        }
 
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 20px; background-color: var(--bg-color); color: var(--text-main); transition: background 0.2s, color 0.2s; }
-        .container { max-width: 1200px; margin: auto; background: var(--container-bg); padding: 25px; border-radius: 0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
-        h2, h3, h4 { color: var(--text-main); }
-        
-        .controls { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; background: rgba(0,0,0,0.02); padding: 20px; border-radius: 0; border: 1px solid var(--border-color); }
-        body.dark-mode .controls { background: rgba(0,0,0,0.2); }
-        a { color: rgb(107, 189, 189);}
-        .control-group { display: flex; flex-direction: column; flex: 1; min-width: 180px; }
-        .control-group.full { flex-basis: 100%; }
-        .control-group.half { flex-basis: 48%; }
-        label { font-weight: 600; margin-bottom: 6px; font-size: 14px; color: var(--text-muted); }
-        
-        input[type="number"], select { padding: 10px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 0; background-color: var(--container-bg); color: var(--text-main); }
-        input[type="number"]:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
-        
-        button { background-color: var(--primary); color: white; border: none; font-weight: 600; cursor: pointer; transition: all 0.2s; padding: 12px 16px; font-size: 14px; border-radius: 0; }
-        button:hover { background-color: var(--primary-hover); }
-        
-        .btn-secondary { background-color: var(--secondary); }
-        .btn-secondary:hover { background-color: var(--secondary-hover); }
-        
-        .btn-webmotors { background-color: #e63946; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-        .btn-webmotors:hover { background-color: #d62828; }
-        .btn-webmotors:disabled { opacity: 0.6; cursor: not-allowed; }
-        .wm-spinner { width: 34px; height: 34px; border: 4px solid rgba(230, 57, 70, 0.2); border-top: 4px solid #e63946; border-radius: 50%; animation: wmSpin 0.9s linear infinite; }
-        @keyframes wmSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .wm-card { background: var(--container-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
-        .wm-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.12); }
-        .wm-card-img { width: 100%; height: 180px; object-fit: cover; background-color: rgba(0,0,0,0.05); }
-        .wm-card-body { padding: 15px; display: flex; flex-direction: column; flex: 1; }
-        .wm-card-price { font-size: 22px; font-weight: bold; color: var(--positive); margin: 6px 0 10px 0; }
-        .wm-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
-        .wm-chip { background: rgba(0,0,0,0.05); color: var(--text-muted); font-size: 12px; padding: 3px 8px; border-radius: 0; }
-        body.dark-mode .wm-chip { background: rgba(255,255,255,0.08); }
-        .wm-card-link { margin-top: auto; display: block; text-align: center; background: #e63946; color: white !important; text-decoration: none; font-weight: 600; font-size: 14px; padding: 10px; transition: background 0.2s; }
-        .wm-card-link:hover { background: #d62828; }
-        
-        /* Estilos OLX */
-        .btn-olx { background-color: #6e0ad6; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-        .btn-olx:hover { background-color: #5507a8; }
-        .btn-olx:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-olx-action { background-color: #6e0ad6; color: white !important; font-size: 13px; padding: 6px 12px; border-radius: 0; cursor: pointer; border: none; font-weight: 600; transition: background 0.2s; display: inline-flex; align-items: center; gap: 5px; }
-        .btn-olx-action:hover { background-color: #5507a8; }
-        .btn-olx-action:disabled { opacity: 0.6; cursor: not-allowed; }
-        .olx-counter { background: rgba(0,0,0,0.2); padding: 2px 6px; font-size: 11px; font-weight: bold; }
-        .olx-spinner { width: 34px; height: 34px; border: 4px solid rgba(110, 10, 214, 0.2); border-top: 4px solid #6e0ad6; border-radius: 50%; animation: olxSpin 0.9s linear infinite; }
-        @keyframes olxSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .olx-card { background: var(--container-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
-        .olx-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.12); }
-        .olx-card-img { width: 100%; height: 180px; object-fit: cover; background-color: rgba(0,0,0,0.05); }
-        .olx-card-body { padding: 15px; display: flex; flex-direction: column; flex: 1; }
-        .olx-card-price { font-size: 22px; font-weight: bold; color: var(--positive); margin: 6px 0 10px 0; }
-        .olx-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
-        .olx-chip { background: rgba(110, 10, 214, 0.08); color: var(--text-main); font-size: 12px; padding: 3px 8px; border-radius: 0; border: 1px solid rgba(110, 10, 214, 0.2); }
-        body.dark-mode .olx-chip { background: rgba(110, 10, 214, 0.25); color: #e9d5ff; border-color: rgba(168, 85, 247, 0.4); }
-        .olx-card-link { margin-top: auto; display: block; text-align: center; background: #6e0ad6; color: white !important; text-decoration: none; font-weight: 600; font-size: 14px; padding: 10px; transition: background 0.2s; }
-        .olx-card-link:hover { background: #5507a8; }
-        .olx-filter-bar { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-bottom: 20px; background: rgba(110, 10, 214, 0.04); padding: 15px; border: 1px solid rgba(110, 10, 214, 0.2); }
-        body.dark-mode .olx-filter-bar { background: rgba(110, 10, 214, 0.12); border-color: rgba(168, 85, 247, 0.3); }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
 
-        /* Estilos IPVA */
-        .ipva-card { background: var(--container-bg); border: 1px solid var(--border-color); padding: 18px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s, box-shadow 0.2s; }
-        .ipva-card:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.08); }
-        .ipva-badge-isento { background: #10b981; color: white; font-weight: bold; padding: 4px 10px; font-size: 13px; display: inline-block; }
-        .ipva-valor-destaque { font-size: 24px; font-weight: 800; color: #10b981; margin: 6px 0; }
-        body.dark-mode .ipva-valor-destaque { color: #34d399; }
-        .ipva-banner { background: rgba(16, 185, 129, 0.08); border-left: 4px solid #10b981; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        body.dark-mode .ipva-banner { background: rgba(16, 185, 129, 0.15); }
-        @keyframes ipvaSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 28px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
 
-        .btn-ficha { background-color: #0284c7; color: white !important; font-size: 13px; padding: 6px 12px; border-radius: 0; cursor: pointer; border: none; font-weight: 600; transition: background 0.2s; display: inline-flex; align-items: center; gap: 5px; }
-        .btn-ficha:hover { background-color: #0369a1; }
-        .btn-wm-action { background-color: #e63946; color: white !important; font-size: 13px; padding: 6px 12px; border-radius: 0; cursor: pointer; border: none; font-weight: 600; transition: background 0.2s; display: inline-flex; align-items: center; gap: 5px; }
-        .btn-wm-action:hover { background-color: #d62828; }
-        .btn-wm-action:disabled { opacity: 0.6; cursor: not-allowed; }
-        .ficha-spinner { width: 34px; height: 34px; border: 4px solid rgba(2, 132, 199, 0.2); border-top: 4px solid #0284c7; border-radius: 50%; animation: fichaSpin 0.9s linear infinite; }
-        @keyframes fichaSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .ficha-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; margin-top: 15px; }
-        .ficha-box { background: var(--container-bg); border: 1px solid var(--border-color); padding: 15px; }
-        .ficha-box h4 { margin: 0 0 10px 0; font-size: 14px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; color: #0284c7; }
-        .ficha-item { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px dashed rgba(0,0,0,0.08); }
-        body.dark-mode .ficha-item { border-bottom: 1px dashed rgba(255,255,255,0.08); }
-        .ficha-label { color: var(--text-muted); }
-        .ficha-val { font-weight: 600; color: var(--text-main); text-align: right; margin-left: 10px; }
-        .equip-chip { display: inline-block; background: rgba(2, 132, 199, 0.1); color: var(--text-main); border: 1px solid rgba(2, 132, 199, 0.3); font-size: 12px; padding: 3px 8px; margin: 3px 4px 3px 0; }
-        
-        .chart-container { position: relative; height: 500px; width: 100%; margin-bottom: 30px; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
-        table, th, td { border: 1px solid var(--border-color); }
-        th, td { padding: 14px; text-align: left; }
-        th { background-color: var(--table-header); font-weight: 600; }
+        h1, h2, h3, h4 {
+            color: var(--text-main);
+            font-weight: 700;
+            margin-top: 0;
+        }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .modal-content { background: var(--container-bg); padding: 30px; border-radius: 0; width: 90%; max-width: 500px; position: relative; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-        .modal-content input, .modal-content textarea { background-color: var(--container-bg); color: var(--text-main); border-color: var(--border-color); }
-        .modal-close { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: var(--text-muted); background: none; border: none; padding: 0; margin: 0; line-height: 1; }
-        
-        .about-box { margin-top: 40px; padding: 20px; background: rgba(59, 130, 246, 0.05); border-left: 4px solid var(--primary); border-radius: 0; text-align: left; color: var(--text-muted); }
-        .about-box h3 { margin-top: 0; margin-bottom: 10px; color: var(--text-main); }
-        .about-box p { margin-bottom: 0; line-height: 1.6; }
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
 
-        .positive { color: var(--positive); font-weight: bold; }
-        .negative { color: var(--negative); font-weight: bold; }
-        
-        .event-box { background: var(--event-bg); color: var(--event-text); padding: 18px; border-radius: 0; border-left: 5px solid var(--event-border); margin-bottom: 30px; }
+        /* Top Navigation Bar */
+        .app-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-bottom: 22px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-        /* Links Globais Topo */
-        .top-links a { background: var(--secondary); color: #fff; padding: 10px 16px; border-radius: 0; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.2s; }
-        .top-links a:hover { background: var(--secondary-hover); }
-        .top-links a.primary-link { background: var(--primary); }
-        .top-links a.primary-link:hover { background: var(--primary-hover); }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon-box {
+            width: 44px;
+            height: 44px;
+            background: var(--primary-light);
+            border: 1px solid var(--primary-border);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .brand-title {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .brand-subtitle {
+            margin: 2px 0 0 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .top-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .top-links a, .nav-link-btn {
+            background: var(--subtle-bg);
+            color: var(--text-main);
+            padding: 7px 14px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            transition: all 0.18s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .top-links a:hover, .nav-link-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+            text-decoration: none;
+        }
+
+        .top-links a.primary-link, .nav-link-btn.primary-link {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary-border);
+        }
+
+        .top-links a.primary-link:hover, .nav-link-btn.primary-link:hover {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
 
         /* Checkbox Switch Pequeno de Modo Escuro/Claro */
         .theme-switch-wrapper {
-            position: absolute;
-            top: 15px;
-            right: 15px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: var(--container-bg);
+            background: var(--subtle-bg);
             border: 1px solid var(--border-color);
-            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            padding: 5px 12px;
             cursor: pointer;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
             user-select: none;
         }
         .theme-switch-wrapper:hover {
@@ -244,29 +281,384 @@
             color: var(--text-muted);
         }
         body.dark-mode .theme-switch-wrapper input[type="checkbox"] {
-            background: #3b82f6;
+            background: var(--primary);
         }
+
+        /* Card Principal de Controles */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 28px;
+            background: var(--subtle-bg);
+            padding: 22px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .controls-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .controls-header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-icon {
+            font-size: 18px;
+        }
+
+        .panel-heading {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .panel-subheading {
+            margin: 2px 0 0 0;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Grid de Seleção Primária */
+        .primary-filter-grid {
+            display: grid;
+            grid-template-columns: minmax(180px, 1fr) minmax(260px, 2fr);
+            gap: 16px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .col-span-full {
+            grid-column: 1 / -1;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .label-badge-tip {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--primary);
+            background: var(--primary-light);
+            border: 1px solid var(--primary-border);
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+        }
+
+        /* Inputs e Selects */
+        input[type="number"], input[type="text"], select {
+            padding: 10px 14px;
+            font-size: 14px;
+            font-family: inherit;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background-color: var(--container-bg);
+            color: var(--text-main);
+            transition: all 0.18s ease;
+            width: 100%;
+        }
+
+        input[type="number"]:focus, input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Subpainel de Filtros Opcionais */
+        .optional-filters-card {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .optional-header {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .optional-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-optional {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--subtle-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+        }
+
+        .optional-heading {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .optional-desc {
+            margin: 0;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .optional-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+        }
+
+        /* Barra de Ações */
+        .action-btn-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding-top: 4px;
+        }
+
+        button {
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            padding: 11px 18px;
+            font-size: 14px;
+            border-radius: var(--radius-md);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-family: inherit;
+        }
+
+        .btn-primary-action, button:not(.btn-secondary):not(.btn-webmotors):not(.btn-olx):not(.btn-ficha):not(.btn-wm-action):not(.btn-olx-action):not(.btn-danger-outline):not(.modal-close):not(.btn-panel-close) {
+            background-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary-action:hover, button:not(.btn-secondary):not(.btn-webmotors):not(.btn-olx):not(.btn-ficha):not(.btn-wm-action):not(.btn-olx-action):not(.btn-danger-outline):not(.modal-close):not(.btn-panel-close):hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-danger-outline {
+            background-color: transparent;
+            color: var(--negative);
+            border: 1px solid var(--negative);
+        }
+
+        .btn-danger-outline:hover {
+            background-color: var(--negative);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        /* Painel Card Compartilhado */
+        .panel-card {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .badge-brand {
+            color: white;
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+
+        .btn-panel-close {
+            padding: 6px 14px;
+            margin: 0;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            background: var(--secondary);
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background 0.18s;
+        }
+        .btn-panel-close:hover {
+            background: var(--secondary-hover);
+        }
+
+        /* Estilos Webmotors */
+        .btn-webmotors { background-color: #e63946; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-webmotors:hover { background-color: #d62828; }
+        .btn-webmotors:disabled { opacity: 0.6; cursor: not-allowed; }
+        .wm-spinner { width: 34px; height: 34px; border: 4px solid rgba(230, 57, 70, 0.2); border-top: 4px solid #e63946; border-radius: 50%; animation: wmSpin 0.9s linear infinite; }
+        @keyframes wmSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .wm-card { background: var(--container-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); display: flex; flex-direction: column; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; box-shadow: var(--shadow-sm); }
+        .wm-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .wm-card-img { width: 100%; height: 180px; object-fit: cover; background-color: rgba(0,0,0,0.05); }
+        .wm-card-body { padding: 16px; display: flex; flex-direction: column; flex: 1; }
+        .wm-card-price { font-size: 22px; font-weight: 800; color: var(--positive); margin: 6px 0 10px 0; }
+        .wm-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
+        .wm-chip { background: var(--subtle-bg); color: var(--text-muted); font-size: 12px; font-weight: 500; padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
+        body.dark-mode .wm-chip { background: rgba(255,255,255,0.06); }
+        .wm-card-link { margin-top: auto; display: block; text-align: center; background: #e63946; color: white !important; text-decoration: none; font-weight: 600; font-size: 13px; padding: 10px; border-radius: var(--radius-sm); transition: background 0.2s; }
+        .wm-card-link:hover { background: #d62828; text-decoration: none; }
+        
+        /* Estilos OLX */
+        .btn-olx { background-color: #6e0ad6; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-olx:hover { background-color: #5507a8; }
+        .btn-olx:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-olx-action { background-color: #6e0ad6; color: white !important; font-size: 13px; padding: 7px 12px; border-radius: var(--radius-sm); cursor: pointer; border: none; font-weight: 600; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-olx-action:hover { background-color: #5507a8; transform: translateY(-1px); }
+        .btn-olx-action:disabled { opacity: 0.6; cursor: not-allowed; }
+        .olx-counter { background: rgba(0,0,0,0.2); padding: 2px 6px; font-size: 11px; font-weight: bold; border-radius: 4px; }
+        .olx-spinner { width: 34px; height: 34px; border: 4px solid rgba(110, 10, 214, 0.2); border-top: 4px solid #6e0ad6; border-radius: 50%; animation: olxSpin 0.9s linear infinite; }
+        @keyframes olxSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .olx-card { background: var(--container-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); display: flex; flex-direction: column; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; box-shadow: var(--shadow-sm); }
+        .olx-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .olx-card-img { width: 100%; height: 180px; object-fit: cover; background-color: rgba(0,0,0,0.05); }
+        .olx-card-body { padding: 16px; display: flex; flex-direction: column; flex: 1; }
+        .olx-card-price { font-size: 22px; font-weight: 800; color: var(--positive); margin: 6px 0 10px 0; }
+        .olx-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
+        .olx-chip { background: rgba(110, 10, 214, 0.08); color: var(--text-main); font-size: 12px; font-weight: 500; padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid rgba(110, 10, 214, 0.2); }
+        body.dark-mode .olx-chip { background: rgba(110, 10, 214, 0.25); color: #e9d5ff; border-color: rgba(168, 85, 247, 0.4); }
+        .olx-card-link { margin-top: auto; display: block; text-align: center; background: #6e0ad6; color: white !important; text-decoration: none; font-weight: 600; font-size: 13px; padding: 10px; border-radius: var(--radius-sm); transition: background 0.2s; }
+        .olx-card-link:hover { background: #5507a8; text-decoration: none; }
+        .olx-filter-bar { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-bottom: 20px; background: rgba(110, 10, 214, 0.04); padding: 16px; border-radius: var(--radius-md); border: 1px solid rgba(110, 10, 214, 0.2); }
+        body.dark-mode .olx-filter-bar { background: rgba(110, 10, 214, 0.12); border-color: rgba(168, 85, 247, 0.3); }
+
+        /* Estilos IPVA */
+        .ipva-card { background: var(--container-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: transform 0.2s, box-shadow 0.2s; box-shadow: var(--shadow-sm); }
+        .ipva-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .ipva-badge-isento { background: #10b981; color: white; font-weight: 700; padding: 4px 10px; font-size: 12px; border-radius: var(--radius-full); display: inline-block; }
+        .ipva-valor-destaque { font-size: 24px; font-weight: 800; color: #10b981; margin: 6px 0; }
+        body.dark-mode .ipva-valor-destaque { color: #34d399; }
+        .ipva-banner { background: rgba(16, 185, 129, 0.08); border-left: 4px solid #10b981; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid rgba(16, 185, 129, 0.2); border-right: 1px solid rgba(16, 185, 129, 0.2); border-bottom: 1px solid rgba(16, 185, 129, 0.2); }
+        body.dark-mode .ipva-banner { background: rgba(16, 185, 129, 0.15); }
+        @keyframes ipvaSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Estilos Ficha Técnica */
+        .btn-ficha { background-color: #0284c7; color: white !important; font-size: 13px; padding: 7px 12px; border-radius: var(--radius-sm); cursor: pointer; border: none; font-weight: 600; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-ficha:hover { background-color: #0369a1; transform: translateY(-1px); }
+        .btn-wm-action { background-color: #e63946; color: white !important; font-size: 13px; padding: 7px 12px; border-radius: var(--radius-sm); cursor: pointer; border: none; font-weight: 600; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-wm-action:hover { background-color: #d62828; transform: translateY(-1px); }
+        .btn-wm-action:disabled { opacity: 0.6; cursor: not-allowed; }
+        .ficha-spinner { width: 34px; height: 34px; border: 4px solid rgba(2, 132, 199, 0.2); border-top: 4px solid #0284c7; border-radius: 50%; animation: fichaSpin 0.9s linear infinite; }
+        @keyframes fichaSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .ficha-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; margin-top: 15px; }
+        .ficha-box { background: var(--container-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; box-shadow: var(--shadow-sm); }
+        .ficha-box h4 { margin: 0 0 10px 0; font-size: 14px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; color: #0284c7; }
+        .ficha-item { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed rgba(0,0,0,0.08); }
+        body.dark-mode .ficha-item { border-bottom: 1px dashed rgba(255,255,255,0.08); }
+        .ficha-label { color: var(--text-muted); }
+        .ficha-val { font-weight: 600; color: var(--text-main); text-align: right; margin-left: 10px; }
+        .equip-chip { display: inline-block; background: rgba(2, 132, 199, 0.1); color: var(--text-main); border: 1px solid rgba(2, 132, 199, 0.3); font-size: 12px; padding: 4px 9px; margin: 3px 4px 3px 0; border-radius: var(--radius-full); }
+        
+        /* Gráfico Container */
+        .chart-container {
+            position: relative;
+            min-height: 480px;
+            height: 520px;
+            width: 100%;
+            margin-bottom: 28px;
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        table, th, td { border: 1px solid var(--border-color); }
+        th, td { padding: 14px; text-align: left; }
+        th { background-color: var(--table-header); font-weight: 600; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-content { background: var(--container-bg); padding: 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); width: 90%; max-width: 500px; position: relative; box-shadow: var(--shadow-lg); }
+        .modal-content input, .modal-content textarea { background-color: var(--container-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+        .modal-close { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: var(--text-muted); background: none; border: none; padding: 0; margin: 0; line-height: 1; }
+        
+        .about-box { margin-top: 36px; padding: 22px; background: var(--subtle-bg); border: 1px solid var(--border-color); border-left: 4px solid var(--primary); border-radius: var(--radius-md); text-align: left; color: var(--text-muted); }
+        .about-box h3 { margin-top: 0; margin-bottom: 8px; color: var(--text-main); font-size: 16px; }
+        .about-box p { margin-bottom: 0; line-height: 1.6; font-size: 14px; }
+
+        .positive { color: var(--positive); font-weight: bold; }
+        .negative { color: var(--negative); font-weight: bold; }
+        
+        .event-box { background: var(--event-bg); color: var(--event-text); padding: 18px 22px; border-radius: var(--radius-md); border-left: 4px solid var(--event-border); margin-bottom: 28px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
 
         /* Estilização Moderna do Painel de Resumo e Comparação */
         .summary-card {
             background: var(--container-bg);
             border: 1px solid var(--border-color);
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);
+            border-radius: var(--radius-lg);
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-sm);
             overflow: hidden;
         }
         .summary-header {
-            padding: 16px 20px;
+            padding: 18px 22px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            background: rgba(0,0,0,0.015);
-        }
-        body.dark-mode .summary-header {
-            background: rgba(255,255,255,0.02);
+            background: var(--subtle-bg);
         }
         .summary-header h3 {
             margin: 0;
@@ -280,10 +672,11 @@
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
-            padding: 3px 8px;
-            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 10px;
+            background: var(--primary-light);
             color: var(--primary);
-            border: 1px solid rgba(59, 130, 246, 0.25);
+            border: 1px solid var(--primary-border);
+            border-radius: var(--radius-full);
             letter-spacing: 0.5px;
         }
         .table-responsive {
@@ -304,7 +697,7 @@
             border-left: none;
             border-right: none;
             border-bottom: 2px solid var(--border-color);
-            padding: 14px 16px;
+            padding: 14px 18px;
             font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -316,7 +709,7 @@
             border-left: none;
             border-right: none;
             border-bottom: 1px solid var(--border-color);
-            padding: 14px 16px;
+            padding: 14px 18px;
             vertical-align: middle;
             font-size: 14px;
         }
@@ -324,7 +717,7 @@
             transition: background 0.15s;
         }
         #summaryTable tbody tr:hover {
-            background: rgba(59, 130, 246, 0.03);
+            background: rgba(37, 99, 235, 0.03);
         }
         body.dark-mode #summaryTable tbody tr:hover {
             background: rgba(255, 255, 255, 0.025);
@@ -332,13 +725,10 @@
         
         /* Divisória da Seção Macroeconômica */
         .summary-section-row td {
-            background: rgba(0,0,0,0.03) !important;
-            padding: 10px 16px !important;
+            background: var(--subtle-bg) !important;
+            padding: 10px 18px !important;
             border-top: 1px solid var(--border-color) !important;
             border-bottom: 1px solid var(--border-color) !important;
-        }
-        body.dark-mode .summary-section-row td {
-            background: rgba(255, 255, 255, 0.04) !important;
         }
         .summary-section-banner {
             display: flex;
@@ -373,12 +763,10 @@
             display: inline-block;
             font-size: 11px;
             color: var(--text-muted);
-            background: rgba(0,0,0,0.04);
+            background: var(--subtle-bg);
             padding: 3px 8px;
+            border-radius: 4px;
             border: 1px solid var(--border-color);
-        }
-        body.dark-mode .macro-tag-note {
-            background: rgba(255,255,255,0.05);
         }
 
         /* Badges de Variação */
@@ -390,6 +778,7 @@
             font-size: 13px;
             font-weight: 700;
             white-space: nowrap;
+            border-radius: var(--radius-full);
         }
         .badge-var.positive {
             background: rgba(22, 163, 74, 0.12);
@@ -438,98 +827,200 @@
             white-space: nowrap;
         }
         
-        /* TomSelect Dark Mode Fixes */
-        .ts-control { border-radius: 0; padding: 10px; font-size: 14px; background-color: var(--container-bg); border-color: var(--border-color); }
-        .ts-dropdown { background-color: var(--container-bg); border-color: var(--border-color); color: var(--text-main); }
-        body.dark-mode .ts-control { background-color: var(--container-bg) !important; color: var(--text-main) !important; border-color: var(--border-color) !important; }
-        body.dark-mode .ts-control input { color: var(--text-main) !important; background-color: transparent !important; }
-        body.dark-mode .ts-wrapper.focus .ts-control { border-color: var(--primary) !important; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
-        body.dark-mode .ts-dropdown .active { background-color: rgba(59, 130, 246, 0.2); color: var(--text-main); }
-        body.dark-mode .ts-dropdown .option { color: var(--text-main); }
-        body.dark-mode .item { background-color: var(--secondary) !important; color: #fff !important; }
+        /* TomSelect Modern Styling & Dark Mode */
+        .ts-control {
+            border-radius: var(--radius-md) !important;
+            padding: 9px 12px !important;
+            font-size: 14px !important;
+            background-color: var(--container-bg) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-main) !important;
+            min-height: 42px !important;
+            transition: all 0.18s ease;
+        }
+        .ts-wrapper.focus .ts-control {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
+        }
+        .ts-dropdown {
+            background-color: var(--container-bg) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-main) !important;
+            border-radius: var(--radius-md) !important;
+            box-shadow: var(--shadow-lg) !important;
+            overflow: hidden !important;
+        }
+        body.dark-mode .ts-control input {
+            color: var(--text-main) !important;
+            background-color: transparent !important;
+        }
+        body.dark-mode .ts-dropdown .active {
+            background-color: var(--primary-light) !important;
+            color: var(--primary) !important;
+        }
+        body.dark-mode .ts-dropdown .option {
+            color: var(--text-main) !important;
+        }
+        .item {
+            border-radius: 4px !important;
+            padding: 2px 8px !important;
+            background-color: var(--primary-light) !important;
+            color: var(--primary) !important;
+            border: 1px solid var(--primary-border) !important;
+            font-weight: 600 !important;
+        }
+        body.dark-mode .item {
+            background-color: rgba(59, 130, 246, 0.22) !important;
+            color: #bfdbfe !important;
+            border-color: rgba(96, 165, 250, 0.35) !important;
+        }
         
+        .app-footer {
+            text-align: center;
+            margin: 30px 0 20px 0;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .app-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .app-footer a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
-            body { margin: 10px; }
-            .container { padding: 15px; }
-            .theme-switch-wrapper { position: relative; top: 0; right: 0; margin: 10px 0 15px auto; width: fit-content; display: inline-flex; }
-            .controls { flex-direction: column; gap: 12px; padding: 15px; }
-            .control-group, .control-group.half, .control-group.full { flex-basis: 100% !important; width: 100%; }
-            div[style*="flex-direction: row"] { flex-direction: column !important; gap: 12px !important; }
-            button { margin-top: 5px; width: 100%; padding: 14px; }
-            .chart-container { height: 350px; margin-bottom: 20px; }
+            body { padding: 10px; }
+            .container { padding: 16px; border-radius: var(--radius-md); }
+            .app-navbar { flex-direction: column; align-items: stretch; gap: 14px; }
+            .navbar-right { justify-content: space-between; }
+            .primary-filter-grid { grid-template-columns: 1fr; }
+            .optional-grid { grid-template-columns: 1fr; }
+            .action-btn-toolbar { flex-direction: column; width: 100%; }
+            .action-btn-toolbar button { width: 100%; }
+            .chart-container { height: 360px; min-height: 320px; padding: 12px; }
             #table-container { overflow-x: auto; }
             th, td { padding: 10px; }
-            .top-links { position: relative !important; top: 0 !important; left: 0 !important; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
-            .top-links a { text-align: center; }
             .actions-btn-group { flex-wrap: wrap; justify-content: center; }
+            .actions-btn-group button { width: 100%; }
         }
     </style>
-
-
 </head>
 
 <body>
-    <div class="top-links" style="position: absolute; top: 15px; left: 15px; z-index: 10; display: flex; gap: 10px;">
-        <a href="/ranking">Ranking</a>
-        <a href="/docs" class="primary-link">API Docs</a>
-    </div>
-    <label class="theme-switch-wrapper" for="themeCheckbox" title="Alternar entre Modo Claro e Escuro">
-        <span class="theme-icon">☀️</span>
-        <input type="checkbox" id="themeCheckbox" onchange="toggleTheme(event)">
-        <span class="theme-icon">🌙</span>
-        <span class="theme-text">Modo Escuro</span>
-    </label>
-
     <div class="container">
-        <h2>GráficoFIPE - Evolução de Preços da Tabela FIPE</h2>
+        <!-- Top Navigation Bar Integrada -->
+        <header class="app-navbar">
+            <div class="navbar-brand">
+                <div class="brand-icon-box">
+                    <span>📈</span>
+                </div>
+                <div>
+                    <h1 class="brand-title">GraphFIPE</h1>
+                    <p class="brand-subtitle">Histórico e Evolução de Preços da Tabela FIPE</p>
+                </div>
+            </div>
+
+            <div class="navbar-right">
+                <nav class="top-links">
+                    <a href="/ranking" class="nav-link-btn" title="Ver ranking de valorização e desvalorização">
+                        <span>🏆</span> Ranking
+                    </a>
+                    <a href="/docs" class="nav-link-btn primary-link" title="Documentação da API">
+                        <span>📖</span> API Docs
+                    </a>
+                </nav>
+
+                <label class="theme-switch-wrapper" for="themeCheckbox" title="Alternar entre Modo Claro e Escuro">
+                    <span class="theme-icon">☀️</span>
+                    <input type="checkbox" id="themeCheckbox" onchange="toggleTheme(event)">
+                    <span class="theme-icon">🌙</span>
+                    <span class="theme-text">Modo Escuro</span>
+                </label>
+            </div>
+        </header>
                
+        <!-- Card Principal de Controles e Filtros -->
         <div class="controls">
-            <div class="control-group">
-                <label for="tipo">Categoria</label>
-                <select id="tipo" placeholder="Selecione a categoria..."></select>
-            </div>
-            
-            <div class="control-group">
-                <label for="marca">Marca (Digite para buscar)</label>
-                <select id="marca" placeholder="Selecione a marca..."></select>
-            </div>
-            
-            <div class="control-group full">
-                <label for="modelo">Modelos (Digite para buscar. Mantém seleções anteriores!)</label>
-                <select id="modelo" multiple placeholder="Selecione os modelos..."></select>
-            </div>
-
-            <div class="control-group full" style="margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 20px;">
-                <h4 style="margin: 0 0 5px 0; color: var(--text-main);">Filtros Opcionais</h4>
-                <p style="margin: 0 0 15px 0; font-size: 14px; color: var(--text-muted);">Refine sua busca escolhendo um período específico ou filtrando os modelos por uma faixa de preço.</p>
-            </div>
-            
-            <div class="control-group">
-                <label for="mes_inicio">Mês Inicial</label>
-                <select id="mes_inicio" placeholder="Mês inicial..."></select>
-            </div>
-            
-            <div class="control-group">
-                <label for="mes_fim">Mês Final</label>
-                <select id="mes_fim" placeholder="Mês final..."></select>
-            </div>
-
-            <div class="control-group full" style="flex-direction: row; gap: 15px;">
-                <div class="control-group half">
-                    <label for="preco_min">Preço Mínimo (R$)</label>
-                    <input type="number" id="preco_min" placeholder="Ex: 10000" onchange="applyFilters()">
-                </div>
-                <div class="control-group half">
-                    <label for="preco_max">Preço Máximo (R$)</label>
-                    <input type="number" id="preco_max" placeholder="Ex: 50000" onchange="applyFilters()">
+            <div class="controls-card-header">
+                <div class="controls-header-title">
+                    <span class="header-icon">🔍</span>
+                    <div>
+                        <h3 class="panel-heading">Consulta e Filtros de Veículos</h3>
+                        <p class="panel-subheading">Selecione a categoria, marca e adicione modelos para visualizar o gráfico comparativo.</p>
+                    </div>
                 </div>
             </div>
+
+            <!-- Grid de Seleção Primária -->
+            <div class="primary-filter-grid">
+                <div class="control-group">
+                    <label for="tipo"><span>🚗</span> Categoria</label>
+                    <select id="tipo" placeholder="Selecione a categoria..."></select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="marca"><span>🏷️</span> Marca (Digite para buscar)</label>
+                    <select id="marca" placeholder="Selecione a marca..."></select>
+                </div>
+                
+                <div class="control-group col-span-full">
+                    <div class="label-row">
+                        <label for="modelo"><span>🚘</span> Modelos (Múltipla seleção)</label>
+                        <span class="label-badge-tip">💡 Mantém seleções ao trocar de marca</span>
+                    </div>
+                    <select id="modelo" multiple placeholder="Selecione os modelos para comparar..."></select>
+                </div>
+            </div>
+
+            <!-- Subpainel de Filtros Opcionais -->
+            <div class="optional-filters-card">
+                <div class="optional-header">
+                    <div class="optional-title-wrap">
+                        <span class="badge-optional">Opcional</span>
+                        <h4 class="optional-heading">Período de Análise & Faixa de Preço</h4>
+                    </div>
+                    <p class="optional-desc">Refine sua busca escolhendo um período específico ou filtrando os modelos por faixa de valor.</p>
+                </div>
+                
+                <div class="optional-grid">
+                    <div class="control-group">
+                        <label for="mes_inicio">Mês Inicial</label>
+                        <select id="mes_inicio" placeholder="Mês inicial..."></select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="mes_fim">Mês Final</label>
+                        <select id="mes_fim" placeholder="Mês final..."></select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="preco_min">Preço Mínimo (R$)</label>
+                        <input type="number" id="preco_min" placeholder="Ex: 10000" onchange="applyFilters()">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="preco_max">Preço Máximo (R$)</label>
+                        <input type="number" id="preco_max" placeholder="Ex: 50000" onchange="applyFilters()">
+                    </div>
+                </div>
+            </div>
             
-            <div class="control-group full" style="flex-direction: row; gap: 15px;">
-                <button onclick="updateChart()">Atualizar Gráfico</button>
-                <button type="button" class="btn-secondary" onclick="copyLink()">Copiar Link do Gráfico</button>
-                <button type="button" class="btn-secondary" onclick="listTable()">Listar Tabela Detalhada</button>
-                <button type="button" class="btn-secondary" onclick="tsModelo.clear()">Remover Todos</button>
+            <!-- Barra de Botões de Ação -->
+            <div class="action-btn-toolbar">
+                <button type="button" class="btn-primary-action" onclick="updateChart()">
+                    <span>📈</span> Atualizar Gráfico
+                </button>
+                <button type="button" class="btn-secondary" onclick="copyLink()">
+                    <span>🔗</span> Copiar Link do Gráfico
+                </button>
+                <button type="button" class="btn-secondary" onclick="listTable()">
+                    <span>📋</span> Listar Tabela Detalhada
+                </button>
+                <button type="button" class="btn-danger-outline" onclick="tsModelo.clear()">
+                    <span>🗑️</span> Remover Todos
+                </button>
             </div>
         </div>
 
@@ -584,25 +1075,25 @@
         </div>
 
         <!-- Seção Pré-calculada de IPVA -->
-        <div id="ipva-container" class="controls" style="display: none; flex-direction: column; margin-bottom: 30px; border-left: 5px solid #10b981;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px;">
+        <div id="ipva-container" class="controls panel-card" style="display: none; flex-direction: column; margin-bottom: 30px; border-left: 5px solid #10b981;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 16px;">
                 <div>
                     <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
-                        <span style="background: #10b981; color: white; padding: 2px 8px; font-size: 13px; font-weight: bold;">IPVA</span>
+                        <span class="badge-brand" style="background: #10b981;">IPVA</span>
                         Estimativa Pré-calculada de IPVA
                     </h3>
-                    <p style="margin: 5px 0 0 0; font-size: 14px; color: var(--text-muted);">
+                    <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted);">
                         Cálculo automático baseado no último valor da Tabela FIPE e na alíquota oficial de cada estado.
                     </p>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                     <label for="ipva_select_estado" style="font-weight: 600; font-size: 13px; margin: 0; white-space: nowrap;">Estado (UF):</label>
-                    <select id="ipva_select_estado" onchange="aoMudarEstadoIPVA()" style="padding: 7px 12px; font-size: 14px; font-weight: 600; border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-main); cursor: pointer; min-width: 170px;">
+                    <select id="ipva_select_estado" onchange="aoMudarEstadoIPVA()" style="padding: 7px 12px; font-size: 13px; font-weight: 600; border: 1px solid var(--border-color); background: var(--container-bg); color: var(--text-main); cursor: pointer; min-width: 170px; border-radius: var(--radius-md);">
                     </select>
-                    <span id="ipva_geo_tag" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 8px; font-size: 11px; font-weight: 600;" title="Estado selecionado automaticamente com base no seu IP">
+                    <span id="ipva_geo_tag" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; font-size: 11px; font-weight: 700; border-radius: var(--radius-full);" title="Estado selecionado automaticamente com base no seu IP">
                         Auto IP: ...
                     </span>
-                    <button type="button" class="btn-secondary" onclick="fecharIPVA()" style="padding: 6px 12px; margin: 0; font-size: 13px;">✕ Fechar</button>
+                    <button type="button" class="btn-panel-close" onclick="fecharIPVA()">✕ Fechar</button>
                 </div>
             </div>
 
@@ -623,18 +1114,18 @@
         </div>
 
         <!-- Painel de Ficha Técnica (iCarros) -->
-        <div id="ficha-tecnica-container" class="controls" style="display: none; flex-direction: column; margin-bottom: 30px; border-left: 5px solid #0284c7;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px;">
+        <div id="ficha-tecnica-container" class="controls panel-card" style="display: none; flex-direction: column; margin-bottom: 30px; border-left: 5px solid #0284c7;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 16px;">
                 <div>
                     <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
-                        <span style="background: #0284c7; color: white; padding: 2px 8px; font-size: 13px; font-weight: bold;">iCarros</span>
+                        <span class="badge-brand" style="background: #0284c7;">iCarros</span>
                         Ficha Técnica Completa
                     </h3>
-                    <p id="ficha_subtitulo" style="margin: 5px 0 0 0; font-size: 14px; color: var(--text-muted);"></p>
+                    <p id="ficha_subtitulo" style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted);"></p>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <a id="ficha_link_externo" href="#" target="_blank" rel="noopener" style="display: none; font-size: 13px; font-weight: 600; text-decoration: none; color: #0284c7; padding: 6px 12px; border: 1px solid #0284c7;">Abrir no iCarros ↗</a>
-                    <button type="button" class="btn-secondary" onclick="fecharFichaTecnica()" style="padding: 6px 12px; margin: 0; font-size: 13px;">✕ Fechar</button>
+                    <a id="ficha_link_externo" href="#" target="_blank" rel="noopener" style="display: none; font-size: 13px; font-weight: 600; text-decoration: none; color: #0284c7; padding: 6px 14px; border: 1px solid #0284c7; border-radius: var(--radius-md);">Abrir no iCarros ↗</a>
+                    <button type="button" class="btn-panel-close" onclick="fecharFichaTecnica()">✕ Fechar</button>
                 </div>
             </div>
 
@@ -646,7 +1137,7 @@
             </div>
 
             <!-- Error -->
-            <div id="ficha_error" style="display: none; background: rgba(220, 38, 38, 0.1); border: 1px solid var(--negative); color: var(--negative); padding: 15px; margin-bottom: 15px; width: 100%; box-sizing: border-box;"></div>
+            <div id="ficha_error" style="display: none; background: rgba(220, 38, 38, 0.1); border: 1px solid var(--negative); color: var(--negative); border-radius: var(--radius-md); padding: 15px; margin-bottom: 15px; width: 100%; box-sizing: border-box;"></div>
 
             <!-- Content -->
             <div id="ficha_conteudo" style="display: none; width: 100%;">
@@ -654,25 +1145,25 @@
                 <div id="ficha_specs_grid" class="ficha-grid"></div>
 
                 <!-- Equipamentos -->
-                <div id="ficha_equipamentos_box" style="margin-top: 20px; background: var(--container-bg); border: 1px solid var(--border-color); padding: 15px;">
-                    <h4 style="margin: 0 0 10px 0; font-size: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; color: var(--text-main);">Equipamentos de Série e Opcionais</h4>
+                <div id="ficha_equipamentos_box" style="margin-top: 20px; background: var(--container-bg); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px;">
+                    <h4 style="margin: 0 0 10px 0; font-size: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; color: var(--text-main);">Equipamentos de Série e Opcionais</h4>
                     <div id="ficha_equipamentos_content" style="display: flex; flex-direction: column; gap: 10px;"></div>
                 </div>
             </div>
         </div>
 
         <!-- Seção Webmotors -->
-        <div id="webmotors-container" class="controls" style="display: none; flex-direction: column; margin-bottom: 30px; border-left: 5px solid #e63946;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px;">
+        <div id="webmotors-container" class="controls panel-card" style="display: none; flex-direction: column; margin-bottom: 30px; border-left: 5px solid #e63946;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 16px;">
                 <div>
                     <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
-                        <span style="background: #e63946; color: white; padding: 2px 8px; font-size: 13px; font-weight: bold;">Webmotors</span>
+                        <span class="badge-brand" style="background: #e63946;">Webmotors</span>
                         Ofertas do Mercado em Tempo Real
                     </h3>
-                    <p id="wm_subtitulo" style="margin: 5px 0 0 0; font-size: 14px; color: var(--text-muted);"></p>
+                    <p id="wm_subtitulo" style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted);"></p>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <button type="button" class="btn-secondary" onclick="fecharWebmotors()" style="padding: 6px 12px; margin: 0; font-size: 13px;">✕ Fechar</button>
+                    <button type="button" class="btn-panel-close" onclick="fecharWebmotors()">✕ Fechar</button>
                 </div>
             </div>
 
@@ -684,27 +1175,27 @@
             </div>
 
             <!-- Error Box -->
-            <div id="wm_error" style="display: none; background: rgba(220, 38, 38, 0.1); border: 1px solid var(--negative); color: var(--negative); padding: 15px; margin-bottom: 15px; width: 100%; box-sizing: border-box;"></div>
+            <div id="wm_error" style="display: none; background: rgba(220, 38, 38, 0.1); border: 1px solid var(--negative); color: var(--negative); border-radius: var(--radius-md); padding: 15px; margin-bottom: 15px; width: 100%; box-sizing: border-box;"></div>
 
             <!-- Results Grid -->
             <div id="wm_cards_grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; width: 100%;"></div>
         </div>
 
         <!-- Seção OLX com Filtros -->
-        <div id="olx-container" class="controls" style="display: none; flex-direction: column; margin-bottom: 30px; border-left: 5px solid #6e0ad6;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px;">
+        <div id="olx-container" class="controls panel-card" style="display: none; flex-direction: column; margin-bottom: 30px; border-left: 5px solid #6e0ad6;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 16px;">
                 <div>
                     <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
-                        <span style="background: #6e0ad6; color: white; padding: 2px 8px; font-size: 13px; font-weight: bold;">OLX</span>
+                        <span class="badge-brand" style="background: #6e0ad6;">OLX</span>
                         Ofertas e Preços Praticados no Mercado
                     </h3>
-                    <p id="olx_subtitulo" style="margin: 5px 0 0 0; font-size: 14px; color: var(--text-muted);"></p>
+                    <p id="olx_subtitulo" style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted);"></p>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <span id="olx_tentativas_badge" style="background: rgba(110, 10, 214, 0.1); color: #6e0ad6; border: 1px solid #6e0ad6; padding: 5px 12px; font-size: 13px; font-weight: bold;">
+                    <span id="olx_tentativas_badge" style="background: rgba(110, 10, 214, 0.1); color: #6e0ad6; border: 1px solid rgba(110, 10, 214, 0.3); padding: 5px 12px; font-size: 12px; font-weight: 700; border-radius: var(--radius-full);">
                         Consultas restantes: 5/5
                     </span>
-                    <button type="button" class="btn-secondary" onclick="fecharOLX()" style="padding: 6px 12px; margin: 0; font-size: 13px;">✕ Fechar</button>
+                    <button type="button" class="btn-panel-close" onclick="fecharOLX()">✕ Fechar</button>
                 </div>
             </div>
 
@@ -794,7 +1285,7 @@
                     <input type="number" id="olx_filtro_preco_max" placeholder="Ex: 60000" style="padding: 8px; font-size: 13px;">
                 </div>
                 <div style="display: flex; align-items: flex-end;">
-                    <button type="button" class="btn-olx" onclick="aplicarFiltrosOLX()" style="width: 100%; height: 38px; font-size: 13px; padding: 0 14px;">
+                    <button type="button" class="btn-olx" onclick="aplicarFiltrosOLX()" style="width: 100%; height: 38px; font-size: 13px; padding: 0 14px; border-radius: var(--radius-md);">
                         🔍 Filtrar Ofertas OLX
                     </button>
                 </div>
@@ -808,93 +1299,113 @@
             </div>
 
             <!-- Error Box -->
-            <div id="olx_error" style="display: none; background: rgba(220, 38, 38, 0.1); border: 1px solid var(--negative); color: var(--negative); padding: 15px; margin-bottom: 15px; width: 100%; box-sizing: border-box;"></div>
+            <div id="olx_error" style="display: none; background: rgba(220, 38, 38, 0.1); border: 1px solid var(--negative); color: var(--negative); border-radius: var(--radius-md); padding: 15px; margin-bottom: 15px; width: 100%; box-sizing: border-box;"></div>
 
             <!-- Results Grid (Max 15 items) -->
             <div id="olx_cards_grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; width: 100%;"></div>
         </div>
 
         <!-- Simulador de Financiamento -->
-        <div id="simulador-container" class="controls" style="margin-bottom: 30px; display: none;">
-            <h3 style="width: 100%; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Simulador de Financiamento</h3>
-            
-            <div class="control-group">
-                <label for="sim_valor">Valor Base (R$)</label>
-                <input type="number" id="sim_valor" placeholder="Ex: 50000" oninput="calcularFinanciamento()">
+        <div id="simulador-container" class="controls panel-card" style="margin-bottom: 30px; display: none; flex-direction: column; border-left: 5px solid var(--primary);">
+            <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
+                <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                    <span class="badge-brand" style="background: var(--primary);">Simulador</span>
+                    Simulador de Financiamento (Tabela Price)
+                </h3>
+                <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted);">
+                    Estime o valor das parcelas e custos de financiamento com taxa fixa ou juros da taxa SELIC.
+                </p>
             </div>
             
-            <div class="control-group">
-                <label for="sim_entrada">Ajuste de Preço (R$)</label>
-                <input type="number" id="sim_entrada" placeholder="-10000 para entrada" value="0" oninput="calcularFinanciamento()">
-                <small style="color: var(--text-muted); margin-top: 5px;">Valores negativos = Entrada (Subtrai). Valores positivos = Taxas extras (Adiciona).</small>
-            </div>
-            
-            <div class="control-group half">
-                <label for="sim_parcelas">Prazo (Meses)</label>
-                <input type="number" id="sim_parcelas" value="48" min="1" oninput="calcularFinanciamento()">
-            </div>
-            
-            <div class="control-group half">
-                <label for="sim_taxa">Taxa de Juros (%)</label>
-                <div style="display: flex; gap: 5px;">
-                    <input type="number" step="0.01" id="sim_taxa" value="1.5" style="width: 60%;" oninput="calcularFinanciamento()">
-                    <select id="sim_taxa_tipo" style="width: 40%; padding: 10px; border: 1px solid var(--border-color); border-radius: 0; background-color: var(--container-bg); color: var(--text-main);" onchange="calcularFinanciamento()">
-                        <option value="mes">ao mês</option>
-                        <option value="ano">ao ano</option>
-                    </select>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+                <div class="control-group">
+                    <label for="sim_valor">Valor Base (R$)</label>
+                    <input type="number" id="sim_valor" placeholder="Ex: 50000" oninput="calcularFinanciamento()">
+                </div>
+                
+                <div class="control-group">
+                    <label for="sim_entrada">Ajuste de Preço (R$)</label>
+                    <input type="number" id="sim_entrada" placeholder="-10000 para entrada" value="0" oninput="calcularFinanciamento()">
+                    <small style="color: var(--text-muted); font-size: 11px;">Valores negativos = Entrada (Subtrai). Positivos = Taxas (Adiciona).</small>
+                </div>
+                
+                <div class="control-group">
+                    <label for="sim_parcelas">Prazo (Meses)</label>
+                    <input type="number" id="sim_parcelas" value="48" min="1" oninput="calcularFinanciamento()">
+                </div>
+                
+                <div class="control-group">
+                    <label for="sim_taxa">Taxa de Juros (%)</label>
+                    <div style="display: flex; gap: 6px;">
+                        <input type="number" step="0.01" id="sim_taxa" value="1.5" style="flex: 1;" oninput="calcularFinanciamento()">
+                        <select id="sim_taxa_tipo" style="width: 110px;" onchange="calcularFinanciamento()">
+                            <option value="mes">ao mês</option>
+                            <option value="ano">ao ano</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             
-            <div class="control-group full" style="flex-direction: row; gap: 15px; margin-top: 10px;">
-                <button type="button" class="btn-secondary" style="margin-top: 0;" onclick="usarSelicSimulador()">Usar Taxa SELIC do Mês Final</button>
+            <div style="margin-top: 14px;">
+                <button type="button" class="btn-secondary" onclick="usarSelicSimulador()">
+                    <span>📊</span> Usar Taxa SELIC do Mês Final
+                </button>
             </div>
             
-            <div class="control-group full" id="sim_resultado" style="background: var(--event-bg); color: var(--event-text); padding: 20px; border-radius: 0; border-left: 5px solid var(--primary); margin-top: 20px;">
-                <h4 style="margin: 0 0 15px 0;">Resultado (Tabela Price)</h4>
+            <div id="sim_resultado" style="background: var(--event-bg); color: var(--event-text); padding: 20px; border-radius: var(--radius-md); border-left: 5px solid var(--primary); margin-top: 20px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+                <h4 style="margin: 0 0 15px 0; color: var(--event-text);">Resultado do Financiamento</h4>
                 <div style="display: flex; flex-wrap: wrap; gap: 20px;">
                     <div style="flex: 1; min-width: 150px;">
-                        <p style="margin: 0 0 5px 0; color: var(--text-muted);">Valor Financiado</p>
+                        <p style="margin: 0 0 5px 0; font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Valor Financiado</p>
                         <p id="res_financiado" style="margin: 0; font-size: 20px; font-weight: bold; color: var(--text-main);">R$ 0,00</p>
                     </div>
                     <div style="flex: 1; min-width: 150px;">
-                        <p style="margin: 0 0 5px 0; color: var(--text-muted);">Valor da Parcela</p>
-                        <p id="res_parcela" style="margin: 0; font-size: 24px; font-weight: bold; color: var(--negative);">R$ 0,00</p>
+                        <p style="margin: 0 0 5px 0; font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Valor da Parcela</p>
+                        <p id="res_parcela" style="margin: 0; font-size: 24px; font-weight: 800; color: var(--negative);">R$ 0,00</p>
                     </div>
                     <div style="flex: 1; min-width: 150px;">
-                        <p style="margin: 0 0 5px 0; color: var(--text-muted);">Total Pago</p>
+                        <p style="margin: 0 0 5px 0; font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Total Pago</p>
                         <p id="res_total" style="margin: 0; font-size: 18px; font-weight: bold; color: var(--text-main);">R$ 0,00</p>
                     </div>
                     <div style="flex: 1; min-width: 150px;">
-                        <p style="margin: 0 0 5px 0; color: var(--text-muted);">Total em Juros</p>
+                        <p style="margin: 0 0 5px 0; font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Total em Juros</p>
                         <p id="res_juros" style="margin: 0; font-size: 18px; font-weight: bold; color: var(--negative);">R$ 0,00</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="table-container" style="display: none;">
-            <h3>Lista de Veículos (Baseado nos filtros ou Modelos selecionados)</h3>
-            <table id="veiculosTable">
-                <thead>
-                    <tr>
-                        <th>Marca</th>
-                        <th>Modelo</th>
-                        <th>Versão / Ano</th>
-                        <th>Preço (R$)</th>
-                        <th style="text-align: center;">Ficha Técnica</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <!-- Tabela Detalhada -->
+        <div id="table-container" class="summary-card" style="display: none; padding: 22px; margin-bottom: 28px;">
+            <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 17px; display: flex; align-items: center; gap: 8px;">
+                <span>📑</span> Lista de Veículos (Baseado nos filtros ou Modelos selecionados)
+            </h3>
+            <div class="table-responsive">
+                <table id="veiculosTable">
+                    <thead>
+                        <tr>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Versão / Ano</th>
+                            <th>Preço (R$)</th>
+                            <th style="text-align: center; min-width: 250px;">Ações Rápidas</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
         
+        <!-- Box Informativo -->
         <div class="about-box">
-            <h3>Sobre o FipeData</h3>
-            <p>O <strong>FipeData</strong> é uma plataforma independente, gratuita e FLOSS desenvolvida para facilitar a consulta e a visualização do histórico de preços de veículos da Tabela FIPE (carros, motos e caminhões). Uso como fonte o dataset de <a href="" target="_blank" rel="noopener">fipex</a>.</p>
+            <h3><span>ℹ️</span> Sobre o FipeData</h3>
+            <p>O <strong>FipeData</strong> é uma plataforma independente, gratuita e FLOSS desenvolvida para facilitar a consulta e a visualização do histórico de preços de veículos da Tabela FIPE (carros, motos e caminhões). Utiliza como fonte primária o dataset público do <a href="https://github.com/fipex" target="_blank" rel="noopener">fipex</a>.</p>
         </div>
         
-        <div style="text-align: center; margin-top: 40px;">
-            <button type="button" class="btn-secondary" onclick="abrirModalSugestao()" style="margin-top: 0;">Enviar Sugestão | Reportar Problema</button>
+        <div style="text-align: center; margin-top: 32px;">
+            <button type="button" class="btn-secondary" onclick="abrirModalSugestao()" style="margin-top: 0; padding: 12px 22px;">
+                <span>💬</span> Enviar Sugestão | Reportar Problema
+            </button>
         </div>
     </div>
 
@@ -902,22 +1413,29 @@
     <div id="modalSugestao" class="modal-overlay" onclick="fecharModalSugestao(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="fecharModalSugestao()">&times;</button>
-            <h3 style="margin-top: 0;">Enviar Sugestão</h3>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <input type="text" id="sug_nome" placeholder="Seu Nome (Opcional)" style="padding: 10px; border: 1px solid #ccc; border-radius: 0; width: 100%; box-sizing: border-box;">
-                <textarea id="sug_msg" placeholder="Descreva sua sugestão ou problema..." rows="4" style="padding: 10px; border: 1px solid #ccc; border-radius: 0; resize: vertical; width: 100%; box-sizing: border-box;"></textarea>
-                <button type="button" id="btnEnviarSugestao" class="btn-secondary" onclick="enviarSugestao()">Enviar Sugestão</button>
+            <h3 style="margin-top: 0; display: flex; align-items: center; gap: 8px;">
+                <span>💬</span> Enviar Sugestão
+            </h3>
+            <p style="margin: 0 0 15px 0; font-size: 13px; color: var(--text-muted);">
+                Compartilhe sua opinião, melhorias desejadas ou reporte um problema no sistema.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <input type="text" id="sug_nome" placeholder="Seu Nome (Opcional)" style="padding: 10px 12px; width: 100%; box-sizing: border-box;">
+                <textarea id="sug_msg" placeholder="Descreva sua sugestão ou problema..." rows="4" style="padding: 10px 12px; resize: vertical; width: 100%; box-sizing: border-box;"></textarea>
+                <button type="button" id="btnEnviarSugestao" class="btn-primary-action" onclick="enviarSugestao()" style="width: 100%;">Enviar Sugestão</button>
                 <p id="sug_status" style="margin: 0; font-size: 14px; font-weight: bold; text-align: center;"></p>
             </div>
         </div>
     </div>
 
-    <header>
+    <!-- Rodapé -->
+    <footer class="app-footer">
         <p>
-            <a href="https://github.com/zuirx/GraficoFIPE" target="_blank" rel="noopener">Código Fonte</a>
-             | <a href="https://zuirx.com" target="_blank" rel="noopener">zuirx.com</a>
+            <a href="https://github.com/zuirx/GraficoFIPE" target="_blank" rel="noopener">Código Fonte (GitHub)</a>
+             &bull; 
+            <a href="https://zuirx.com" target="_blank" rel="noopener">zuirx.com</a>
         </p>
-    </header>
+    </footer>
 
     {% include 'ad.html' ignore missing %}
     

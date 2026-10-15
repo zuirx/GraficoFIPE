@@ -8,59 +8,114 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
     <style>
         :root {
-            --bg-color: #f0f4f8;
+            --bg-color: #f1f5f9;
             --container-bg: #ffffff;
-            --text-main: #334155;
+            --text-main: #0f172a;
             --text-muted: #64748b;
             --border-color: #cbd5e1;
             
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: rgba(37, 99, 235, 0.08);
+            --primary-border: rgba(37, 99, 235, 0.25);
             --secondary: #64748b;
             
             --table-header: #f8fafc;
-            --endpoint-bg: #e0f2fe;
+            --endpoint-bg: #eff6ff;
             --code-bg: #f1f5f9;
             --code-text: #db2777;
+
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-full: 9999px;
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
         }
 
         body.dark-mode {
-            --bg-color: #0f172a;
-            --container-bg: #1e293b;
+            --bg-color: #0b1120;
+            --container-bg: #151e32;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border-color: #334155;
+            --border-color: #2e3d5a;
             
             --primary: #3b82f6;
             --primary-hover: #60a5fa;
+            --primary-light: rgba(59, 130, 246, 0.16);
+            --primary-border: rgba(96, 165, 250, 0.3);
             --secondary: #475569;
             
-            --table-header: #0f172a;
-            --endpoint-bg: #1e3a8a;
-            --code-bg: #334155;
+            --table-header: #101828;
+            --endpoint-bg: #172554;
+            --code-bg: #1e2942;
             --code-text: #f472b6;
+
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.35);
+            --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.55);
         }
 
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 20px; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; transition: background 0.2s, color 0.2s; }
-        .container { max-width: 900px; margin: auto; background: var(--container-bg); padding: 30px; border-radius: 0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: auto;
+            background: var(--container-bg);
+            padding: 30px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+        }
+
         h1, h2, h3 { color: var(--text-main); }
-        h1 { border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        h1 { border-bottom: 2px solid var(--border-color); padding-bottom: 12px; margin-top: 0; font-size: 26px; }
         
-        .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: 600; padding: 10px 15px; background: rgba(59, 130, 246, 0.1); border-radius: 0; transition: 0.2s; }
-        .back-link:hover { background: rgba(59, 130, 246, 0.2); }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: var(--primary-light);
+            border: 1px solid var(--primary-border);
+            border-radius: var(--radius-md);
+            transition: all 0.18s ease;
+            font-size: 13px;
+        }
+        .back-link:hover {
+            background: var(--primary);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
         
-        code { background: var(--code-bg); padding: 2px 5px; border-radius: 0; font-family: monospace; color: var(--code-text); font-size: 15px; }
-        pre { background: #1e293b; color: #f8fafc; padding: 15px; border-radius: 0; overflow-x: auto; }
+        code { background: var(--code-bg); padding: 3px 6px; border-radius: var(--radius-sm); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: var(--code-text); font-size: 14px; }
+        pre { background: #0f172a; color: #f8fafc; padding: 18px; border-radius: var(--radius-md); overflow-x: auto; border: 1px solid var(--border-color); }
         pre code { background: transparent; color: inherit; padding: 0; }
         
-        .endpoint { background: var(--endpoint-bg); padding: 15px; border-left: 5px solid var(--primary); border-radius: 0; margin-bottom: 20px; }
-        .badge { color: white; padding: 4px 10px; border-radius: 0; font-size: 13px; font-weight: bold; margin-right: 10px; }
+        .endpoint { background: var(--endpoint-bg); padding: 16px 20px; border-left: 4px solid var(--primary); border-radius: var(--radius-md); margin-bottom: 20px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+        .badge { color: white; padding: 4px 10px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700; margin-right: 10px; letter-spacing: 0.5px; }
         .get { background: #10b981; }
         .post { background: #f59e0b; color: #fff; }
         
         table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
         table, th, td { border: 1px solid var(--border-color); }
-        th, td { padding: 12px; text-align: left; }
+        th, td { padding: 12px 14px; text-align: left; }
         th { background-color: var(--table-header); font-weight: 600; }
     </style>
 </head>
